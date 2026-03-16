@@ -3,7 +3,7 @@ name: Weekly Analytics Digest
 on:
   schedule:
     - cron: '0 9 * * 5' # Every Friday at 9 AM UTC
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch: # Manual trigger via GitHub UI or CLI
 
 jobs:
   post-digest:
