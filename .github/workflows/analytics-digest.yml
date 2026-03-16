@@ -29,7 +29,6 @@ jobs:
               }
             }')
 
-          # Extract labels and data arrays, pair them up
           DAU_TABLE=$(echo "$RESPONSE" | jq -r '
             .results[0].labels as $labels |
             .results[0].data as $data |
@@ -38,7 +37,6 @@ jobs:
             join("\n")
           ')
 
-          # Get latest value for summary
           DAU_LATEST=$(echo "$RESPONSE" | jq -r '.results[0].data[-1] | round')
 
           echo "DAU_TABLE<<EOF" >> $GITHUB_OUTPUT
@@ -74,7 +72,6 @@ jobs:
             join("\n")
           ')
 
-          # Current and previous for trend
           WAU_CURRENT=$(echo "$RESPONSE" | jq -r '.results[0].data[-1] | round')
           WAU_PREVIOUS=$(echo "$RESPONSE" | jq -r '.results[0].data[-2] | round')
 
@@ -95,7 +92,7 @@ jobs:
           echo "WAU_CURRENT=$WAU_CURRENT" >> $GITHUB_OUTPUT
           echo "WAU_TREND=$WAU_TREND" >> $GITHUB_OUTPUT
 
-      - name: Query PostHog - Sessions Launched (last 30 days)
+      - name: Query PostHog - Sessions Created (last 30 days)
         id: sessions
         run: |
           RESPONSE=$(curl -s -X POST "https://us.posthog.com/api/projects/96374/query/" \
@@ -106,15 +103,10 @@ jobs:
                 "kind": "InsightVizNode",
                 "source": {
                   "kind": "TrendsQuery",
-                  "series": [{"kind": "EventsNode", "math": "total", "event": null, "name": "All events"}],
+                  "series": [{"kind": "EventsNode", "event": "session_created", "math": "total", "custom_name": "Sessions Created"}],
                   "interval": "week",
                   "dateRange": {"date_from": "-30d"},
-                  "properties": {
-                    "type": "AND",
-                    "values": [{"type": "AND", "values": [{"key": "$el_text", "type": "event", "value": ["Launch"], "operator": "exact"}]}]
-                  },
-                  "filterTestAccounts": true,
-                  "trendsFilter": {}
+                  "trendsFilter": {"display": "ActionsLineGraph"}
                 }
               }
             }')
@@ -148,13 +140,46 @@ jobs:
           echo "SESSIONS_TOTAL=$SESSIONS_TOTAL" >> $GITHUB_OUTPUT
           echo "SESSIONS_TREND=$SESSIONS_TREND" >> $GITHUB_OUTPUT
 
+      - name: Query PostHog - Participants (last 30 days)
+        id: participants
+        run: |
+          RESPONSE=$(curl -s -X POST "https://us.posthog.com/api/projects/96374/query/" \
+            -H "Authorization: Bearer ${{ secrets.POSTHOG_PERSONAL_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "query": {
+                "kind": "InsightVizNode",
+                "source": {
+                  "kind": "TrendsQuery",
+                  "series": [
+                    {"kind": "EventsNode", "event": "participant_joined", "math": "total", "custom_name": "Joined"},
+                    {"kind": "EventsNode", "event": "participant_completed", "math": "total", "custom_name": "Completed"}
+                  ],
+                  "interval": "week",
+                  "dateRange": {"date_from": "-30d"},
+                  "trendsFilter": {"display": "ActionsLineGraph"}
+                }
+              }
+            }')
+
+          JOINED_CURRENT=$(echo "$RESPONSE" | jq -r '.results[0].data[-1] | round')
+          COMPLETED_CURRENT=$(echo "$RESPONSE" | jq -r '.results[1].data[-1] | round')
+
+          if [ "$JOINED_CURRENT" -gt 0 ] 2>/dev/null; then
+            COMPLETION_RATE=$(( COMPLETED_CURRENT * 100 / JOINED_CURRENT ))
+          else
+            COMPLETION_RATE=0
+          fi
+
+          echo "JOINED_CURRENT=$JOINED_CURRENT" >> $GITHUB_OUTPUT
+          echo "COMPLETED_CURRENT=$COMPLETED_CURRENT" >> $GITHUB_OUTPUT
+          echo "COMPLETION_RATE=$COMPLETION_RATE" >> $GITHUB_OUTPUT
+
       - name: Post to Discord
         run: |
-          # Build date range
           END_DATE=$(date -u +"%b %d, %Y")
           START_DATE=$(date -u -d "7 days ago" +"%b %d, %Y")
 
-          # Determine trend arrows
           WAU_ARROW="→"
           if [[ "${{ steps.wau.outputs.WAU_TREND }}" == up* ]]; then WAU_ARROW="↑"; fi
           if [[ "${{ steps.wau.outputs.WAU_TREND }}" == down* ]]; then WAU_ARROW="↓"; fi
@@ -163,29 +188,30 @@ jobs:
           if [[ "${{ steps.sessions.outputs.SESSIONS_TREND }}" == up* ]]; then SESSIONS_ARROW="↑"; fi
           if [[ "${{ steps.sessions.outputs.SESSIONS_TREND }}" == down* ]]; then SESSIONS_ARROW="↓"; fi
 
-          # Build the message
           MESSAGE="**Harmonica Weekly Metrics Summary**
-          _Week of ${START_DATE} - ${END_DATE}_
+_Week of ${START_DATE} - ${END_DATE}_
 
-          **Daily Active Users (last 7 days)**
-          \`\`\`
-          ${{ steps.dau.outputs.DAU_TABLE }}
-          \`\`\`
+**Daily Active Users (last 7 days)**
+\`\`\`
+${{ steps.dau.outputs.DAU_TABLE }}
+\`\`\`
 
-          **Weekly Active Users (last 4 weeks)** ${WAU_ARROW} ${{ steps.wau.outputs.WAU_TREND }} vs prev week
-          \`\`\`
-          ${{ steps.wau.outputs.WAU_TABLE }}
-          \`\`\`
+**Weekly Active Users (last 4 weeks)** ${WAU_ARROW} ${{ steps.wau.outputs.WAU_TREND }} vs prev week
+\`\`\`
+${{ steps.wau.outputs.WAU_TABLE }}
+\`\`\`
 
-          **Sessions Launched (last 4 weeks)** ${SESSIONS_ARROW} ${{ steps.sessions.outputs.SESSIONS_TREND }} vs prev week
-          \`\`\`
-          ${{ steps.sessions.outputs.SESSIONS_TABLE }}
-          \`\`\`
-          Total sessions (30d): **${{ steps.sessions.outputs.SESSIONS_TOTAL }}**
+**Sessions Created (last 4 weeks)** ${SESSIONS_ARROW} ${{ steps.sessions.outputs.SESSIONS_TREND }} vs prev week
+\`\`\`
+${{ steps.sessions.outputs.SESSIONS_TABLE }}
+\`\`\`
+Total sessions (30d): **${{ steps.sessions.outputs.SESSIONS_TOTAL }}**
 
-          [View full dashboard](https://us.posthog.com/project/96374/dashboard/242543)"
+**Participants This Week**
+Joined: **${{ steps.participants.outputs.JOINED_CURRENT }}** | Completed: **${{ steps.participants.outputs.COMPLETED_CURRENT }}** | Completion rate: **${{ steps.participants.outputs.COMPLETION_RATE }}%**
 
-          # Post to Discord
+[View full dashboard](https://us.posthog.com/project/96374/dashboard/242543)"
+
           jq -n --arg content "$MESSAGE" \
             '{"username": "Harmonica Analytics", "content": $content}' | \
             curl -s -X POST "${{ secrets.DISCORD_ANALYTICS_WEBHOOK_URL }}" \
