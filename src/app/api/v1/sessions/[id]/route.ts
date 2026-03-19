@@ -48,6 +48,8 @@ const ALLOWED_UPDATE_FIELDS: (keyof UpdateSessionRequest)[] = [
   'context',
   'critical',
   'prompt',
+  'cross_pollination',
+  'distribution',
 ];
 
 export async function PATCH(
@@ -76,6 +78,11 @@ export async function PATCH(
     // Keep prompt_summary in sync when prompt changes
     if (typeof update.prompt === 'string') {
       update.prompt_summary = update.prompt.substring(0, 500);
+    }
+
+    // Serialize distribution array to JSON string for storage
+    if (update.distribution !== undefined) {
+      update.distribution = update.distribution ? JSON.stringify(update.distribution) : null;
     }
 
     if (Object.keys(update).length === 0) {

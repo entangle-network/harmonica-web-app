@@ -47,6 +47,8 @@ export interface UpdateSessionRequest {
   context?: string;
   critical?: string;
   prompt?: string;
+  cross_pollination?: boolean;
+  distribution?: DistributionTarget[];
 }
 
 export interface SessionCreated extends SessionListItem {
