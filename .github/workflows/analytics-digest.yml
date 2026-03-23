@@ -189,28 +189,31 @@ jobs:
           if [[ "${{ steps.sessions.outputs.SESSIONS_TREND }}" == down* ]]; then SESSIONS_ARROW="↓"; fi
 
           MESSAGE="**Harmonica Weekly Metrics Summary**
-_Week of ${START_DATE} - ${END_DATE}_
+          _Week of ${START_DATE} - ${END_DATE}_
 
-**Daily Active Users (last 7 days)**
-\`\`\`
-${{ steps.dau.outputs.DAU_TABLE }}
-\`\`\`
+          **Daily Active Users (last 7 days)**
+          \`\`\`
+          ${{ steps.dau.outputs.DAU_TABLE }}
+          \`\`\`
 
-**Weekly Active Users (last 4 weeks)** ${WAU_ARROW} ${{ steps.wau.outputs.WAU_TREND }} vs prev week
-\`\`\`
-${{ steps.wau.outputs.WAU_TABLE }}
-\`\`\`
+          **Weekly Active Users (last 4 weeks)** ${WAU_ARROW} ${{ steps.wau.outputs.WAU_TREND }} vs prev week
+          \`\`\`
+          ${{ steps.wau.outputs.WAU_TABLE }}
+          \`\`\`
 
-**Sessions Created (last 4 weeks)** ${SESSIONS_ARROW} ${{ steps.sessions.outputs.SESSIONS_TREND }} vs prev week
-\`\`\`
-${{ steps.sessions.outputs.SESSIONS_TABLE }}
-\`\`\`
-Total sessions (30d): **${{ steps.sessions.outputs.SESSIONS_TOTAL }}**
+          **Sessions Created (last 4 weeks)** ${SESSIONS_ARROW} ${{ steps.sessions.outputs.SESSIONS_TREND }} vs prev week
+          \`\`\`
+          ${{ steps.sessions.outputs.SESSIONS_TABLE }}
+          \`\`\`
+          Total sessions (30d): **${{ steps.sessions.outputs.SESSIONS_TOTAL }}**
 
-**Participants This Week**
-Joined: **${{ steps.participants.outputs.JOINED_CURRENT }}** | Completed: **${{ steps.participants.outputs.COMPLETED_CURRENT }}** | Completion rate: **${{ steps.participants.outputs.COMPLETION_RATE }}%**
+          **Participants This Week**
+          Joined: **${{ steps.participants.outputs.JOINED_CURRENT }}** | Completed: **${{ steps.participants.outputs.COMPLETED_CURRENT }}** | Completion rate: **${{ steps.participants.outputs.COMPLETION_RATE }}%**
 
-[View full dashboard](https://us.posthog.com/project/96374/dashboard/242543)"
+          [View full dashboard](https://us.posthog.com/project/96374/dashboard/242543)"
+
+          # Strip the 10-space YAML indentation from message lines
+          MESSAGE=$(echo "$MESSAGE" | sed 's/^          //')
 
           jq -n --arg content "$MESSAGE" \
             '{"username": "Harmonica Analytics", "content": $content}' | \
