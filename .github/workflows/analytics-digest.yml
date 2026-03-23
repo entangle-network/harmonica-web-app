@@ -58,11 +58,15 @@ jobs:
           CHG_PAGEVIEWS=$(pct_change "$TW_PAGEVIEWS" "$PW_PAGEVIEWS")
           CHG_INTERACTIONS=$(pct_change "$TW_INTERACTIONS" "$PW_INTERACTIONS")
 
-          # --- Query 2b: Sessions created (custom event, this week vs prev) ---
-          CREATED_TW=$(hogql "SELECT count(*) FROM events WHERE event = 'session_created' AND timestamp >= now() - INTERVAL 7 DAY")
-          CREATED_PW=$(hogql "SELECT count(*) FROM events WHERE event = 'session_created' AND timestamp >= now() - INTERVAL 14 DAY AND timestamp < now() - INTERVAL 7 DAY")
+          # --- Query 2b: Sessions created with participant quality split ---
+          # Get all sessions created this week, then count participant_joined per session
+          CREATED_DETAIL_TW=$(hogql "SELECT s.session_id, countIf(p.event = 'participant_joined') AS participants FROM (SELECT properties.session_id AS session_id FROM events WHERE event = 'session_created' AND timestamp >= now() - INTERVAL 7 DAY) s LEFT JOIN (SELECT properties.session_id AS session_id, event FROM events WHERE event = 'participant_joined') p ON s.session_id = p.session_id GROUP BY s.session_id")
 
-          TW_CREATED=$(echo "$CREATED_TW" | jq -r '.results[0][0]')
+          TW_CREATED=$(echo "$CREATED_DETAIL_TW" | jq -r '.results | length')
+          TW_REAL=$(echo "$CREATED_DETAIL_TW" | jq -r '[.results[] | select(.[1] >= 2)] | length')
+          TW_EMPTY=$(( TW_CREATED - TW_REAL ))
+
+          CREATED_PW=$(hogql "SELECT count(*) FROM events WHERE event = 'session_created' AND timestamp >= now() - INTERVAL 14 DAY AND timestamp < now() - INTERVAL 7 DAY")
           PW_CREATED=$(echo "$CREATED_PW" | jq -r '.results[0][0]')
           CHG_CREATED=$(pct_change "$TW_CREATED" "$PW_CREATED")
 
@@ -147,6 +151,7 @@ jobs:
           \`\`\`
           Metric            This Wk   Prev Wk   Change
           Sessions created  $(printf '%-10s' "$TW_CREATED")$(printf '%-10s' "$PW_CREATED")${CHG_CREATED}
+            w/ 2+ participants: ${TW_REAL}  |  empty/test: ${TW_EMPTY}
           Active sessions   $(printf '%-10s' "$TW_SESSIONS")$(printf '%-10s' "$PW_SESSIONS")${CHG_SESSIONS}
           Participants      $(printf '%-10s' "$TW_PARTICIPANTS")$(printf '%-10s' "$PW_PARTICIPANTS")${CHG_PARTICIPANTS}
           Pageviews         $(printf '%-10s' "$TW_PAGEVIEWS")$(printf '%-10s' "$PW_PAGEVIEWS")${CHG_PAGEVIEWS}
