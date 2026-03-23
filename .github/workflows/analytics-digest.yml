@@ -19,14 +19,15 @@ jobs:
           API="https://us.posthog.com/api/projects/96374/query/"
 
           hogql() {
-            curl -sf -X POST "$API" \
-              -H "Authorization: Bearer $POSTHOG_API_KEY" \
-              -H "Content-Type: application/json" \
-              -d "{\"query\":{\"kind\":\"HogQLQuery\",\"query\":\"$1\"}}"
+            jq -n --arg q "$1" '{"query":{"kind":"HogQLQuery","query":$q}}' | \
+              curl -sf -X POST "$API" \
+                -H "Authorization: Bearer $POSTHOG_API_KEY" \
+                -H "Content-Type: application/json" \
+                -d @-
           }
 
           # --- Query 1: Aggregate metrics (this week) ---
-          THIS_WEEK=$(hogql "SELECT count(DISTINCT distinct_id) AS unique_participants, count(DISTINCT extractURLParameter(properties.\\\$current_url, 's')) AS active_sessions, countIf(event = '\\\$pageview') AS total_pageviews, countIf(event = '\\\$autocapture') AS total_interactions FROM events WHERE (event = '\\\$pageview' OR event = '\\\$autocapture') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY")
+          THIS_WEEK=$(hogql "SELECT count(DISTINCT distinct_id) AS unique_participants, count(DISTINCT extractURLParameter(properties.\$current_url, 's')) AS active_sessions, countIf(event = '\$pageview') AS total_pageviews, countIf(event = '\$autocapture') AS total_interactions FROM events WHERE (event = '\$pageview' OR event = '\$autocapture') AND properties.\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY")
 
           TW_PARTICIPANTS=$(echo "$THIS_WEEK" | jq -r '.results[0][0]')
           TW_SESSIONS=$(echo "$THIS_WEEK" | jq -r '.results[0][1]')
@@ -34,7 +35,7 @@ jobs:
           TW_INTERACTIONS=$(echo "$THIS_WEEK" | jq -r '.results[0][3]')
 
           # --- Query 2: Aggregate metrics (previous week) ---
-          PREV_WEEK=$(hogql "SELECT count(DISTINCT distinct_id) AS unique_participants, count(DISTINCT extractURLParameter(properties.\\\$current_url, 's')) AS active_sessions, countIf(event = '\\\$pageview') AS total_pageviews, countIf(event = '\\\$autocapture') AS total_interactions FROM events WHERE (event = '\\\$pageview' OR event = '\\\$autocapture') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 14 DAY AND timestamp < now() - INTERVAL 7 DAY")
+          PREV_WEEK=$(hogql "SELECT count(DISTINCT distinct_id) AS unique_participants, count(DISTINCT extractURLParameter(properties.\$current_url, 's')) AS active_sessions, countIf(event = '\$pageview') AS total_pageviews, countIf(event = '\$autocapture') AS total_interactions FROM events WHERE (event = '\$pageview' OR event = '\$autocapture') AND properties.\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 14 DAY AND timestamp < now() - INTERVAL 7 DAY")
 
           PW_PARTICIPANTS=$(echo "$PREV_WEEK" | jq -r '.results[0][0]')
           PW_SESSIONS=$(echo "$PREV_WEEK" | jq -r '.results[0][1]')
@@ -57,11 +58,11 @@ jobs:
           CHG_PAGEVIEWS=$(pct_change "$TW_PAGEVIEWS" "$PW_PAGEVIEWS")
           CHG_INTERACTIONS=$(pct_change "$TW_INTERACTIONS" "$PW_INTERACTIONS")
 
-          # --- Query 3: Active sessions with names ---
-          ACTIVE_SESSIONS=$(hogql "SELECT extractURLParameter(properties.\\\$current_url, 's') AS session_id, any(properties.title) AS session_name, count(DISTINCT distinct_id) AS visitors, count(*) AS pageviews FROM events WHERE event = '\\\$pageview' AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY session_id ORDER BY visitors DESC")
+          # --- Query 3: Active sessions with names (top 10) ---
+          ACTIVE_SESSIONS=$(hogql "SELECT extractURLParameter(properties.\$current_url, 's') AS session_id, any(properties.title) AS session_name, count(DISTINCT distinct_id) AS visitors, count(*) AS pageviews FROM events WHERE event = '\$pageview' AND properties.\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY session_id ORDER BY visitors DESC LIMIT 10")
 
           TOP_SESSIONS=$(echo "$ACTIVE_SESSIONS" | jq -r '
-            [.results[:10][] | {
+            [.results[] | {
               id: .[0],
               name: (.[1] // "Unnamed" | gsub(" \\| Harmonica$"; "") | gsub(" \\| harmonica$"; "")),
               visitors: .[2],
@@ -71,9 +72,10 @@ jobs:
             map("\(.key + 1). [\(.value.name)](https://app.harmonica.chat/chat?s=\(.value.id)) — \(.value.visitors) visitors, \(.value.pageviews) views") |
             join("\n")
           ')
+          if [ -z "$TOP_SESSIONS" ]; then TOP_SESSIONS="No sessions this week"; fi
 
           # --- Query 4: Per-session engagement ---
-          ENGAGEMENT=$(hogql "SELECT extractURLParameter(properties.\\\$current_url, 's') AS session_id, distinct_id, countIf(event = '\\\$autocapture') AS interactions FROM events WHERE (event = '\\\$pageview' OR event = '\\\$autocapture') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY session_id, distinct_id")
+          ENGAGEMENT=$(hogql "SELECT extractURLParameter(properties.\$current_url, 's') AS session_id, distinct_id, countIf(event = '\$autocapture') AS interactions FROM events WHERE (event = '\$pageview' OR event = '\$autocapture') AND properties.\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY session_id, distinct_id")
 
           ENGAGEMENT_SUMMARY=$(echo "$ENGAGEMENT" | jq -r '
             .results |
@@ -91,37 +93,36 @@ jobs:
           ')
 
           # --- Query 5: Daily trend ---
-          DAILY=$(hogql "SELECT toDate(timestamp) AS day, count(DISTINCT distinct_id) AS visitors, count(DISTINCT extractURLParameter(properties.\\\$current_url, 's')) AS active_sessions, countIf(event = '\\\$pageview') AS pageviews FROM events WHERE (event = '\\\$pageview' OR event = '\\\$autocapture') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY day ORDER BY day")
+          DAILY=$(hogql "SELECT toDate(timestamp) AS day, count(DISTINCT distinct_id) AS visitors, count(DISTINCT extractURLParameter(properties.\$current_url, 's')) AS active_sessions, countIf(event = '\$pageview') AS pageviews FROM events WHERE (event = '\$pageview' OR event = '\$autocapture') AND properties.\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY day ORDER BY day")
 
-          DAILY_TABLE=$(echo "$DAILY" | jq -r '
-            .results[] | "\(.[0])  \(.[1]) visitors  \(.[2]) sessions  \(.[3]) views"
-          ')
+          DAILY_TABLE=$(echo "$DAILY" | jq -r '.results[] | "\(.[0])  \(.[1]) visitors  \(.[2]) sessions  \(.[3]) views"')
+          if [ -z "$DAILY_TABLE" ]; then DAILY_TABLE="No data"; fi
 
           # --- Query 6: UX issues ---
-          UX=$(hogql "SELECT countIf(event = '\\\$rageclick') AS rageclicks, countIf(event = '\\\$exception') AS exceptions, count(DISTINCT distinct_id) AS affected_users FROM events WHERE (event = '\\\$rageclick' OR event = '\\\$exception') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY")
+          UX=$(hogql "SELECT countIf(event = '\$rageclick') AS rageclicks, countIf(event = '\$exception') AS exceptions, count(DISTINCT distinct_id) AS affected_users FROM events WHERE (event = '\$rageclick' OR event = '\$exception') AND properties.\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY")
 
           UX_RAGECLICKS=$(echo "$UX" | jq -r '.results[0][0]')
           UX_EXCEPTIONS=$(echo "$UX" | jq -r '.results[0][1]')
           UX_USERS=$(echo "$UX" | jq -r '.results[0][2]')
 
-          if [ "$UX_RAGECLICKS" -eq 0 ] && [ "$UX_EXCEPTIONS" -eq 0 ] 2>/dev/null; then
+          if [ "${UX_RAGECLICKS:-0}" -eq 0 ] && [ "${UX_EXCEPTIONS:-0}" -eq 0 ] 2>/dev/null; then
             UX_LINE="No issues detected"
           else
             UX_LINE="${UX_RAGECLICKS} rageclicks, ${UX_EXCEPTIONS} exceptions affecting ${UX_USERS} users"
           fi
 
           # --- Query 7: LLM usage by model ---
-          LLM=$(hogql "SELECT properties.\\\$ai_model AS model, count(*) AS calls, sum(properties.\\\$ai_input_tokens * 1) AS total_input_tokens, sum(properties.\\\$ai_output_tokens * 1) AS total_output_tokens, avg(properties.\\\$ai_latency * 1) AS avg_latency FROM events WHERE event = '\\\$ai_generation' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY model ORDER BY calls DESC")
+          LLM=$(hogql "SELECT properties.\$ai_model AS model, count(*) AS calls, sum(properties.\$ai_input_tokens * 1) AS total_input_tokens, sum(properties.\$ai_output_tokens * 1) AS total_output_tokens, avg(properties.\$ai_latency * 1) AS avg_latency FROM events WHERE event = '\$ai_generation' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY model ORDER BY calls DESC")
 
           LLM_TABLE=$(echo "$LLM" | jq -r '
             if (.results | length) == 0 then "No LLM data for this period"
             else
-              .results[] | "\(.[0]): \(.[1]) calls, \(.[2]) in / \(.[3]) out tokens, \(.[4] | if . then (. * 100 | round / 100 | tostring) + "s" else "N/A" end) avg"
+              .results[] | "\(.[0]): \(.[1]) calls, \(.[2]) in / \(.[3]) out tokens, \(.[4] | if . then (. * 100 | round / 100 | tostring) + "s avg" else "N/A" end)"
             end
           ')
 
           # --- Query 8: Embedding usage ---
-          EMB=$(hogql "SELECT count(*) AS calls, avg(properties.\\\$ai_latency * 1) AS avg_latency FROM events WHERE event = '\\\$ai_embedding' AND timestamp >= now() - INTERVAL 7 DAY")
+          EMB=$(hogql "SELECT count(*) AS calls, avg(properties.\$ai_latency * 1) AS avg_latency FROM events WHERE event = '\$ai_embedding' AND timestamp >= now() - INTERVAL 7 DAY")
 
           EMB_CALLS=$(echo "$EMB" | jq -r '.results[0][0]')
           EMB_LATENCY=$(echo "$EMB" | jq -r '.results[0][1] // 0 | . * 100 | round / 100')
@@ -130,17 +131,17 @@ jobs:
           END_DATE=$(date -u +"%b %d, %Y")
           START_DATE=$(date -u -d "7 days ago" +"%b %d, %Y")
 
-          # --- Build Message 1: Overview + Top Sessions ---
+          # --- Build Message 1: Overview + Daily + Top Sessions ---
           MSG1="**Harmonica Weekly Sessions Report**
           _Week of ${START_DATE} - ${END_DATE}_
 
           **Overview**
           \`\`\`
-          Metric            This Week  Prev Week  Change
-          Active sessions   ${TW_SESSIONS}          ${PW_SESSIONS}          ${CHG_SESSIONS}
-          Participants      ${TW_PARTICIPANTS}          ${PW_PARTICIPANTS}          ${CHG_PARTICIPANTS}
-          Pageviews         ${TW_PAGEVIEWS}          ${PW_PAGEVIEWS}          ${CHG_PAGEVIEWS}
-          Interactions      ${TW_INTERACTIONS}          ${PW_INTERACTIONS}          ${CHG_INTERACTIONS}
+          Metric            This Wk   Prev Wk   Change
+          Active sessions   $(printf '%-10s' "$TW_SESSIONS")$(printf '%-10s' "$PW_SESSIONS")${CHG_SESSIONS}
+          Participants      $(printf '%-10s' "$TW_PARTICIPANTS")$(printf '%-10s' "$PW_PARTICIPANTS")${CHG_PARTICIPANTS}
+          Pageviews         $(printf '%-10s' "$TW_PAGEVIEWS")$(printf '%-10s' "$PW_PAGEVIEWS")${CHG_PAGEVIEWS}
+          Interactions      $(printf '%-10s' "$TW_INTERACTIONS")$(printf '%-10s' "$PW_INTERACTIONS")${CHG_INTERACTIONS}
           \`\`\`
 
           **Daily Activity**
@@ -149,7 +150,7 @@ jobs:
           \`\`\`
 
           **Top Sessions**
-          ${TOP_SESSIONS:-No sessions this week}"
+          ${TOP_SESSIONS}"
 
           MSG1=$(echo "$MSG1" | sed 's/^          //')
 
@@ -172,7 +173,7 @@ jobs:
 
           MSG2=$(echo "$MSG2" | sed 's/^          //')
 
-          # --- Post to Discord ---
+          # --- Post to Discord (2 messages to stay under 2000 char limit) ---
           jq -n --arg content "$MSG1" \
             '{"username": "Harmonica Analytics", "content": $content}' | \
             curl -sf -X POST "$DISCORD_WEBHOOK" \
