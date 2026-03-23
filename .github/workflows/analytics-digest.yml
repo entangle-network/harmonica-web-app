@@ -9,214 +9,182 @@ jobs:
   post-digest:
     runs-on: ubuntu-latest
     steps:
-      - name: Query PostHog - DAUs (last 7 days)
-        id: dau
+      - name: Run PostHog queries and post to Discord
+        env:
+          POSTHOG_API_KEY: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_ANALYTICS_WEBHOOK_URL }}
         run: |
-          RESPONSE=$(curl -s -X POST "https://us.posthog.com/api/projects/96374/query/" \
-            -H "Authorization: Bearer ${{ secrets.POSTHOG_PERSONAL_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "query": {
-                "kind": "InsightVizNode",
-                "source": {
-                  "kind": "TrendsQuery",
-                  "series": [{"kind": "EventsNode", "event": "$pageview", "math": "dau", "custom_name": "Daily Active Users"}],
-                  "interval": "day",
-                  "dateRange": {"date_from": "-7d"},
-                  "filterTestAccounts": true,
-                  "trendsFilter": {"display": "ActionsLineGraph"}
-                }
-              }
-            }')
+          set -euo pipefail
 
-          DAU_TABLE=$(echo "$RESPONSE" | jq -r '
-            .results[0].labels as $labels |
-            .results[0].data as $data |
-            [range(0; $labels | length)] |
-            map("  \($labels[.])  \($data[.] | round)") |
+          API="https://us.posthog.com/api/projects/96374/query/"
+
+          hogql() {
+            curl -sf -X POST "$API" \
+              -H "Authorization: Bearer $POSTHOG_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d "{\"query\":{\"kind\":\"HogQLQuery\",\"query\":\"$1\"}}"
+          }
+
+          # --- Query 1: Aggregate metrics (this week) ---
+          THIS_WEEK=$(hogql "SELECT count(DISTINCT distinct_id) AS unique_participants, count(DISTINCT extractURLParameter(properties.\\\$current_url, 's')) AS active_sessions, countIf(event = '\\\$pageview') AS total_pageviews, countIf(event = '\\\$autocapture') AS total_interactions FROM events WHERE (event = '\\\$pageview' OR event = '\\\$autocapture') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY")
+
+          TW_PARTICIPANTS=$(echo "$THIS_WEEK" | jq -r '.results[0][0]')
+          TW_SESSIONS=$(echo "$THIS_WEEK" | jq -r '.results[0][1]')
+          TW_PAGEVIEWS=$(echo "$THIS_WEEK" | jq -r '.results[0][2]')
+          TW_INTERACTIONS=$(echo "$THIS_WEEK" | jq -r '.results[0][3]')
+
+          # --- Query 2: Aggregate metrics (previous week) ---
+          PREV_WEEK=$(hogql "SELECT count(DISTINCT distinct_id) AS unique_participants, count(DISTINCT extractURLParameter(properties.\\\$current_url, 's')) AS active_sessions, countIf(event = '\\\$pageview') AS total_pageviews, countIf(event = '\\\$autocapture') AS total_interactions FROM events WHERE (event = '\\\$pageview' OR event = '\\\$autocapture') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 14 DAY AND timestamp < now() - INTERVAL 7 DAY")
+
+          PW_PARTICIPANTS=$(echo "$PREV_WEEK" | jq -r '.results[0][0]')
+          PW_SESSIONS=$(echo "$PREV_WEEK" | jq -r '.results[0][1]')
+          PW_PAGEVIEWS=$(echo "$PREV_WEEK" | jq -r '.results[0][2]')
+          PW_INTERACTIONS=$(echo "$PREV_WEEK" | jq -r '.results[0][3]')
+
+          # --- WoW change calculation ---
+          pct_change() {
+            local curr=$1 prev=$2
+            if [ "$prev" -gt 0 ] 2>/dev/null; then
+              local change=$(( (curr - prev) * 100 / prev ))
+              if [ "$change" -ge 0 ]; then echo "↑ ${change}%"
+              else echo "↓ ${change#-}%"; fi
+            elif [ "$curr" -gt 0 ] 2>/dev/null; then echo "↑ new"
+            else echo "→ 0%"; fi
+          }
+
+          CHG_PARTICIPANTS=$(pct_change "$TW_PARTICIPANTS" "$PW_PARTICIPANTS")
+          CHG_SESSIONS=$(pct_change "$TW_SESSIONS" "$PW_SESSIONS")
+          CHG_PAGEVIEWS=$(pct_change "$TW_PAGEVIEWS" "$PW_PAGEVIEWS")
+          CHG_INTERACTIONS=$(pct_change "$TW_INTERACTIONS" "$PW_INTERACTIONS")
+
+          # --- Query 3: Active sessions with names ---
+          ACTIVE_SESSIONS=$(hogql "SELECT extractURLParameter(properties.\\\$current_url, 's') AS session_id, any(properties.title) AS session_name, count(DISTINCT distinct_id) AS visitors, count(*) AS pageviews FROM events WHERE event = '\\\$pageview' AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY session_id ORDER BY visitors DESC")
+
+          TOP_SESSIONS=$(echo "$ACTIVE_SESSIONS" | jq -r '
+            [.results[:10][] | {
+              id: .[0],
+              name: (.[1] // "Unnamed" | gsub(" \\| Harmonica$"; "") | gsub(" \\| harmonica$"; "")),
+              visitors: .[2],
+              pageviews: .[3]
+            }] |
+            to_entries |
+            map("\(.key + 1). [\(.value.name)](https://app.harmonica.chat/chat?s=\(.value.id)) — \(.value.visitors) visitors, \(.value.pageviews) views") |
             join("\n")
           ')
 
-          DAU_LATEST=$(echo "$RESPONSE" | jq -r '.results[0].data[-1] | round')
+          # --- Query 4: Per-session engagement ---
+          ENGAGEMENT=$(hogql "SELECT extractURLParameter(properties.\\\$current_url, 's') AS session_id, distinct_id, countIf(event = '\\\$autocapture') AS interactions FROM events WHERE (event = '\\\$pageview' OR event = '\\\$autocapture') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY session_id, distinct_id")
 
-          echo "DAU_TABLE<<EOF" >> $GITHUB_OUTPUT
-          echo "$DAU_TABLE" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo "DAU_LATEST=$DAU_LATEST" >> $GITHUB_OUTPUT
-
-      - name: Query PostHog - WAUs (last 30 days)
-        id: wau
-        run: |
-          RESPONSE=$(curl -s -X POST "https://us.posthog.com/api/projects/96374/query/" \
-            -H "Authorization: Bearer ${{ secrets.POSTHOG_PERSONAL_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "query": {
-                "kind": "InsightVizNode",
-                "source": {
-                  "kind": "TrendsQuery",
-                  "series": [{"kind": "EventsNode", "event": "$pageview", "math": "weekly_active", "custom_name": "Weekly Active Users"}],
-                  "interval": "week",
-                  "dateRange": {"date_from": "-30d"},
-                  "filterTestAccounts": true,
-                  "trendsFilter": {"display": "ActionsLineGraph"}
-                }
-              }
-            }')
-
-          WAU_TABLE=$(echo "$RESPONSE" | jq -r '
-            .results[0].labels as $labels |
-            .results[0].data as $data |
-            [range(0; $labels | length)] |
-            map("  \($labels[.])  \($data[.] | round)") |
-            join("\n")
-          ')
-
-          WAU_CURRENT=$(echo "$RESPONSE" | jq -r '.results[0].data[-1] | round')
-          WAU_PREVIOUS=$(echo "$RESPONSE" | jq -r '.results[0].data[-2] | round')
-
-          if [ "$WAU_PREVIOUS" -gt 0 ] 2>/dev/null; then
-            CHANGE=$(( (WAU_CURRENT - WAU_PREVIOUS) * 100 / WAU_PREVIOUS ))
-            if [ "$CHANGE" -ge 0 ]; then
-              WAU_TREND="up ${CHANGE}%"
+          ENGAGEMENT_SUMMARY=$(echo "$ENGAGEMENT" | jq -r '
+            .results |
+            {
+              bounced: [.[] | select(.[2] == 0)] | length,
+              brief: [.[] | select(.[2] > 0 and .[2] <= 5)] | length,
+              meaningful: [.[] | select(.[2] > 5)] | length
+            } |
+            . + {total: (.bounced + .brief + .meaningful)} |
+            if .total > 0 then
+              "Bounced (0 interactions): \(.bounced) (\(.bounced * 100 / .total)%)\nBrief (1-5): \(.brief) (\(.brief * 100 / .total)%)\nMeaningful (6+): \(.meaningful) (\(.meaningful * 100 / .total)%)"
             else
-              WAU_TREND="down ${CHANGE#-}%"
-            fi
-          else
-            WAU_TREND="N/A"
-          fi
-
-          echo "WAU_TABLE<<EOF" >> $GITHUB_OUTPUT
-          echo "$WAU_TABLE" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo "WAU_CURRENT=$WAU_CURRENT" >> $GITHUB_OUTPUT
-          echo "WAU_TREND=$WAU_TREND" >> $GITHUB_OUTPUT
-
-      - name: Query PostHog - Sessions Created (last 30 days)
-        id: sessions
-        run: |
-          RESPONSE=$(curl -s -X POST "https://us.posthog.com/api/projects/96374/query/" \
-            -H "Authorization: Bearer ${{ secrets.POSTHOG_PERSONAL_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "query": {
-                "kind": "InsightVizNode",
-                "source": {
-                  "kind": "TrendsQuery",
-                  "series": [{"kind": "EventsNode", "event": "session_created", "math": "total", "custom_name": "Sessions Created"}],
-                  "interval": "week",
-                  "dateRange": {"date_from": "-30d"},
-                  "trendsFilter": {"display": "ActionsLineGraph"}
-                }
-              }
-            }')
-
-          SESSIONS_TABLE=$(echo "$RESPONSE" | jq -r '
-            .results[0].labels as $labels |
-            .results[0].data as $data |
-            [range(0; $labels | length)] |
-            map("  \($labels[.])  \($data[.] | round)") |
-            join("\n")
+              "No engagement data"
+            end
           ')
 
-          SESSIONS_TOTAL=$(echo "$RESPONSE" | jq -r '[.results[0].data[] | round] | add')
-          SESSIONS_CURRENT=$(echo "$RESPONSE" | jq -r '.results[0].data[-1] | round')
-          SESSIONS_PREVIOUS=$(echo "$RESPONSE" | jq -r '.results[0].data[-2] | round')
+          # --- Query 5: Daily trend ---
+          DAILY=$(hogql "SELECT toDate(timestamp) AS day, count(DISTINCT distinct_id) AS visitors, count(DISTINCT extractURLParameter(properties.\\\$current_url, 's')) AS active_sessions, countIf(event = '\\\$pageview') AS pageviews FROM events WHERE (event = '\\\$pageview' OR event = '\\\$autocapture') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY day ORDER BY day")
 
-          if [ "$SESSIONS_PREVIOUS" -gt 0 ] 2>/dev/null; then
-            CHANGE=$(( (SESSIONS_CURRENT - SESSIONS_PREVIOUS) * 100 / SESSIONS_PREVIOUS ))
-            if [ "$CHANGE" -ge 0 ]; then
-              SESSIONS_TREND="up ${CHANGE}%"
+          DAILY_TABLE=$(echo "$DAILY" | jq -r '
+            .results[] | "\(.[0])  \(.[1]) visitors  \(.[2]) sessions  \(.[3]) views"
+          ')
+
+          # --- Query 6: UX issues ---
+          UX=$(hogql "SELECT countIf(event = '\\\$rageclick') AS rageclicks, countIf(event = '\\\$exception') AS exceptions, count(DISTINCT distinct_id) AS affected_users FROM events WHERE (event = '\\\$rageclick' OR event = '\\\$exception') AND properties.\\\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY")
+
+          UX_RAGECLICKS=$(echo "$UX" | jq -r '.results[0][0]')
+          UX_EXCEPTIONS=$(echo "$UX" | jq -r '.results[0][1]')
+          UX_USERS=$(echo "$UX" | jq -r '.results[0][2]')
+
+          if [ "$UX_RAGECLICKS" -eq 0 ] && [ "$UX_EXCEPTIONS" -eq 0 ] 2>/dev/null; then
+            UX_LINE="No issues detected"
+          else
+            UX_LINE="${UX_RAGECLICKS} rageclicks, ${UX_EXCEPTIONS} exceptions affecting ${UX_USERS} users"
+          fi
+
+          # --- Query 7: LLM usage by model ---
+          LLM=$(hogql "SELECT properties.\\\$ai_model AS model, count(*) AS calls, sum(properties.\\\$ai_input_tokens * 1) AS total_input_tokens, sum(properties.\\\$ai_output_tokens * 1) AS total_output_tokens, avg(properties.\\\$ai_latency * 1) AS avg_latency FROM events WHERE event = '\\\$ai_generation' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY model ORDER BY calls DESC")
+
+          LLM_TABLE=$(echo "$LLM" | jq -r '
+            if (.results | length) == 0 then "No LLM data for this period"
             else
-              SESSIONS_TREND="down ${CHANGE#-}%"
-            fi
-          else
-            SESSIONS_TREND="N/A"
-          fi
+              .results[] | "\(.[0]): \(.[1]) calls, \(.[2]) in / \(.[3]) out tokens, \(.[4] | if . then (. * 100 | round / 100 | tostring) + "s" else "N/A" end) avg"
+            end
+          ')
 
-          echo "SESSIONS_TABLE<<EOF" >> $GITHUB_OUTPUT
-          echo "$SESSIONS_TABLE" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo "SESSIONS_TOTAL=$SESSIONS_TOTAL" >> $GITHUB_OUTPUT
-          echo "SESSIONS_TREND=$SESSIONS_TREND" >> $GITHUB_OUTPUT
+          # --- Query 8: Embedding usage ---
+          EMB=$(hogql "SELECT count(*) AS calls, avg(properties.\\\$ai_latency * 1) AS avg_latency FROM events WHERE event = '\\\$ai_embedding' AND timestamp >= now() - INTERVAL 7 DAY")
 
-      - name: Query PostHog - Participants (last 30 days)
-        id: participants
-        run: |
-          RESPONSE=$(curl -s -X POST "https://us.posthog.com/api/projects/96374/query/" \
-            -H "Authorization: Bearer ${{ secrets.POSTHOG_PERSONAL_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "query": {
-                "kind": "InsightVizNode",
-                "source": {
-                  "kind": "TrendsQuery",
-                  "series": [
-                    {"kind": "EventsNode", "event": "participant_joined", "math": "total", "custom_name": "Joined"},
-                    {"kind": "EventsNode", "event": "participant_completed", "math": "total", "custom_name": "Completed"}
-                  ],
-                  "interval": "week",
-                  "dateRange": {"date_from": "-30d"},
-                  "trendsFilter": {"display": "ActionsLineGraph"}
-                }
-              }
-            }')
+          EMB_CALLS=$(echo "$EMB" | jq -r '.results[0][0]')
+          EMB_LATENCY=$(echo "$EMB" | jq -r '.results[0][1] // 0 | . * 100 | round / 100')
 
-          JOINED_CURRENT=$(echo "$RESPONSE" | jq -r '.results[0].data[-1] | round')
-          COMPLETED_CURRENT=$(echo "$RESPONSE" | jq -r '.results[1].data[-1] | round')
-
-          if [ "$JOINED_CURRENT" -gt 0 ] 2>/dev/null; then
-            COMPLETION_RATE=$(( COMPLETED_CURRENT * 100 / JOINED_CURRENT ))
-          else
-            COMPLETION_RATE=0
-          fi
-
-          echo "JOINED_CURRENT=$JOINED_CURRENT" >> $GITHUB_OUTPUT
-          echo "COMPLETED_CURRENT=$COMPLETED_CURRENT" >> $GITHUB_OUTPUT
-          echo "COMPLETION_RATE=$COMPLETION_RATE" >> $GITHUB_OUTPUT
-
-      - name: Post to Discord
-        run: |
+          # --- Format dates ---
           END_DATE=$(date -u +"%b %d, %Y")
           START_DATE=$(date -u -d "7 days ago" +"%b %d, %Y")
 
-          WAU_ARROW="→"
-          if [[ "${{ steps.wau.outputs.WAU_TREND }}" == up* ]]; then WAU_ARROW="↑"; fi
-          if [[ "${{ steps.wau.outputs.WAU_TREND }}" == down* ]]; then WAU_ARROW="↓"; fi
-
-          SESSIONS_ARROW="→"
-          if [[ "${{ steps.sessions.outputs.SESSIONS_TREND }}" == up* ]]; then SESSIONS_ARROW="↑"; fi
-          if [[ "${{ steps.sessions.outputs.SESSIONS_TREND }}" == down* ]]; then SESSIONS_ARROW="↓"; fi
-
-          MESSAGE="**Harmonica Weekly Metrics Summary**
+          # --- Build Message 1: Overview + Top Sessions ---
+          MSG1="**Harmonica Weekly Sessions Report**
           _Week of ${START_DATE} - ${END_DATE}_
 
-          **Daily Active Users (last 7 days)**
+          **Overview**
           \`\`\`
-          ${{ steps.dau.outputs.DAU_TABLE }}
+          Metric            This Week  Prev Week  Change
+          Active sessions   ${TW_SESSIONS}          ${PW_SESSIONS}          ${CHG_SESSIONS}
+          Participants      ${TW_PARTICIPANTS}          ${PW_PARTICIPANTS}          ${CHG_PARTICIPANTS}
+          Pageviews         ${TW_PAGEVIEWS}          ${PW_PAGEVIEWS}          ${CHG_PAGEVIEWS}
+          Interactions      ${TW_INTERACTIONS}          ${PW_INTERACTIONS}          ${CHG_INTERACTIONS}
           \`\`\`
 
-          **Weekly Active Users (last 4 weeks)** ${WAU_ARROW} ${{ steps.wau.outputs.WAU_TREND }} vs prev week
+          **Daily Activity**
           \`\`\`
-          ${{ steps.wau.outputs.WAU_TABLE }}
+          ${DAILY_TABLE}
           \`\`\`
 
-          **Sessions Created (last 4 weeks)** ${SESSIONS_ARROW} ${{ steps.sessions.outputs.SESSIONS_TREND }} vs prev week
-          \`\`\`
-          ${{ steps.sessions.outputs.SESSIONS_TABLE }}
-          \`\`\`
-          Total sessions (30d): **${{ steps.sessions.outputs.SESSIONS_TOTAL }}**
+          **Top Sessions**
+          ${TOP_SESSIONS:-No sessions this week}"
 
-          **Participants This Week**
-          Joined: **${{ steps.participants.outputs.JOINED_CURRENT }}** | Completed: **${{ steps.participants.outputs.COMPLETED_CURRENT }}** | Completion rate: **${{ steps.participants.outputs.COMPLETION_RATE }}%**
+          MSG1=$(echo "$MSG1" | sed 's/^          //')
+
+          # --- Build Message 2: Engagement + LLM + UX ---
+          MSG2="**Engagement Breakdown**
+          \`\`\`
+          ${ENGAGEMENT_SUMMARY}
+          \`\`\`
+
+          **LLM Usage**
+          \`\`\`
+          ${LLM_TABLE}
+          \`\`\`
+          Embeddings: ${EMB_CALLS} calls (${EMB_LATENCY}s avg latency)
+
+          **UX Health**
+          ${UX_LINE}
 
           [View full dashboard](https://us.posthog.com/project/96374/dashboard/242543)"
 
-          # Strip the 10-space YAML indentation from message lines
-          MESSAGE=$(echo "$MESSAGE" | sed 's/^          //')
+          MSG2=$(echo "$MSG2" | sed 's/^          //')
 
-          jq -n --arg content "$MESSAGE" \
+          # --- Post to Discord ---
+          jq -n --arg content "$MSG1" \
             '{"username": "Harmonica Analytics", "content": $content}' | \
-            curl -s -X POST "${{ secrets.DISCORD_ANALYTICS_WEBHOOK_URL }}" \
+            curl -sf -X POST "$DISCORD_WEBHOOK" \
               -H "Content-Type: application/json" \
               -d @-
+
+          sleep 1
+
+          jq -n --arg content "$MSG2" \
+            '{"username": "Harmonica Analytics", "content": $content}' | \
+            curl -sf -X POST "$DISCORD_WEBHOOK" \
+              -H "Content-Type: application/json" \
+              -d @-
+
+          echo "Posted weekly report to Discord"
