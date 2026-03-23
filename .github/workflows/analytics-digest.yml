@@ -58,6 +58,14 @@ jobs:
           CHG_PAGEVIEWS=$(pct_change "$TW_PAGEVIEWS" "$PW_PAGEVIEWS")
           CHG_INTERACTIONS=$(pct_change "$TW_INTERACTIONS" "$PW_INTERACTIONS")
 
+          # --- Query 2b: Sessions created (custom event, this week vs prev) ---
+          CREATED_TW=$(hogql "SELECT count(*) FROM events WHERE event = 'session_created' AND timestamp >= now() - INTERVAL 7 DAY")
+          CREATED_PW=$(hogql "SELECT count(*) FROM events WHERE event = 'session_created' AND timestamp >= now() - INTERVAL 14 DAY AND timestamp < now() - INTERVAL 7 DAY")
+
+          TW_CREATED=$(echo "$CREATED_TW" | jq -r '.results[0][0]')
+          PW_CREATED=$(echo "$CREATED_PW" | jq -r '.results[0][0]')
+          CHG_CREATED=$(pct_change "$TW_CREATED" "$PW_CREATED")
+
           # --- Query 3: Active sessions with names (top 10) ---
           ACTIVE_SESSIONS=$(hogql "SELECT extractURLParameter(properties.\$current_url, 's') AS session_id, any(properties.title) AS session_name, count(DISTINCT distinct_id) AS visitors, count(*) AS pageviews FROM events WHERE event = '\$pageview' AND properties.\$current_url LIKE '%/chat?s=%' AND timestamp >= now() - INTERVAL 7 DAY GROUP BY session_id ORDER BY visitors DESC LIMIT 10")
 
@@ -138,6 +146,7 @@ jobs:
           **Overview**
           \`\`\`
           Metric            This Wk   Prev Wk   Change
+          Sessions created  $(printf '%-10s' "$TW_CREATED")$(printf '%-10s' "$PW_CREATED")${CHG_CREATED}
           Active sessions   $(printf '%-10s' "$TW_SESSIONS")$(printf '%-10s' "$PW_SESSIONS")${CHG_SESSIONS}
           Participants      $(printf '%-10s' "$TW_PARTICIPANTS")$(printf '%-10s' "$PW_PARTICIPANTS")${CHG_PARTICIPANTS}
           Pageviews         $(printf '%-10s' "$TW_PAGEVIEWS")$(printf '%-10s' "$PW_PAGEVIEWS")${CHG_PAGEVIEWS}
