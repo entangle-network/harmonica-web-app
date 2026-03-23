@@ -81,7 +81,7 @@ jobs:
               pageviews: .[3]
             }] |
             to_entries |
-            map("\(.key + 1). [\(.value.name)](https://app.harmonica.chat/chat?s=\(.value.id)) — \(.value.visitors) visitors, \(.value.pageviews) views") |
+            map("\(.key + 1). [\(.value.name)](https://app.harmonica.chat/sessions/\(.value.id)) — \(.value.visitors) visitors, \(.value.pageviews) views") |
             join("\n")
           ')
           if [ -z "$TOP_SESSIONS" ]; then TOP_SESSIONS="No sessions this week"; fi
