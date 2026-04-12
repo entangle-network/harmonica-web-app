@@ -47,5 +47,6 @@ tsconfig.tsbuildinfo
 
 *.sql
 
-# sensitive planning docs
+# sensitive / internal docs
 docs/plans/
+docs/process-notes.md
