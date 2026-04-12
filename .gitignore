@@ -47,6 +47,10 @@ tsconfig.tsbuildinfo
 
 *.sql
 
+# Claude Code (maintainer-specific)
+CLAUDE.md
+.claude/
+
 # sensitive / internal docs
 docs/plans/
 docs/process-notes.md
