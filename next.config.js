@@ -13,6 +13,8 @@ const auth0BaseUrl =
     : undefined);
 
 const nextConfig = {
+  // Self-hosted deployments (Docker/Coolify) run the standalone server bundle.
+  output: 'standalone',
   // Inline AUTH0_BASE_URL at build time so it's available in all runtimes
   // (edge middleware + serverless functions)
   ...(auth0BaseUrl ? { env: { AUTH0_BASE_URL: auth0BaseUrl } } : {}),
@@ -67,7 +69,18 @@ const nextConfig = {
     serverComponentsExternalPackages: ['braintrust'],
     // This is supposed to prevent route handler caching
     serverActions: {
-      allowedOrigins: ['localhost:3000'],
+      // Behind a reverse proxy the Origin header is the public domain, so every
+      // host the app is served from has to be listed here or server actions are
+      // rejected. SERVER_ACTIONS_ALLOWED_ORIGINS (comma-separated, host[:port],
+      // no scheme) lets a deployment add its own without editing this file.
+      allowedOrigins: [
+        'localhost:3000',
+        'localhost:3001',
+        ...(process.env.SERVER_ACTIONS_ALLOWED_ORIGINS || '')
+          .split(',')
+          .map((origin) => origin.trim())
+          .filter(Boolean),
+      ],
       bodySizeLimit: '10mb',
     },
   },

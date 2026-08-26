@@ -1,0 +1,22 @@
+node_modules
+.next
+.git
+.github
+.vercel
+npm-debug.log*
+*.log
+
+# local env — real values come from the deployment environment
+.env
+.env.*
+
+# not needed in the image
+docs
+evals
+tasks
+coverage
+Dockerfile
+.dockerignore
+README.md
+CHANGELOG.md
+code_of_conduct.md

@@ -247,7 +247,13 @@ export async function createDbInstance<T extends Record<string, any>>() {
     const url = process.env.POSTGRES_URL;
     console.log('Creating DB instance:', url ? 'URL configured' : 'MISSING POSTGRES_URL');
     let db;
-    if (url?.includes('localhost')) {
+    // @vercel/postgres only accepts pooled Neon/Vercel connection strings. Any
+    // other Postgres — self-hosted, Docker, Coolify — has to go through the node
+    // pg driver, and its hostname is whatever the container is called, so the
+    // 'localhost' check alone cannot detect it. POSTGRES_DRIVER=pg forces it.
+    const usePgDriver =
+      process.env.POSTGRES_DRIVER === 'pg' || url?.includes('localhost');
+    if (usePgDriver) {
       const dialect = new PostgresDialect({
         pool: new pg.Pool({
           connectionString: url,
