@@ -3,7 +3,11 @@
     "loading": "Načítání...",
     "save": "Uložit",
     "saved": "Uloženo",
-    "errorPrefix": "Chyba: {message}"
+    "errorPrefix": "Chyba: {message}",
+    "cancel": "Zrušit",
+    "next": "Další",
+    "back": "Zpět",
+    "create": "Vytvořit"
   },
   "settings": {
     "title": "Nastavení",
@@ -76,5 +80,72 @@
       "accountDeleted": "Účet smazán. Přesměrovávám na odhlášení...",
       "deleteAccountFailed": "Nepodařilo se smazat účet"
     }
+  },
+  "create": {
+    "intro": {
+      "title": "Pojďme navrhnout vaše sezení",
+      "youWill": "Čeká vás:",
+      "step1": "Sdělte cíle a kontext svého projektu",
+      "step2": "Společně s AI navrhnete scénář rozhovoru",
+      "step3": "Zkontrolujete a upravíte úvodní formulář",
+      "ready": "Můžeme začít?",
+      "imageAlt": "Ukázka chatu s průběhem konverzace"
+    },
+    "objective": {
+      "title": "Jaký je váš cíl?",
+      "description": "Shrňte, čeho chcete těmito rozhovory dosáhnout",
+      "placeholder": "Chci porozumět tomu, jak uživatelé vnímají nové funkce našeho produktu."
+    },
+    "critical": {
+      "title": "Co je klíčové zjistit?",
+      "description": "Určete, jaké informace nebo detaily od účastníků potřebujete",
+      "placeholder": "Účastníci by měli uvést příklady svých pracovních postupů nebo popsat problémy, se kterými se potýkají."
+    },
+    "context": {
+      "title": "Přidejte kontext",
+      "description": "Doplňte pozadí, aby naše AI pochopila účel vašeho sezení",
+      "placeholder": "Naše firma vyvíjí novou aplikaci a toto sezení je součástí uživatelského testování klíčových funkcí."
+    },
+    "name": {
+      "title": "Pojmenujte sezení",
+      "description": "Zadejte srozumitelný název sezení, který uvidí účastníci",
+      "label": "Název sezení",
+      "placeholder": "Název vašeho sezení"
+    },
+    "summary": {
+      "title": "Shrnutí sezení",
+      "objective": "Cíl",
+      "critical": "Co je klíčové zjistit",
+      "context": "Kontext"
+    },
+    "generate": "Vygenerovat sezení",
+    "notSpecified": "Neuvedeno",
+    "validation": {
+      "objectiveRequired": "Zadejte prosím cíl sezení",
+      "objectiveTooShort": "Popište cíl podrobněji (alespoň 10 znaků)",
+      "criticalRequired": "Určete prosím, jaké informace od účastníků potřebujete",
+      "criticalTooShort": "Uveďte konkrétnější požadavky (alespoň 10 znaků)",
+      "nameRequired": "Zadejte prosím název sezení",
+      "nameTooShort": "Název sezení musí mít alespoň 3 znaky"
+    }
+  },
+  "questionModal": {
+    "addTitle": "Přidat otázku",
+    "editTitle": "Upravit otázku",
+    "description": "Přidejte otázku, kterou účastník vyplní před začátkem",
+    "questionLabel": "Otázka",
+    "questionPlaceholder": "Jaká je vaše role?",
+    "typeLabel": "Typ",
+    "typePlaceholder": "Vyberte typ",
+    "types": {
+      "shortField": "Krátká odpověď",
+      "email": "E-mail",
+      "options": "Výběr z možností"
+    },
+    "optionsLabel": "Přidejte možnosti výběru",
+    "optionsPlaceholder": "Možnost 1, Možnost 2, Možnost 3",
+    "optionsHint": "Hodnoty oddělujte čárkou",
+    "required": "Povinné",
+    "saveChanges": "Uložit změny"
   }
 }

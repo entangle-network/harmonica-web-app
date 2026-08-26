@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -34,6 +35,8 @@ function EditableField({
   onSave,
   placeholder,
 }: EditableFieldProps) {
+  const t = useTranslations('create');
+  const tCommon = useTranslations('common');
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(value);
   const [showEditButton, setShowEditButton] = useState(false);
@@ -87,17 +90,17 @@ function EditableField({
             <div className="flex space-x-2">
               <Button size="sm" onClick={handleSave}>
                 <Check className="h-3 w-3" />
-                Save
+                {tCommon('save')}
               </Button>
               <Button size="sm" variant="outline" onClick={handleCancel}>
                 <X className="h-3 w-3" />
-                Cancel
+                {tCommon('cancel')}
               </Button>
             </div>
           </div>
         ) : (
           <div className="text-sm text-gray-700 whitespace-pre-wrap bg-white p-3 rounded-md border min-h-[80px]">
-            {value || <span className="text-muted-foreground italic">Not specified</span>}
+            {value || <span className="text-muted-foreground italic">{t('notSpecified')}</span>}
           </div>
         )}
       </div>
@@ -114,6 +117,8 @@ export default function MultiStepForm({
   onBackToDashboard,
   initialStep
 }: MultiStepFormProps) {
+  const t = useTranslations('create');
+  const tCommon = useTranslations('common');
   const [currentStep, setCurrentStep] = useState<number>(initialStep ?? 0); // Start at provided step or 0
   const [stepValidations, setStepValidations] = useState<Record<number, StepValidation>>({});
   const [isObjectivePrefilled, setIsObjectivePrefilled] = useState(initialStep ? initialStep > 1 : false);
@@ -143,19 +148,19 @@ export default function MultiStepForm({
 
       case 1: // Objective
         if (!formData.goal?.trim()) {
-          return { isValid: false, error: 'Please provide your session objective' };
+          return { isValid: false, error: t('validation.objectiveRequired') };
         }
         if (formData.goal.trim().length < 10) {
-          return { isValid: false, error: 'Please provide a more detailed objective (at least 10 characters)' };
+          return { isValid: false, error: t('validation.objectiveTooShort') };
         }
         return { isValid: true };
 
       case 2: // Critical to gather
         if (!formData.critical?.trim()) {
-          return { isValid: false, error: 'Please specify what information you need from participants' };
+          return { isValid: false, error: t('validation.criticalRequired') };
         }
         if (formData.critical.trim().length < 10) {
-          return { isValid: false, error: 'Please provide more specific requirements (at least 10 characters)' };
+          return { isValid: false, error: t('validation.criticalTooShort') };
         }
         return { isValid: true };
 
@@ -165,10 +170,10 @@ export default function MultiStepForm({
 
       case 4: // Session name
         if (!formData.sessionName?.trim()) {
-          return { isValid: false, error: 'Please provide a session name' };
+          return { isValid: false, error: t('validation.nameRequired') };
         }
         if (formData.sessionName.trim().length < 3) {
-          return { isValid: false, error: 'Session name must be at least 3 characters' };
+          return { isValid: false, error: t('validation.nameTooShort') };
         }
         return { isValid: true };
 
@@ -241,37 +246,37 @@ export default function MultiStepForm({
               <div className="w-full hidden md:block md:col-span-2">
                 <img 
                   src="/chat-example.png" 
-                  alt="Chat example showing conversation flow" 
+                  alt={t('intro.imageAlt')}
                   className="w-full h-auto"
                 />
               </div>
               {/* Content right */}
               <div className="space-y-4 p-6 md:col-span-3">
                 <div>
-                  <h2 className="text-2xl mb-2">Let's design your session</h2>
-                  <p className="text-muted-foreground">You’ll:</p>
+                  <h2 className="text-2xl mb-2">{t('intro.title')}</h2>
+                  <p className="text-muted-foreground">{t('intro.youWill')}</p>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md bg-yellow-100 text-yellow-700 border border-yellow-200">
                       <Check className="h-3.5 w-3.5" />
                     </span>
-                    <span>Share your project goals and context</span>
+                    <span>{t('intro.step1')}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md bg-yellow-100 text-yellow-700 border border-yellow-200">
                       <Check className="h-3.5 w-3.5" />
                     </span>
-                    <span>Co-design your conversational guide with AI</span>
+                    <span>{t('intro.step2')}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md bg-yellow-100 text-yellow-700 border border-yellow-200">
                       <Check className="h-3.5 w-3.5" />
                     </span>
-                    <span>Review and edit your pre-session form</span>
+                    <span>{t('intro.step3')}</span>
                   </li>
                 </ul>
-                <p className="text-muted-foreground">Ready to get started?</p>
+                <p className="text-muted-foreground">{t('intro.ready')}</p>
               </div>
             </div>
           </div>
@@ -281,15 +286,15 @@ export default function MultiStepForm({
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold mb-2">What's your objective?</h2>
-              <p className="text-muted-foreground">Summarize what you are trying to achieve through these interviews</p>
+              <h2 className="text-2xl font-semibold mb-2">{t('objective.title')}</h2>
+              <p className="text-muted-foreground">{t('objective.description')}</p>
             </div>
             <div className="space-y-2">
               <Textarea
                 name="goal"
                 value={formData.goal}
                 onChange={handleInputChange}
-                placeholder="I want to understand user preferences on our new product features."
+                placeholder={t('objective.placeholder')}
                 className={`min-h-[120px] resize-none text-base ${
                   stepValidations[currentStep]?.error ? 'border-yellow-700 focus-visible:ring-yellow-700' : ''
                 }`}
@@ -305,15 +310,15 @@ export default function MultiStepForm({
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold mb-2">What is critical to gather?</h2>
-              <p className="text-muted-foreground">Specify what kind of information or details you need from participant responses</p>
+              <h2 className="text-2xl font-semibold mb-2">{t('critical.title')}</h2>
+              <p className="text-muted-foreground">{t('critical.description')}</p>
             </div>
             <div className="space-y-2">
               <Textarea
                 name="critical"
                 value={formData.critical}
                 onChange={handleInputChange}
-                placeholder="Participants should provide examples of their workflows or describe challenges they face."
+                placeholder={t('critical.placeholder')}
                 className={`min-h-[120px] resize-none text-base ${
                   stepValidations[currentStep]?.error ? 'border-yellow-700 focus-visible:ring-yellow-700' : ''
                 }`}
@@ -329,15 +334,15 @@ export default function MultiStepForm({
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold mb-2">Add any context</h2>
-              <p className="text-muted-foreground">Provide background to help our AI understand the purpose of your session</p>
+              <h2 className="text-2xl font-semibold mb-2">{t('context.title')}</h2>
+              <p className="text-muted-foreground">{t('context.description')}</p>
             </div>
             <div className="space-y-2">
               <Textarea
                 name="context"
                 value={formData.context}
                 onChange={handleInputChange}
-                placeholder="Our company is developing a new app, and this session is part of our usability testing to gather user feedback on key features."
+                placeholder={t('context.placeholder')}
                 className={`min-h-[120px] resize-none text-base ${
                   stepValidations[currentStep]?.error ? 'border-yellow-700 focus-visible:ring-yellow-700' : ''
                 }`}
@@ -353,20 +358,20 @@ export default function MultiStepForm({
         return (
           <div className="space-y-2">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold mb-2">Name your session</h2>
-              <p className="text-muted-foreground">Enter a clear session name that will be shared with participants</p>
+              <h2 className="text-2xl font-semibold mb-2">{t('name.title')}</h2>
+              <p className="text-muted-foreground">{t('name.description')}</p>
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="sessionName" className="text-base font-medium">
-                Session Name
+                {t('name.label')}
               </Label>
               <Input
                 id="sessionName"
                 name="sessionName"
                 value={formData.sessionName}
                 onChange={handleInputChange}
-                placeholder="Your session name"
+                placeholder={t('name.placeholder')}
                 className={`text-base ${
                   stepValidations[currentStep]?.error ? 'border-yellow-700 focus-visible:ring-yellow-700' : ''
                 }`}
@@ -402,24 +407,24 @@ export default function MultiStepForm({
           {/* Review section for step 4 */}
           {currentStep === 4 && (
             <div className="space-y-4 mb-8">
-              <h3 className="text-lg font-semibold">Session Summary</h3>
+              <h3 className="text-lg font-semibold">{t('summary.title')}</h3>
               <EditableField
-                label="Objective"
+                label={t('summary.objective')}
                 value={formData.goal || ''}
                 onSave={(value) => onFormDataChange({ goal: value })}
-                placeholder="I want to understand user preferences on our new product features."
+                placeholder={t('objective.placeholder')}
               />
               <EditableField
-                label="Critical to gather"
+                label={t('summary.critical')}
                 value={formData.critical || ''}
                 onSave={(value) => onFormDataChange({ critical: value })}
-                placeholder="Participants should provide examples of their workflows or describe challenges they face."
+                placeholder={t('critical.placeholder')}
               />
               <EditableField
-                label="Context"
+                label={t('summary.context')}
                 value={formData.context || ''}
                 onSave={(value) => onFormDataChange({ context: value })}
-                placeholder="Our company is developing a new app, and this session is part of our usability testing to gather user feedback on key features."
+                placeholder={t('context.placeholder')}
               />
             </div>
           )}
@@ -431,7 +436,7 @@ export default function MultiStepForm({
             onPrevious={handlePrevious}
             onNext={handleNext}
             isLoading={isLoading}
-            nextLabel={currentStep === 4 ? 'Generate Session' : 'Next'}
+            nextLabel={currentStep === 4 ? t('generate') : tCommon('next')}
           />
         </div>
 

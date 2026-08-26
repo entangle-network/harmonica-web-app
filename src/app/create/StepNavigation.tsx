@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
@@ -22,14 +23,18 @@ export function StepNavigation({
   onNext,
   isNextDisabled = false,
   isLoading = false,
-  nextLabel = 'Next'
+  nextLabel
 }: StepNavigationProps) {
+  const t = useTranslations('common');
+
   // Determine if we're on the first step
   // Back button is now enabled on first step to go back to dashboard
   const isFirstStep = false; // Always allow back button
-  
+
   // Determine if we're on the last step
   const isLastStep = currentStep === totalSteps;
+
+  const label = nextLabel ?? t('next');
 
   return (
     <div className="flex justify-center gap-8 mt-8 max-w-md mx-auto">
@@ -40,7 +45,7 @@ export function StepNavigation({
         disabled={isFirstStep}
       >
         <ChevronLeft className="w-4 h-4" />
-        Back
+        {t('back')}
       </Button>
       
       <Button
@@ -52,12 +57,12 @@ export function StepNavigation({
         {isLoading ? (
           <>
             <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            Loading...
+            {t('loading')}
           </>
         ) : (
           <>
-            {nextLabel === 'Generate Session' && <Sparkles className="w-4 h-4" />}
-            <span className="px-1">{nextLabel}</span>
+            {isLastStep && <Sparkles className="w-4 h-4" />}
+            <span className="px-1">{label}</span>
             <ChevronRight className="w-4 h-4" />
           </>
         )}

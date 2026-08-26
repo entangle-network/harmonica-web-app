@@ -3,7 +3,11 @@
     "loading": "Loading...",
     "save": "Save",
     "saved": "Saved",
-    "errorPrefix": "Error: {message}"
+    "errorPrefix": "Error: {message}",
+    "cancel": "Cancel",
+    "next": "Next",
+    "back": "Back",
+    "create": "Create"
   },
   "settings": {
     "title": "Settings",
@@ -76,5 +80,72 @@
       "accountDeleted": "Account deleted. Redirecting to logout...",
       "deleteAccountFailed": "Failed to delete account"
     }
+  },
+  "create": {
+    "intro": {
+      "title": "Let's design your session",
+      "youWill": "You’ll:",
+      "step1": "Share your project goals and context",
+      "step2": "Co-design your conversational guide with AI",
+      "step3": "Review and edit your pre-session form",
+      "ready": "Ready to get started?",
+      "imageAlt": "Chat example showing conversation flow"
+    },
+    "objective": {
+      "title": "What's your objective?",
+      "description": "Summarize what you are trying to achieve through these interviews",
+      "placeholder": "I want to understand user preferences on our new product features."
+    },
+    "critical": {
+      "title": "What is critical to gather?",
+      "description": "Specify what kind of information or details you need from participant responses",
+      "placeholder": "Participants should provide examples of their workflows or describe challenges they face."
+    },
+    "context": {
+      "title": "Add any context",
+      "description": "Provide background to help our AI understand the purpose of your session",
+      "placeholder": "Our company is developing a new app, and this session is part of our usability testing to gather user feedback on key features."
+    },
+    "name": {
+      "title": "Name your session",
+      "description": "Enter a clear session name that will be shared with participants",
+      "label": "Session Name",
+      "placeholder": "Your session name"
+    },
+    "summary": {
+      "title": "Session Summary",
+      "objective": "Objective",
+      "critical": "Critical to gather",
+      "context": "Context"
+    },
+    "generate": "Generate Session",
+    "notSpecified": "Not specified",
+    "validation": {
+      "objectiveRequired": "Please provide your session objective",
+      "objectiveTooShort": "Please provide a more detailed objective (at least 10 characters)",
+      "criticalRequired": "Please specify what information you need from participants",
+      "criticalTooShort": "Please provide more specific requirements (at least 10 characters)",
+      "nameRequired": "Please provide a session name",
+      "nameTooShort": "Session name must be at least 3 characters"
+    }
+  },
+  "questionModal": {
+    "addTitle": "Add Question",
+    "editTitle": "Edit Question",
+    "description": "Add a question before the participant starts",
+    "questionLabel": "Question",
+    "questionPlaceholder": "What is your role?",
+    "typeLabel": "Type",
+    "typePlaceholder": "Select type",
+    "types": {
+      "shortField": "Short field",
+      "email": "Email",
+      "options": "Options"
+    },
+    "optionsLabel": "Add select options",
+    "optionsPlaceholder": "Option 1, Option 2, Option 3",
+    "optionsHint": "Separate values with comma",
+    "required": "Required",
+    "saveChanges": "Save changes"
   }
 }
