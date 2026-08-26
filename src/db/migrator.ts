@@ -76,6 +76,14 @@ function handleResults(error: any, results: any) {
 }
 
 async function askToProceed() {
+  // Without a TTY there is nobody to answer the prompt: readline resolves on EOF
+  // and the answer comes back empty, which reads as "no" and silently cancels the
+  // migration. Containers and CI runners hit this, so skip the prompt there.
+  if (process.env.MIGRATE_NON_INTERACTIVE === 'true' || !process.stdin.isTTY) {
+    console.log('Non-interactive environment detected, proceeding without confirmation.');
+    return;
+  }
+
   const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout,

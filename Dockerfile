@@ -55,6 +55,19 @@ ENV POSTGRES_URL=postgresql://build:build@localhost:5432/build \
 
 RUN npm run build
 
+# Compile the migrator and each migration to standalone CJS so the runtime image
+# can migrate itself without carrying tsx and the full node_modules tree.
+# Migrations stay separate files because Kysely's FileMigrationProvider reads the
+# directory at runtime and imports each one; only their names identify them.
+RUN npx esbuild src/db/migrator.ts \
+      --bundle --platform=node --target=node20 --format=cjs \
+      --external:pg-native \
+      --outfile=dist-migrate/migrator.js \
+    && npx esbuild src/db/migrations/*.ts \
+      --bundle --platform=node --target=node20 --format=cjs \
+      --external:pg-native \
+      --outdir=dist-migrate/migrations
+
 # ---------- runner ----------
 FROM node:20-bookworm-slim AS runner
 WORKDIR /app
@@ -73,8 +86,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Message catalogs are bundled by the dynamic import in src/i18n/request.ts;
 # copied as well so a locale added later does not silently 404.
 COPY --from=builder --chown=nextjs:nodejs /app/messages ./messages
+COPY --from=builder --chown=nextjs:nodejs /app/dist-migrate ./dist-migrate
+
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
 
 USER nextjs
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["/app/docker-entrypoint.sh"]
