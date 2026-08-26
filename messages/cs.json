@@ -1,5 +1,80 @@
 {
   "common": {
-    "loading": "Načítání..."
+    "loading": "Načítání...",
+    "save": "Uložit",
+    "saved": "Uloženo",
+    "errorPrefix": "Chyba: {message}"
+  },
+  "settings": {
+    "title": "Nastavení",
+    "signInPrompt": "Pro zobrazení nastavení se prosím přihlaste.",
+    "tabs": {
+      "profile": "Profil",
+      "account": "Účet",
+      "apiKeys": "API klíče"
+    },
+    "loginProvider": {
+      "emailPassword": "E-mail a heslo",
+      "social": "Přihlášení přes sociální síť"
+    },
+    "profile": {
+      "title": "Profil",
+      "description": "Vaše osobní údaje viditelné ostatním účastníkům",
+      "avatarAlt": "Avatar",
+      "avatarSynced": "Avatar převzat z {provider}",
+      "displayName": "Zobrazované jméno",
+      "displayNamePlaceholder": "Vaše zobrazované jméno",
+      "displayNameHint": "Pod tímto jménem vás uvidí ostatní účastníci sezení.",
+      "email": "E-mail",
+      "emailHint": "Spravuje váš poskytovatel přihlášení. Tady ho změnit nelze."
+    },
+    "password": {
+      "title": "Heslo",
+      "description": "Změna hesla k účtu",
+      "hint": "Pošleme vám e-mailem odkaz pro nastavení nového hesla.",
+      "send": "Poslat e-mail pro obnovu",
+      "sent": "E-mail odeslán"
+    },
+    "usage": {
+      "title": "Využití",
+      "description": "Vaše aktivita v Harmonice",
+      "sessionsJoined": "Sezení, kterých jste se zúčastnili",
+      "sessionsOwned": "Sezení, která vlastníte",
+      "projects": "Projekty",
+      "noData": "Žádná data k dispozici."
+    },
+    "export": {
+      "title": "Export dat",
+      "description": "Stáhněte si všechna svá osobní data ve strojově čitelném formátu",
+      "action": "Exportovat moje data",
+      "inProgress": "Exportuji..."
+    },
+    "danger": {
+      "title": "Nebezpečná zóna",
+      "deleteDataTitle": "Smazat všechna data",
+      "deleteDataDescription": "Odstraní všechny vaše zprávy a sezení či projekty, kde jste jediným vlastníkem. Váš účet zůstane aktivní.",
+      "deleteData": "Smazat data",
+      "deleting": "Mažu...",
+      "deleteAccountTitle": "Smazat účet",
+      "deleteAccountDescription": "Trvale smaže váš účet a všechna související data. Budete okamžitě odhlášeni.",
+      "deleteAccount": "Smazat účet",
+      "gdpr": "V záležitostech GDPR se obraťte na našeho pověřence pro ochranu osobních údajů na adrese <link>privacy@harmonica.chat</link>"
+    },
+    "messages": {
+      "loadFailed": "Nepodařilo se načíst uživatelská data",
+      "nameUpdateFailed": "Nepodařilo se změnit jméno",
+      "passwordResetSent": "E-mail pro obnovu hesla odeslán. Zkontrolujte schránku.",
+      "passwordResetFailed": "Nepodařilo se odeslat e-mail pro obnovu",
+      "passwordResetSendFailed": "Nepodařilo se odeslat e-mail pro obnovu hesla",
+      "exportSuccess": "Data byla úspěšně exportována",
+      "exportFailed": "Nepodařilo se exportovat data",
+      "deleteDataConfirm": "Opravdu chcete smazat všechna svá data? Tuto akci nelze vzít zpět.",
+      "dataDeleted": "Všechna uživatelská data byla smazána",
+      "deleteDataFailed": "Nepodařilo se smazat uživatelská data",
+      "deleteAccountConfirm1": "VAROVÁNÍ: Trvale se smaže váš účet i všechna data. Tuto akci NELZE vzít zpět.",
+      "deleteAccountConfirm2": "Potvrďte to prosím ještě jednou. Ihned po smazání budete odhlášeni.",
+      "accountDeleted": "Účet smazán. Přesměrovávám na odhlášení...",
+      "deleteAccountFailed": "Nepodařilo se smazat účet"
+    }
   }
 }

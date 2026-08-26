@@ -1,5 +1,80 @@
 {
   "common": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "save": "Save",
+    "saved": "Saved",
+    "errorPrefix": "Error: {message}"
+  },
+  "settings": {
+    "title": "Settings",
+    "signInPrompt": "Please sign in to view your settings.",
+    "tabs": {
+      "profile": "Profile",
+      "account": "Account",
+      "apiKeys": "API Keys"
+    },
+    "loginProvider": {
+      "emailPassword": "Email & Password",
+      "social": "Social login"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Your personal information visible to other participants",
+      "avatarAlt": "Avatar",
+      "avatarSynced": "Avatar synced from {provider}",
+      "displayName": "Display name",
+      "displayNamePlaceholder": "Your display name",
+      "displayNameHint": "This is how other participants will see you in sessions.",
+      "email": "Email",
+      "emailHint": "Managed by your authentication provider. Cannot be changed here."
+    },
+    "password": {
+      "title": "Password",
+      "description": "Change your account password",
+      "hint": "We'll send a password reset link to your email address.",
+      "send": "Send reset email",
+      "sent": "Reset email sent"
+    },
+    "usage": {
+      "title": "Usage",
+      "description": "Your activity on Harmonica",
+      "sessionsJoined": "Sessions joined",
+      "sessionsOwned": "Sessions owned",
+      "projects": "Projects",
+      "noData": "No data available."
+    },
+    "export": {
+      "title": "Export Data",
+      "description": "Download all your personal data in a machine-readable format",
+      "action": "Export My Data",
+      "inProgress": "Exporting..."
+    },
+    "danger": {
+      "title": "Danger Zone",
+      "deleteDataTitle": "Delete all data",
+      "deleteDataDescription": "Remove all your messages, and sessions/projects where you are the sole owner. Your account will remain active.",
+      "deleteData": "Delete data",
+      "deleting": "Deleting...",
+      "deleteAccountTitle": "Delete account",
+      "deleteAccountDescription": "Permanently delete your account and all associated data. You will be logged out immediately.",
+      "deleteAccount": "Delete account",
+      "gdpr": "For GDPR-related requests, contact our Data Protection Officer at <link>privacy@harmonica.chat</link>"
+    },
+    "messages": {
+      "loadFailed": "Failed to load user data",
+      "nameUpdateFailed": "Failed to update name",
+      "passwordResetSent": "Password reset email sent. Check your inbox.",
+      "passwordResetFailed": "Failed to send reset email",
+      "passwordResetSendFailed": "Failed to send password reset email",
+      "exportSuccess": "Data exported successfully",
+      "exportFailed": "Failed to export data",
+      "deleteDataConfirm": "Are you sure you want to delete all your data? This action cannot be undone.",
+      "dataDeleted": "All user data has been deleted",
+      "deleteDataFailed": "Failed to delete user data",
+      "deleteAccountConfirm1": "WARNING: This will permanently delete your account and all data. This action CANNOT be undone.",
+      "deleteAccountConfirm2": "Please confirm once more. You will be logged out immediately after deletion.",
+      "accountDeleted": "Account deleted. Redirecting to logout...",
+      "deleteAccountFailed": "Failed to delete account"
+    }
   }
 }

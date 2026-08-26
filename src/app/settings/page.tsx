@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import ApiKeysTab from './ApiKeysTab';
 
 export default function SettingsPage() {
+  const t = useTranslations('settings');
+  const tCommon = useTranslations('common');
   const { user, error: userError, isLoading: userLoading } = useUser();
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('tab') || 'profile';
@@ -73,7 +76,7 @@ export default function SettingsPage() {
       const data = await fetchUserData();
       setUserData(data);
     } catch (error) {
-      showMessage('Failed to load user data', 'error');
+      showMessage(t('messages.loadFailed'), 'error');
       console.error(error);
     } finally {
       setLoading(false);
@@ -99,10 +102,10 @@ export default function SettingsPage() {
           setUserData({ ...userData, user: { ...userData.user, name: trimmed } });
         }
       } else {
-        showMessage(result.message || 'Failed to update name', 'error');
+        showMessage(result.message || t('messages.nameUpdateFailed'), 'error');
       }
     } catch (error) {
-      showMessage('Failed to update name', 'error');
+      showMessage(t('messages.nameUpdateFailed'), 'error');
       console.error(error);
     } finally {
       setNameLoading(false);
@@ -115,12 +118,12 @@ export default function SettingsPage() {
       const result = await requestPasswordReset();
       if (result.success) {
         setPasswordResetSent(true);
-        showMessage('Password reset email sent. Check your inbox.', 'success');
+        showMessage(t('messages.passwordResetSent'), 'success');
       } else {
-        showMessage(result.message || 'Failed to send reset email', 'error');
+        showMessage(result.message || t('messages.passwordResetFailed'), 'error');
       }
     } catch (error) {
-      showMessage('Failed to send password reset email', 'error');
+      showMessage(t('messages.passwordResetSendFailed'), 'error');
       console.error(error);
     } finally {
       setPasswordResetLoading(false);
@@ -151,9 +154,9 @@ export default function SettingsPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      showMessage('Data exported successfully', 'success');
+      showMessage(t('messages.exportSuccess'), 'success');
     } catch (error) {
-      showMessage('Failed to export data', 'error');
+      showMessage(t('messages.exportFailed'), 'error');
       console.error(error);
     } finally {
       setExportLoading(false);
@@ -163,7 +166,7 @@ export default function SettingsPage() {
   const handleDeleteData = async () => {
     if (
       !confirm(
-        'Are you sure you want to delete all your data? This action cannot be undone.'
+        t('messages.deleteDataConfirm')
       )
     ) {
       return;
@@ -174,12 +177,12 @@ export default function SettingsPage() {
       const result = await deleteUserData();
       if (result.success) {
         setUserData(null);
-        showMessage('All user data has been deleted', 'success');
+        showMessage(t('messages.dataDeleted'), 'success');
       } else {
-        showMessage(result.message || 'Failed to delete user data', 'error');
+        showMessage(result.message || t('messages.deleteDataFailed'), 'error');
       }
     } catch (error) {
-      showMessage('Failed to delete user data', 'error');
+      showMessage(t('messages.deleteDataFailed'), 'error');
       console.error(error);
     } finally {
       setDeleteLoading(false);
@@ -189,7 +192,7 @@ export default function SettingsPage() {
   const handleDeleteAccount = async () => {
     if (
       !confirm(
-        'WARNING: This will permanently delete your account and all data. This action CANNOT be undone.'
+        t('messages.deleteAccountConfirm1')
       )
     ) {
       return;
@@ -197,7 +200,7 @@ export default function SettingsPage() {
 
     if (
       !confirm(
-        'Please confirm once more. You will be logged out immediately after deletion.'
+        t('messages.deleteAccountConfirm2')
       )
     ) {
       return;
@@ -207,15 +210,15 @@ export default function SettingsPage() {
     try {
       const result = await deleteUserAccount();
       if (result.success) {
-        showMessage('Account deleted. Redirecting to logout...', 'success');
+        showMessage(t('messages.accountDeleted'), 'success');
         setTimeout(() => {
           window.location.href = '/api/auth/logout';
         }, 2000);
       } else {
-        showMessage(result.message || 'Failed to delete account', 'error');
+        showMessage(result.message || t('messages.deleteAccountFailed'), 'error');
       }
     } catch (error) {
-      showMessage('Failed to delete account', 'error');
+      showMessage(t('messages.deleteAccountFailed'), 'error');
       console.error(error);
     } finally {
       setAccountDeleteLoading(false);
@@ -224,18 +227,18 @@ export default function SettingsPage() {
 
   const isEmailPasswordUser = user?.sub?.toString().startsWith('auth0|');
   const loginProvider = isEmailPasswordUser
-    ? 'Email & Password'
+    ? t('loginProvider.emailPassword')
     : user?.sub?.toString().startsWith('google-oauth2|')
       ? 'Google'
       : user?.sub?.toString().startsWith('github|')
         ? 'GitHub'
-        : 'Social login';
+        : t('loginProvider.social');
 
   if (userLoading || loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <LoaderCircle className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Loading...</span>
+        <span className="ml-2">{tCommon('loading')}</span>
       </div>
     );
   }
@@ -243,7 +246,7 @@ export default function SettingsPage() {
   if (userError) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p>Error: {userError.message}</p>
+        <p>{tCommon('errorPrefix', { message: userError.message })}</p>
       </div>
     );
   }
@@ -251,7 +254,7 @@ export default function SettingsPage() {
   if (!user) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p>Please sign in to view your settings.</p>
+        <p>{t('signInPrompt')}</p>
       </div>
     );
   }
@@ -264,7 +267,7 @@ export default function SettingsPage() {
 
   return (
     <div className="container max-w-3xl mx-auto py-8 px-4">
-      <h1 className="text-2xl font-semibold mb-6">Settings</h1>
+      <h1 className="text-2xl font-semibold mb-6">{t('title')}</h1>
 
       {message && (
         <div
@@ -277,18 +280,18 @@ export default function SettingsPage() {
 
       <Tabs defaultValue={initialTab} className="w-full">
         <TabsList className="mb-6">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="api-keys">API Keys</TabsTrigger>
+          <TabsTrigger value="profile">{t('tabs.profile')}</TabsTrigger>
+          <TabsTrigger value="account">{t('tabs.account')}</TabsTrigger>
+          <TabsTrigger value="api-keys">{t('tabs.apiKeys')}</TabsTrigger>
         </TabsList>
 
         {/* ── Profile Tab ── */}
         <TabsContent value="profile" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Profile</CardTitle>
+              <CardTitle className="text-lg">{t('profile.title')}</CardTitle>
               <CardDescription>
-                Your personal information visible to other participants
+                {t('profile.description')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -297,7 +300,7 @@ export default function SettingsPage() {
                 {user.picture ? (
                   <Image
                     src={user.picture}
-                    alt="Avatar"
+                    alt={t('profile.avatarAlt')}
                     width={64}
                     height={64}
                     className="rounded-full"
@@ -310,14 +313,14 @@ export default function SettingsPage() {
                 <div>
                   <p className="text-sm font-medium">{editName || user.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    Avatar synced from {loginProvider}
+                    {t('profile.avatarSynced', { provider: loginProvider })}
                   </p>
                 </div>
               </div>
 
               {/* Name */}
               <div className="space-y-2">
-                <Label htmlFor="display-name">Display name</Label>
+                <Label htmlFor="display-name">{t('profile.displayName')}</Label>
                 <div className="flex gap-2">
                   <Input
                     id="display-name"
@@ -329,7 +332,7 @@ export default function SettingsPage() {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') handleSaveName();
                     }}
-                    placeholder="Your display name"
+                    placeholder={t('profile.displayNamePlaceholder')}
                     className="max-w-sm"
                     maxLength={255}
                   />
@@ -349,21 +352,21 @@ export default function SettingsPage() {
                     ) : nameSaved ? (
                       <>
                         <Check className="h-4 w-4 mr-1" />
-                        Saved
+                        {tCommon('saved')}
                       </>
                     ) : (
-                      'Save'
+                      tCommon('save')
                     )}
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  This is how other participants will see you in sessions.
+                  {t('profile.displayNameHint')}
                 </p>
               </div>
 
               {/* Email */}
               <div className="space-y-2">
-                <Label>Email</Label>
+                <Label>{t('profile.email')}</Label>
                 <div className="flex items-center gap-2">
                   <p className="text-sm">{userData?.user?.email || user.email}</p>
                   <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">
@@ -371,7 +374,7 @@ export default function SettingsPage() {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Managed by your authentication provider. Cannot be changed here.
+                  {t('profile.emailHint')}
                 </p>
               </div>
             </CardContent>
@@ -381,14 +384,14 @@ export default function SettingsPage() {
           {isEmailPasswordUser && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Password</CardTitle>
+                <CardTitle className="text-lg">{t('password.title')}</CardTitle>
                 <CardDescription>
-                  Change your account password
+                  {t('password.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
-                  We&apos;ll send a password reset link to your email address.
+                  {t('password.hint')}
                 </p>
                 <Button
                   onClick={handlePasswordReset}
@@ -403,7 +406,7 @@ export default function SettingsPage() {
                   ) : (
                     <KeyRound className="h-4 w-4 mr-2" />
                   )}
-                  {passwordResetSent ? 'Reset email sent' : 'Send reset email'}
+                  {passwordResetSent ? t('password.sent') : t('password.send')}
                 </Button>
               </CardContent>
             </Card>
@@ -415,9 +418,9 @@ export default function SettingsPage() {
           {/* Usage overview */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Usage</CardTitle>
+              <CardTitle className="text-lg">{t('usage.title')}</CardTitle>
               <CardDescription>
-                Your activity on Harmonica
+                {t('usage.description')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -425,19 +428,19 @@ export default function SettingsPage() {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center p-3 rounded-lg bg-muted/50">
                     <p className="text-2xl font-semibold">{userData.sessions?.length || 0}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Sessions joined</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('usage.sessionsJoined')}</p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/50">
                     <p className="text-2xl font-semibold">{userData.hostSessions?.length || 0}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Sessions owned</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('usage.sessionsOwned')}</p>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-muted/50">
                     <p className="text-2xl font-semibold">{userData.workspaces?.length || 0}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Projects</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('usage.projects')}</p>
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No data available.</p>
+                <p className="text-sm text-muted-foreground">{t('usage.noData')}</p>
               )}
             </CardContent>
           </Card>
@@ -445,9 +448,9 @@ export default function SettingsPage() {
           {/* Data export */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Export Data</CardTitle>
+              <CardTitle className="text-lg">{t('export.title')}</CardTitle>
               <CardDescription>
-                Download all your personal data in a machine-readable format
+                {t('export.description')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -462,7 +465,7 @@ export default function SettingsPage() {
                 ) : (
                   <Download className="h-4 w-4 mr-2" />
                 )}
-                {exportLoading ? 'Exporting...' : 'Export My Data'}
+                {exportLoading ? t('export.inProgress') : t('export.action')}
               </Button>
             </CardContent>
           </Card>
@@ -472,16 +475,15 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2 text-red-600">
                 <AlertTriangle className="h-5 w-5" />
-                Danger Zone
+                {t('danger.title')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">Delete all data</p>
+                  <p className="text-sm font-medium">{t('danger.deleteDataTitle')}</p>
                   <p className="text-xs text-muted-foreground">
-                    Remove all your messages, and sessions/projects where you are the sole owner.
-                    Your account will remain active.
+                    {t('danger.deleteDataDescription')}
                   </p>
                 </div>
                 <Button
@@ -496,16 +498,15 @@ export default function SettingsPage() {
                   ) : (
                     <Trash2 className="h-4 w-4 mr-2" />
                   )}
-                  {deleteLoading ? 'Deleting...' : 'Delete data'}
+                  {deleteLoading ? t('danger.deleting') : t('danger.deleteData')}
                 </Button>
               </div>
 
               <div className="border-t pt-6 flex items-start justify-between gap-4">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">Delete account</p>
+                  <p className="text-sm font-medium">{t('danger.deleteAccountTitle')}</p>
                   <p className="text-xs text-muted-foreground">
-                    Permanently delete your account and all associated data.
-                    You will be logged out immediately.
+                    {t('danger.deleteAccountDescription')}
                   </p>
                 </div>
                 <Button
@@ -518,20 +519,23 @@ export default function SettingsPage() {
                   {accountDeleteLoading ? (
                     <>
                       <LoaderCircle className="h-4 w-4 animate-spin mr-2" />
-                      Deleting...
+                      {t('danger.deleting')}
                     </>
                   ) : (
-                    'Delete account'
+                    t('danger.deleteAccount')
                   )}
                 </Button>
               </div>
             </CardContent>
             <CardFooter>
               <p className="text-xs text-muted-foreground">
-                For GDPR-related requests, contact our Data Protection Officer at{' '}
-                <a href="mailto:privacy@harmonica.chat" className="underline">
-                  privacy@harmonica.chat
-                </a>
+                {t.rich('danger.gdpr', {
+                  link: (chunks) => (
+                    <a href="mailto:privacy@harmonica.chat" className="underline">
+                      {chunks}
+                    </a>
+                  ),
+                })}
               </p>
             </CardFooter>
           </Card>
