@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { X, Plug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ interface ConnectAIBannerProps {
 }
 
 export default function ConnectAIBanner({ hasApiKeys }: ConnectAIBannerProps) {
+  const t = useTranslations('aiBanner');
   const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
@@ -34,11 +36,10 @@ export default function ConnectAIBanner({ hasApiKeys }: ConnectAIBannerProps) {
           </div>
           <div className="min-w-0">
             <p className="text-sm font-medium text-amber-950">
-              Connect your AI tools
+              {t('title')}
             </p>
             <p className="text-xs text-amber-800/70">
-              Use Harmonica from Claude Code, Cursor, or any MCP-compatible
-              agent.
+              {t('body')}
             </p>
           </div>
         </div>
@@ -48,13 +49,13 @@ export default function ConnectAIBanner({ hasApiKeys }: ConnectAIBannerProps) {
               size="sm"
               className="bg-amber-900 hover:bg-amber-800 text-white"
             >
-              Set up API key
+              {t('action')}
             </Button>
           </Link>
           <button
             onClick={handleDismiss}
             className="p-1.5 hover:bg-amber-100/60 rounded-full transition-colors"
-            aria-label="Dismiss banner"
+            aria-label={t('dismiss')}
           >
             <X className="h-4 w-4 text-amber-700" />
           </button>

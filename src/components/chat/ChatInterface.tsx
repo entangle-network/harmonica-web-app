@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { HelpCircle, ChevronDown } from 'lucide-react';
@@ -38,6 +39,7 @@ export const ChatInterface = ({
   userContext,
   questions,
 }: ChatInterfaceProps) => {
+  const t = useTranslations('chat');
   const { hasMinimumRole }  = usePermissions(hostData.id || '');
   const mainPanelRef = useRef<HTMLElement>(null);
   const [showRating, setShowRating] = useState(false);
@@ -107,7 +109,7 @@ export const ChatInterface = ({
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-80 fixed top-0 left-0 h-screen border-r border-gray-200 bg-amber-50 z-20">
         <div className="p-6 pb-4">
-          <p className="text-sm text-muted-foreground mb-2">Your Session</p>
+          <p className="text-sm text-muted-foreground mb-2">{t('yourSession')}</p>
           <h1 className="text-xl font-semibold mb-4 break-words" title={hostData?.topic}>
             {hostData?.topic ?? 'Test'}
           </h1>
@@ -123,7 +125,7 @@ export const ChatInterface = ({
               onClick={() => setIsHowItWorksExpanded(!isHowItWorksExpanded)}
               className="w-full p-4 flex items-center justify-between text-left hover:bg-amber-100 transition-colors"
             >
-              <h3 className="text-sm font-medium text-gray-900">How it works</h3>
+              <h3 className="text-sm font-medium text-gray-900">{t('howItWorks')}</h3>
               <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${isHowItWorksExpanded ? 'rotate-180' : ''}`} />
             </button>
             {isHowItWorksExpanded && (
@@ -131,15 +133,15 @@ export const ChatInterface = ({
                 <div className="space-y-2 pt-4">
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">1</span>
-                    <p className="text-xs text-gray-600">Relax and respond as best you can</p>
+                    <p className="text-xs text-gray-600">{t('tip1')}</p>
                   </div>
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">2</span>
-                    <p className="text-xs text-gray-600">If you need a question rephrasing, just ask</p>
+                    <p className="text-xs text-gray-600">{t('tip2')}</p>
                   </div>
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">3</span>
-                    <p className="text-xs text-gray-600">Keep this tab open to save your progress</p>
+                    <p className="text-xs text-gray-600">{t('tip3')}</p>
                   </div>
                 </div>
               </div>
@@ -179,15 +181,15 @@ export const ChatInterface = ({
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">1</span>
-                  <p className="text-sm text-gray-600">Relax and respond as best you can</p>
+                  <p className="text-sm text-gray-600">{t('tip1')}</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">2</span>
-                  <p className="text-sm text-gray-600">If you need a question rephrasing, just ask</p>
+                  <p className="text-sm text-gray-600">{t('tip2')}</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">3</span>
-                  <p className="text-sm text-gray-600">Keep this tab open to save your progress</p>
+                  <p className="text-sm text-gray-600">{t('tip3')}</p>
                 </div>
                 <div className="pt-2 border-t border-gray-100">
                   <Link href="/" className="inline-flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">

@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChevronRight, PlusCircle, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -206,6 +207,7 @@ export default async function Dashboard({
 }: {
   searchParams?: { page?: string };
 }) {
+  const t = await getTranslations('dashboard');
   const { hostSessions, workspacesWithSessions, hasApiKeys } = await sessionCache();
   if (!hostSessions) {
     return <ErrorPage title={''} message={''} />;
@@ -219,20 +221,20 @@ export default async function Dashboard({
       <div className="border rounded-xl bg-gradient-to-b from-white to-amber-100 p-8 mb-10 flex flex-col md:flex-row items-stretch gap-8">
         {/* Left column */}
         <div className="flex-1 flex flex-col justify-center">
-          <img src="/harmonica-logo-sm.png" alt="Harmonica logo" className="w-16 mb-6" />
+          <img src="/harmonica-logo-sm.png" alt={t('logoAlt')} className="w-16 mb-6" />
           <div>
-            <h1 className="text-4xl font-semibold tracking-tight mb-2">Welcome!</h1>
-            <p className="text-muted-foreground text-lg">Ready to uncover something new?</p>
+            <h1 className="text-4xl font-semibold tracking-tight mb-2">{t('welcome')}</h1>
+            <p className="text-muted-foreground text-lg">{t('tagline')}</p>
           </div>
         </div>
         {/* Right column */}
         <div className="flex-1 flex flex-col justify-center">
           <div className="flex items-center justify-between mb-2">
-            <label htmlFor="dashboard-objective" className="block text-base font-medium">What do you want to find out?</label>
+            <label htmlFor="dashboard-objective" className="block text-base font-medium">{t('objectiveLabel')}</label>
             <Link href="/templates">
               <Button variant="ghost" size="sm">
                 <FileText className="w-4 h-4" />
-                Templates
+                {t('templates')}
               </Button>
             </Link>
           </div>
@@ -241,16 +243,16 @@ export default async function Dashboard({
       </div>
       {/* Main dashboard content */}
       <div>
-        <h2 className="text-2xl font-semibold tracking-tight mb-2">Projects</h2>
+        <h2 className="text-2xl font-semibold tracking-tight mb-2">{t('projects')}</h2>
       </div>
       <div className="mb-10">
         <ProjectsGrid workspaces={workspacesWithSessions} searchParams={searchParams} />
       </div>
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold tracking-tight">Sessions</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">{t('sessions')}</h2>
           {hostSessions.length > 0 && (
-            <CreateSessionButton text="Create Session" />
+            <CreateSessionButton text={t('createSession')} />
           )}
         </div>
         {hostSessions.length > 0 ? (
@@ -258,12 +260,12 @@ export default async function Dashboard({
         ) : (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-8">
-              <p className="text-muted-foreground text-lg mb-4">No sessions yet, create one to get started.</p>
+              <p className="text-muted-foreground text-lg mb-4">{t('noSessions')}</p>
               <div className="flex justify-center gap-4">
-                <CreateSessionButton text="Get Started" />
+                <CreateSessionButton text={t('getStarted')} />
                 <Link href="https://harmonica.chat/support" target="_blank">
                   <Button variant="outline">
-                    How it works
+                    {t('howItWorks')}
                   </Button>
                 </Link>
               </div>

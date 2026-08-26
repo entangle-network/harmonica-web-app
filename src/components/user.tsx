@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -30,6 +31,7 @@ import { createStripeSession } from '@/lib/stripe';
 import { fetchUserData } from 'app/settings/actions';
 
 export default function User() {
+  const t = useTranslations();
   const { user } = useUser();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -90,19 +92,19 @@ export default function User() {
               size="sm"
             >
               <User2 className="h-4 w-4" />
-              {dbName || user.name || 'Account'}
+              {dbName || user.name || t('common.account')}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-72">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('userMenu.myAccount')}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Cog className="h-4 w-4 mr-2" />
-              <a href="/settings">Settings</a>
+              <a href="/settings">{t('userMenu.settings')}</a>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <a href="/api/auth/logout" className="text-red-600">
-                Sign Out
+                {t('common.signOut')}
               </a>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -114,26 +116,25 @@ export default function User() {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-3 text-2xl">
                 <CheckCircle2 className="h-8 w-8 text-green-500" />
-                Welcome to Pro!
+                {t('userMenu.proTitle')}
               </DialogTitle>
               <DialogDescription className="pt-4 space-y-3">
                 <p className="text-base">
-                  Thank you for subscribing to our Pro plan! Your account has
-                  been successfully upgraded.
+                  {t('userMenu.proBody')}
                 </p>
                 <div className="bg-muted p-4 rounded-lg space-y-2">
-                  <h4 className="font-medium">You now have access to:</h4>
+                  <h4 className="font-medium">{t('userMenu.proAccessTitle')}</h4>
                   <ul className="list-disc list-inside space-y-1 text-sm">
-                    <li>Unlimited AI conversations</li>
-                    <li>Advanced features and customization</li>
-                    <li>Priority customer support</li>
-                    <li>Early access to new features</li>
+                    <li>{t('userMenu.proFeature1')}</li>
+                    <li>{t('userMenu.proFeature2')}</li>
+                    <li>{t('userMenu.proFeature3')}</li>
+                    <li>{t('userMenu.proFeature4')}</li>
                   </ul>
                 </div>
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-end">
-              <Button onClick={handleModalClose}>Get Started</Button>
+              <Button onClick={handleModalClose}>{t('dashboard.getStarted')}</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -144,18 +145,16 @@ export default function User() {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-3 text-2xl">
                 <XCircle className="h-8 w-8 text-red-500" />
-                Subscription Not Completed
+                {t('userMenu.canceledTitle')}
               </DialogTitle>
               <DialogDescription className="pt-4 space-y-3">
                 <p className="text-base">
-                  The subscription process was canceled. No charges have been
-                  made to your account.
+                  {t('userMenu.canceledBody')}
                 </p>
                 <div className="bg-muted p-4 rounded-lg space-y-2">
-                  <h4 className="font-medium">Need help?</h4>
+                  <h4 className="font-medium">{t('userMenu.needHelpTitle')}</h4>
                   <p className="text-sm">
-                    If you encountered any issues or have questions about our
-                    Pro plan, our support team is here to help.
+                    {t('userMenu.needHelpBody')}
                   </p>
                 </div>
               </DialogDescription>
@@ -168,7 +167,7 @@ export default function User() {
                     'mailto:support@harmonica.chat?subject=Pro%20Subscription%20Help&body=Hi%2C%20I%20need%20help%20with%20my%20Pro%20subscription.')
                 }
               >
-                Contact Support
+                {t('userMenu.contactSupport')}
               </Button>
               <Button
                 onClick={async () => {
@@ -200,7 +199,7 @@ export default function User() {
                   }
                 }}
               >
-                Try Again
+                {t('common.tryAgain')}
               </Button>
             </div>
           </DialogContent>
@@ -220,7 +219,7 @@ export default function User() {
     >
       <Link href="/">
         <LogIn className="h-4 w-4" />
-        Sign in
+        {t('common.signIn')}
       </Link>
     </Button>
   );

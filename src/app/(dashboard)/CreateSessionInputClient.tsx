@@ -1,25 +1,15 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Textarea } from '@/components/ui/textarea';
 import { MagicWand } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const PLACEHOLDER_SUGGESTIONS = [
-  "Survey my team about our remote work policies",
-  "Ask customers what features they'd pay extra for",
-  "Get feedback from employees on our new office layout",
-  "Survey users about their experience with our onboarding",
-  "Ask stakeholders about their priorities for Q2",
-  "Survey participants about the conference experience",
-  "Get feedback from beta testers on our new interface",
-  "Ask team members about our meeting culture",
-  "Survey customers about their support experience",
-  "Get input from users on our pricing strategy"
-];
-
 function RotatingPlaceholder() {
+  const t = useTranslations('sessionInput');
+  const PLACEHOLDER_SUGGESTIONS = t.raw('suggestions') as string[];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
 
@@ -72,6 +62,8 @@ function RotatingPlaceholder() {
 }
 
 export default function CreateSessionInputClient() {
+  const t = useTranslations('sessionInput');
+  const tCommon = useTranslations('common');
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -93,7 +85,7 @@ export default function CreateSessionInputClient() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!value.trim()) {
-      setError('Please enter your session objective.');
+      setError(t('objectiveRequired'));
       return;
     }
     
@@ -120,13 +112,13 @@ export default function CreateSessionInputClient() {
       const success = setSessionStorage('createSessionPrefill', JSON.stringify(prefillData));
       
       if (!success) {
-        throw new Error('Unable to save your input. Please try again.');
+        throw new Error(t('saveFailed'));
       }
       
       // Navigate to creation flow
       router.push('/create');
     } catch (err: any) {
-      setError(err.message || 'Something went wrong.');
+      setError(err.message || t('genericError'));
     } finally {
       setLoading(false);
     }
@@ -141,7 +133,7 @@ export default function CreateSessionInputClient() {
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder={isFocused ? "Tip: Be specific about what you want to achieve..." : ""}
+          placeholder={isFocused ? t('focusPlaceholder') : ''}
           className="min-h-[44px] md:min-h-[44px] flex-1 resize-none bg-background border-0 focus-visible:ring-0 focus-visible:border-0 shadow-none text-base placeholder:text-muted-foreground pr-[120px] rounded-none"
           disabled={loading}
         />
@@ -158,7 +150,7 @@ export default function CreateSessionInputClient() {
           size="default"
         >
           <MagicWand color="white" />
-          {loading ? 'Creating...' : 'Create'}
+          {loading ? tCommon('creating') : tCommon('create')}
         </Button>
       </div>
       {error && <div className="text-red-500 text-sm mt-2">{error}</div>}

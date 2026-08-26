@@ -23,8 +23,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useTranslations } from 'next-intl';
 
-function CreateWorkspaceButton({ text = 'New Project' }: { text?: string }) {
+function CreateWorkspaceButton({ text }: { text?: string }) {
+  const t = useTranslations('projects');
+  const label = text ?? t('newProject');
   const workspaceId = `wsp_${Math.random().toString(36).substring(2, 14)}`;
   const link = `/workspace/${workspaceId}`;
   return (
@@ -33,7 +36,7 @@ function CreateWorkspaceButton({ text = 'New Project' }: { text?: string }) {
         <CardContent className="flex flex-row items-center justify-between w-full p-0 bg-transparent">
           <span className="flex flex-row items-center gap-2 flex-1 min-w-0">
             <Plus className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-            <span className="font-medium text-base truncate">{text}</span>
+            <span className="font-medium text-base truncate">{label}</span>
           </span>
         </CardContent>
       </Card>
@@ -42,6 +45,8 @@ function CreateWorkspaceButton({ text = 'New Project' }: { text?: string }) {
 }
 
 function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
+  const t = useTranslations('projects');
+  const tCommon = useTranslations('common');
   const hasSessions = workspace.sessions.length > 0;
   const router = useRouter();
   const [isDeleting, setIsDeleting] = React.useState(false);
@@ -63,7 +68,7 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
         router.refresh();
       } catch (error) {
         console.error('Error deleting workspace:', error);
-        alert('Failed to delete workspace. Please try again.');
+        alert(t('deleteFailed'));
       } finally {
         setIsDeleting(false);
       }
@@ -72,7 +77,7 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
 
   const handleRename = async () => {
     if (!newTitle.trim()) {
-      alert('Please enter a valid title.');
+      alert(t('titleRequired'));
       return;
     }
     
@@ -84,7 +89,7 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
       router.refresh();
     } catch (error) {
       console.error('Error renaming workspace:', error);
-      alert('Failed to rename workspace. Please try again.');
+      alert(t('renameFailed'));
     } finally {
       setIsRenaming(false);
     }
@@ -136,7 +141,7 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
                   <DropdownMenuItem asChild>
                     <Link href="/create" className="cursor-pointer">
                       <Plus className="mr-2 h-4 w-4" />
-                      Create Session
+                      {t('createSession')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -148,7 +153,7 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
                 disabled={isRenaming}
               >
                 <Pencil className="mr-2 h-4 w-4" />
-                {isRenaming ? 'Renaming...' : 'Rename'}
+                {isRenaming ? tCommon('renaming') : tCommon('rename')}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={handleDelete}
@@ -156,7 +161,7 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
                 className="text-red-600 focus:text-red-600"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                {isDeleting ? 'Deleting...' : 'Delete'}
+                {isDeleting ? tCommon('deleting') : tCommon('delete')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -167,18 +172,18 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
       <Dialog open={isRenameDialogOpen} onOpenChange={setIsRenameDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Rename Project</DialogTitle>
+            <DialogTitle>{t('renameTitle')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <label htmlFor="title" className="text-sm font-medium">
-                Project Name
+                {t('nameLabel')}
               </label>
               <Input
                 id="title"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="Enter project name"
+                placeholder={t('namePlaceholder')}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -196,13 +201,13 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
                 }}
                 disabled={isRenaming}
               >
-                Cancel
+                {tCommon('cancel')}
               </Button>
               <Button
                 onClick={handleRename}
                 disabled={isRenaming || !newTitle.trim()}
               >
-                {isRenaming ? 'Renaming...' : 'Rename'}
+                {isRenaming ? tCommon('renaming') : tCommon('rename')}
               </Button>
             </div>
           </div>
@@ -213,6 +218,7 @@ function ProjectCard({ workspace }: { workspace: WorkspaceWithSessions }) {
 }
 
 function LoadMoreButton({ currentCount, totalCount }: { currentCount: number; totalCount: number }) {
+  const t = useTranslations('common');
   const nextPage = Math.ceil(currentCount / 8) + 1;
   const remainingItems = totalCount - currentCount;
 
@@ -223,7 +229,7 @@ function LoadMoreButton({ currentCount, totalCount }: { currentCount: number; to
       <Card className="h-14 border border-border flex items-center px-4 cursor-pointer hover:bg-accent transition-colors bg-background">
         <CardContent className="flex flex-row items-center justify-center w-full p-0">
           <span className="text-sm text-muted-foreground">
-            Load more
+            {t('loadMore')}
           </span>
         </CardContent>
       </Card>
