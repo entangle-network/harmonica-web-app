@@ -95,3 +95,29 @@ Dev server na **3001** (3000 obsazuje jiný proces) — na tenhle port je naváz
   (`src/lib/stripe.ts`, `src/app/api/webhook/stripe/route.ts`), takže bez neprázdného klíče
   neprojde `next build`. Placeholder stačí, i když se Stripe nepoužívá.
 - Repo nemá `.env.example`, přestože ho README zmiňuje.
+
+## Nasazení (Coolify na Hetzneru)
+
+| | |
+|---|---|
+| Coolify | https://coolify.mestovdialogu.cz, projekt `harmonica` |
+| Aplikace | `harmonica`, build pack Dockerfile, větev `cs` |
+| Databáze | `harmonica-db` (postgres:16), dostupná jen uvnitř Docker sítě |
+| Doména | https://temata.mestovdialogu.cz |
+
+Nasazení = push do `origin/cs` a spuštění deploye v Coolify. Schéma databáze si
+kontejner srovná sám při startu (`docker-entrypoint.sh`), takže migrace přidané
+upstreamem se aplikují bez ručního zásahu.
+
+### Na co pozor při nasazení
+
+- **`POSTGRES_DRIVER=pg` je povinné.** Hostitel databáze je jméno kontejneru,
+  takže původní detekce podle `localhost` v `createDbInstance` selže a kód by
+  spadl zpět na `@vercel/postgres`, který přijímá jen pooled Neon/Vercel stringy.
+- **`AUTH0_BASE_URL` a `SERVER_ACTIONS_ALLOWED_ORIGINS` jsou build-time proměnné**
+  (v Coolify příznak *build variable*). `next.config.js` se vyhodnocuje při buildu,
+  takže změna domény vyžaduje nový build, ne jen restart.
+- **Auth0 musí znát produkční URL** — callback `https://DOMENA/api/auth/callback`,
+  logout a web origin. Jinak přihlášení skončí na „Callback URL mismatch".
+- Databáze není dostupná zvenčí. Když je potřeba se k ní dostat, jde to přes
+  `docker exec` na serveru, ne přes veřejný port.
