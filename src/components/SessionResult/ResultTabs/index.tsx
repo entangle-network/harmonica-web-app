@@ -1,4 +1,6 @@
 'use client';
+
+import { useTranslations } from 'next-intl';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Tabs } from '@radix-ui/react-tabs';
 import { TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -67,6 +69,7 @@ export default function ResultTabs({
   draft = false, // Whether this is a new workspace / session
   children,
 }: ResultTabsProps & { showEdit?: boolean; draft?: boolean }) {
+  const t = useTranslations('resultTabs');
   const { hasMinimumRole, loading: loadingUserInfo } =
     usePermissions(resourceId);
 
@@ -155,7 +158,7 @@ export default function ResultTabs({
     return [
       {
         id: 'SUMMARY',
-        label: 'Summary',
+        label: t('summary'),
         isVisible:
           (visibilityConfig.showSummary ||
           visibilityConfig.showSessionRecap ||
@@ -179,7 +182,7 @@ export default function ResultTabs({
       },
       {
         id: 'RESPONSES',
-        label: 'Responses',
+        label: t('responses'),
         isVisible:
           !isProject &&
           (visibilityConfig.showResponses || hasMinimumRole('editor')),
@@ -207,7 +210,7 @@ export default function ResultTabs({
       },
       {
         id: 'KNOWLEDGE',
-        label: 'Knowledge',
+        label: t('knowledge'),
         isVisible:
           !isProject &&
           (visibilityConfig.showKnowledge || hasMinimumRole('editor')),
@@ -215,13 +218,13 @@ export default function ResultTabs({
       },
       {
         id: 'SESSIONS',
-        label: 'Sessions',
+        label: t('sessions'),
         isVisible: isProject && !!children,
         content: children,
       },
       {
         id: 'CUSTOM',
-        label: 'Saved Insights',
+        label: t('savedInsights'),
         isVisible:
           customInsightsEnabled &&
           (visibilityConfig.showCustomInsights || hasMinimumRole('editor')),
@@ -240,8 +243,8 @@ export default function ResultTabs({
           <Card>
             <CardHeader>
               <div>
-              <CardTitle className="text-xl flex items-center">Saved Insights</CardTitle>
-              <CardDescription>Insights saved from your Ask AI conversations.</CardDescription>
+              <CardTitle className="text-xl flex items-center">{t('savedInsights')}</CardTitle>
+              <CardDescription>{t('savedInsightsDesc')}</CardDescription>
               </div>
             </CardHeader>
             <CardContent>
@@ -263,15 +266,19 @@ export default function ResultTabs({
         ) : (
           <Card>
             <CardHeader>
-              <CardTitle>Saved Insights</CardTitle>
+              <CardTitle>{t('savedInsights')}</CardTitle>
             </CardHeader>
-            <CardContent>You can save insights by clicking the <PinIcon className="h-4 w-4" /> button in the chat.</CardContent>
+            <CardContent>
+              {t.rich('savedInsightsEmpty', {
+                icon: () => <PinIcon className="h-4 w-4 inline" />,
+              })}
+            </CardContent>
           </Card>
         ),
       },
       {
         id: 'SIMSCORE',
-        label: 'SimScore Ranking',
+        label: t('simScore'),
         isVisible:
           simScoreEnabled &&
           (visibilityConfig.showSimScore || hasMinimumRole('editor')), // SimScore disabled
@@ -279,12 +286,12 @@ export default function ResultTabs({
           <Card className="border-2 border-dashed border-gray-300 h-full flex flex-col items-center justify-center p-6">
             <div className="text-center space-y-4 max-w-md">
               <h3 className="text-2xl font-semibold text-gray-700">
-                SimScore Ranking
+                {t('simScore')}
               </h3>
               <p className="text-gray-500">
-                Statements from participants will be analyzed, semantically
-                compared and ranked. You can control content visibility in the{' '}
-                <i>{'Share > Content Display'}</i> section.
+                {t.rich('simScoreDraft', {
+                  path: (chunks) => <i>{chunks}</i>,
+                })}
               </p>
             </div>
           </Card>

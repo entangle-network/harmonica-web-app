@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
@@ -40,6 +41,8 @@ function DeleteSessionDialog({
   session: SessionTableData;
   onDelete: (sessionId: string) => void;
 }) {
+  const t = useTranslations('sessionRow');
+  const tCommon = useTranslations('common');
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -48,14 +51,14 @@ function DeleteSessionDialog({
       await deleteSession(session.id);
       onDelete(session.id);
       toast({
-        title: 'Session deleted',
-        description: 'The session has been successfully deleted.',
+        title: t('toast.deleted'),
+        description: t('toast.deletedDesc'),
       });
     } catch (error) {
       console.error('Error deleting session:', error);
       toast({
-        title: 'Failed to delete session',
-        description: 'An error occurred while deleting the session.',
+        title: t('toast.deleteFailed'),
+        description: t('toast.deleteFailedDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -68,22 +71,21 @@ function DeleteSessionDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogTitle>{t('deleteTitle')}</DialogTitle>
           <DialogDescription>
-            This will permanently delete the session "{session.topic}" and all
-            its data. This action cannot be undone.
+            {t('deleteBody', { topic: session.topic })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={onClose} disabled={isDeleting}>
-            Cancel
+            {tCommon('cancel')}
           </Button>
           <Button
             onClick={handleDelete}
             disabled={isDeleting}
             variant="destructive"
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {isDeleting ? tCommon('deleting') : tCommon('delete')}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -98,6 +100,8 @@ export function Session({
   session: SessionTableData;
   onDelete: (sessionId: string) => void;
 }) {
+  const t = useTranslations('sessionRow');
+  const tCommon = useTranslations('common');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isCloning, setIsCloning] = useState(false);
   const [showProjectDialog, setShowProjectDialog] = useState(false);
@@ -110,22 +114,22 @@ export function Session({
       const newSessionId = await cloneSession(session.id);
       if (newSessionId) {
         toast({
-          title: 'Session cloned successfully',
+          title: t('toast.cloned'),
           description: "You'll be redirected to the new session.",
         });
         router.push(`/sessions/${encryptId(newSessionId)}`);
       } else {
         toast({
-          title: 'Failed to clone session',
-          description: 'An error occurred while cloning the session.',
+          title: t('toast.cloneFailed'),
+          description: t('toast.cloneFailedDesc'),
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Error cloning session:', error);
       toast({
-        title: 'Failed to clone session',
-        description: 'An error occurred while cloning the session.',
+        title: t('toast.cloneFailed'),
+        description: t('toast.cloneFailedDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -175,29 +179,29 @@ export function Session({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{tCommon('openMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => setShowShareDialog(true)}>
               <Share2 className="mr-2 h-4 w-4" />
-              <span>Invite team</span>
+              <span>{t('inviteTeam')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={addToProject}>
               <FolderPlus className="mr-2 h-4 w-4" />
-              Add to Project
+              {t('addToProject')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleClone} disabled={isCloning}>
               <Copy className="mr-2 h-4 w-4" />
-              Clone
+              {tCommon('clone')}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => setShowDeleteDialog(true)}
               className="text-red-600"
             >
               <Trash2 className="mr-2 h-4 w-4" />
-              Delete
+              {tCommon('delete')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

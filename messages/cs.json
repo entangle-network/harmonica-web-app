@@ -36,7 +36,8 @@
     "text": "Text",
     "continue": "Pokračovat",
     "submit": "Odeslat",
-    "submitting": "Odesílám..."
+    "submitting": "Odesílám...",
+    "clone": "Duplikovat"
   },
   "settings": {
     "title": "Nastavení",
@@ -498,5 +499,31 @@
     "verySatisfied": "Velmi spokojen",
     "feedbackPlaceholder": "Řekněte nám víc o své zkušenosti...",
     "submitFeedback": "Odeslat zpětnou vazbu"
+  },
+  "resultTabs": {
+    "summary": "Shrnutí",
+    "responses": "Odpovědi",
+    "knowledge": "Podklady",
+    "sessions": "Sezení",
+    "savedInsights": "Uložené poznatky",
+    "savedInsightsDesc": "Poznatky uložené z vašich konverzací s AI.",
+    "savedInsightsEmpty": "Poznatky uložíte tlačítkem <icon></icon> v chatu.",
+    "simScore": "Žebříček SimScore",
+    "simScoreDraft": "Výroky účastníků se analyzují, sémanticky porovnají a seřadí. Viditelnost obsahu nastavíte v sekci <path>Sdílet > Zobrazení obsahu</path>."
+  },
+  "sessionRow": {
+    "deleteTitle": "Opravdu?",
+    "deleteBody": "Trvale se smaže sezení „{topic}“ i všechna jeho data. Tuto akci nelze vzít zpět.",
+    "inviteTeam": "Pozvat tým",
+    "addToProject": "Přidat do projektu",
+    "toast": {
+      "deleted": "Sezení smazáno",
+      "deletedDesc": "Sezení bylo úspěšně smazáno.",
+      "deleteFailed": "Sezení se nepodařilo smazat",
+      "deleteFailedDesc": "Při mazání sezení došlo k chybě.",
+      "cloned": "Sezení zduplikováno",
+      "cloneFailed": "Sezení se nepodařilo zduplikovat",
+      "cloneFailedDesc": "Při duplikování sezení došlo k chybě."
+    }
   }
 }

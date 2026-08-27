@@ -36,7 +36,8 @@
     "text": "Text",
     "continue": "Continue",
     "submit": "Submit",
-    "submitting": "Submitting..."
+    "submitting": "Submitting...",
+    "clone": "Clone"
   },
   "settings": {
     "title": "Settings",
@@ -498,5 +499,31 @@
     "verySatisfied": "Very satisfied",
     "feedbackPlaceholder": "Tell us more about your experience...",
     "submitFeedback": "Submit Feedback"
+  },
+  "resultTabs": {
+    "summary": "Summary",
+    "responses": "Responses",
+    "knowledge": "Knowledge",
+    "sessions": "Sessions",
+    "savedInsights": "Saved Insights",
+    "savedInsightsDesc": "Insights saved from your Ask AI conversations.",
+    "savedInsightsEmpty": "You can save insights by clicking the <icon></icon> button in the chat.",
+    "simScore": "SimScore Ranking",
+    "simScoreDraft": "Statements from participants will be analyzed, semantically compared and ranked. You can control content visibility in the <path>Share > Content Display</path> section."
+  },
+  "sessionRow": {
+    "deleteTitle": "Are you sure?",
+    "deleteBody": "This will permanently delete the session “{topic}” and all its data. This action cannot be undone.",
+    "inviteTeam": "Invite team",
+    "addToProject": "Add to Project",
+    "toast": {
+      "deleted": "Session deleted",
+      "deletedDesc": "The session has been successfully deleted.",
+      "deleteFailed": "Failed to delete session",
+      "deleteFailedDesc": "An error occurred while deleting the session.",
+      "cloned": "Session cloned successfully",
+      "cloneFailed": "Failed to clone session",
+      "cloneFailedDesc": "An error occurred while cloning the session."
+    }
   }
 }
