@@ -34,7 +34,13 @@ Details are in [docs/FORK.md](docs/FORK.md) and in the commit history of the
 
 AGPL-3.0 §13 requires that anyone interacting with this software over a network
 be offered the source of the version they are using. The deployed application
-links to the exact commit it was built from — see `src/components/SourceLink.tsx`.
+carries a **Source code** link in the participant chat, the session invitation
+and the host dashboard — see `src/components/SourceLink.tsx`.
+
+The link resolves to the exact commit the image was built from when the builder
+can see the git metadata. Where the build platform hands over an export without
+it, the link points at **`cs`**, the branch production is deployed from, which
+is therefore the branch to consult for the running source.
 
 ## Trademarks
 

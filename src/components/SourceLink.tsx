@@ -17,8 +17,14 @@ const REPO =
 
 const COMMIT = process.env.NEXT_PUBLIC_SOURCE_COMMIT;
 
+// Some build platforms hand the builder an export of the repository with no git
+// metadata, leaving the commit unknown. Falling back to the deployed branch is
+// still a correct offer of the Corresponding Source — unlike the repository
+// root, which says nothing about which code is running.
+const BRANCH = process.env.NEXT_PUBLIC_SOURCE_BRANCH || 'cs';
+
 export function sourceUrl() {
-  return COMMIT ? `${REPO}/tree/${COMMIT}` : REPO;
+  return `${REPO}/tree/${COMMIT || BRANCH}`;
 }
 
 export function SourceLink({ className }: { className?: string }) {
