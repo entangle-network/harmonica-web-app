@@ -166,7 +166,7 @@ export const SessionModal = ({
           ) : (
             <div className="flex flex-col lg:flex-row lg:justify-between flex-1">
               {/* Left side content - 60% width */}
-              <div className="w-full lg:w-3/5 flex flex-col justify-start max-w-xl pb-16">
+              <div className="w-full flex flex-col justify-start max-w-xl pb-16">
                 {/* Header content - outside the flex row */}
                 <div className="mb-8 mt-4">
                   <img
@@ -379,15 +379,6 @@ export const SessionModal = ({
                   )}
                 </div>
               
-              {/* Right side image - 40% width */}
-              <div className="hidden lg:flex w-full lg:w-2/5 items-start justify-end">
-                <img 
-                  src="/chat-example.png" 
-                  alt={t('chatExampleAlt')}
-                  
-                  className="w-full max-w-md h-auto object-contain"
-                />
-              </div>
             </div>
           )}
           
