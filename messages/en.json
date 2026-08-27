@@ -502,7 +502,7 @@
     "tip2": "Your transcript is shared with the session host as you go",
     "tip3": "Need help articulating your thoughts? Just ask",
     "begin": "Begin",
-    "privacyNote": "Data security comes first – we will never sell or share your data. For more details, here's our <link>Privacy Policy</link>"
+    "privacyLink": "Privacy policy"
   },
   "questionsForm": {
     "title": "A bit about you",
@@ -844,7 +844,9 @@
     "logo": "Footer logo",
     "logoHint": "Replaces the \"Powered by Harmonica\" lockup in the chat and on the invitation card.",
     "logoUrl": "Logo link",
-    "logoUrlHint": "Where the logo takes people. Opens in a new tab."
+    "logoUrlHint": "Where the logo takes people. Opens in a new tab.",
+    "privacyUrl": "Privacy policy link",
+    "privacyUrlHint": "Shown to participants on the invitation card. Leave empty to use the default."
   },
   "sessionNav": {
     "editSession": "Edit Session",

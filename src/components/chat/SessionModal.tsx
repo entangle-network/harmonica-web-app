@@ -386,15 +386,17 @@ export const SessionModal = ({
           <div className="mt-auto pt-8 text-center flex flex-col md:flex-row justify-center gap-4 md:gap-8 items-center">
             <ParticipantFooterBrand className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors" />
             <SourceLink />
-            <p className="text-xs text-muted-foreground">
-              {t.rich('privacyNote', {
-                link: (chunks) => (
-                  <Link href="https://harmonica.chat/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
-                    {chunks}
-                  </Link>
-                ),
-              })}
-            </p>
+            {/* The host's own policy when they set one: on a self-hosted
+                instance the data controller is whoever runs it, not the project
+                whose code they run. */}
+            <Link
+              href={theme.privacyUrl || 'https://harmonica.chat/privacy'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-muted-foreground underline hover:text-foreground transition-colors"
+            >
+              {t('privacyLink')}
+            </Link>
           </div>
         </div>
       </div>

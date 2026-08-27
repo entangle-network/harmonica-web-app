@@ -48,6 +48,7 @@ export function AppearanceSettings({
     logo: null,
   });
   const [logoUrl, setLogoUrl] = useState('');
+  const [privacyUrl, setPrivacyUrl] = useState('');
 
   useEffect(() => {
     getOwnTheme(target.kind, target.id).then((own) => {
@@ -62,6 +63,7 @@ export function AppearanceSettings({
         logo: own.logoId,
       });
       setLogoUrl(own.logoUrl ?? '');
+      setPrivacyUrl(own.privacyUrl ?? '');
     });
   }, [target.kind, target.id]);
   const [isSaving, setIsSaving] = useState(false);
@@ -79,6 +81,7 @@ export function AppearanceSettings({
         gradientFrom: colors.gradientFrom || null,
         surface: colors.surface || null,
         logoUrl: logoUrl.trim() || null,
+        privacyUrl: privacyUrl.trim() || null,
       });
       toast({ title: t('saved') });
     } catch (error) {
@@ -252,6 +255,19 @@ export function AppearanceSettings({
             className="max-w-md"
           />
           <p className="text-xs text-muted-foreground">{t('logoUrlHint')}</p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="theme-privacy-url">{t('privacyUrl')}</Label>
+          <Input
+            id="theme-privacy-url"
+            type="url"
+            value={privacyUrl}
+            placeholder="https://"
+            onChange={(e) => setPrivacyUrl(e.target.value)}
+            className="max-w-md"
+          />
+          <p className="text-xs text-muted-foreground">{t('privacyUrlHint')}</p>
         </div>
       </div>
 

@@ -52,6 +52,7 @@ export async function saveThemeColors(
     gradientFrom?: string | null;
     surface?: string | null;
     logoUrl?: string | null;
+    privacyUrl?: string | null;
   },
 ) {
   await assertMayEdit(target);
@@ -68,6 +69,9 @@ export async function saveThemeColors(
         : {}),
       ...(colors.surface !== undefined ? { theme_surface: colors.surface } : {}),
       ...(colors.logoUrl !== undefined ? { theme_logo_url: colors.logoUrl } : {}),
+      ...(colors.privacyUrl !== undefined
+        ? { theme_privacy_url: colors.privacyUrl }
+        : {}),
     } as any)
     .where('id', '=', target.id)
     .execute();

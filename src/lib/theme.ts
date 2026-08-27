@@ -19,6 +19,7 @@ type ThemeColumns = {
   theme_avatar_id?: string | null;
   theme_logo_id?: string | null;
   theme_logo_url?: string | null;
+  theme_privacy_url?: string | null;
 };
 
 function pick(...levels: (ThemeColumns | undefined)[]): SessionTheme {
@@ -33,6 +34,7 @@ function pick(...levels: (ThemeColumns | undefined)[]): SessionTheme {
     avatarId: first('theme_avatar_id'),
     logoId: first('theme_logo_id'),
     logoUrl: first('theme_logo_url'),
+    privacyUrl: first('theme_privacy_url'),
   };
 }
 
@@ -53,6 +55,7 @@ export async function getSessionTheme(
         'theme_avatar_id',
         'theme_logo_id',
         'theme_logo_url',
+        'theme_privacy_url',
       ])
       .executeTakeFirst();
 
@@ -76,6 +79,7 @@ export async function getSessionTheme(
         'workspaces.theme_avatar_id',
         'workspaces.theme_logo_id',
         'workspaces.theme_logo_url',
+        'workspaces.theme_privacy_url',
       ])
       .executeTakeFirst();
 
@@ -104,6 +108,7 @@ export async function getWorkspaceTheme(
         'theme_avatar_id',
         'theme_logo_id',
         'theme_logo_url',
+        'theme_privacy_url',
       ])
       .executeTakeFirst();
 
@@ -138,6 +143,7 @@ export async function getOwnTheme(
         'theme_avatar_id',
         'theme_logo_id',
         'theme_logo_url',
+        'theme_privacy_url',
       ])
       .executeTakeFirst();
 

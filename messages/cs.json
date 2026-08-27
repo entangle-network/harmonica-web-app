@@ -502,7 +502,7 @@
     "tip2": "Váš přepis vidí pořadatel sezení průběžně",
     "tip3": "Když si nevíte rady, jak myšlenku formulovat, stačí říct",
     "begin": "Začít",
-    "privacyNote": "Bezpečnost dat je na prvním místě – vaše data nikdy neprodáme ani nesdílíme. Podrobnosti najdete v <link>zásadách ochrany osobních údajů</link>"
+    "privacyLink": "Zásady ochrany osobních údajů"
   },
   "questionsForm": {
     "title": "Něco o vás",
@@ -844,7 +844,9 @@
     "logo": "Logo v patičce",
     "logoHint": "Nahradí nápis „Běží na Harmonica\" v chatu i na úvodní kartě.",
     "logoUrl": "Odkaz z loga",
-    "logoUrlHint": "Kam logo lidi zavede. Otevře se v nové záložce."
+    "logoUrlHint": "Kam logo lidi zavede. Otevře se v nové záložce.",
+    "privacyUrl": "Odkaz na zásady ochrany osobních údajů",
+    "privacyUrlHint": "Zobrazí se účastníkům na úvodní kartě. Prázdné použije výchozí odkaz."
   },
   "sessionNav": {
     "editSession": "Upravit sezení",

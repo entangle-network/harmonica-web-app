@@ -13,6 +13,7 @@ export type SessionTheme = {
   avatarId: string | null;
   logoId: string | null;
   logoUrl: string | null;
+  privacyUrl: string | null;
 };
 
 export const EMPTY_THEME: SessionTheme = {
@@ -23,6 +24,7 @@ export const EMPTY_THEME: SessionTheme = {
   avatarId: null,
   logoId: null,
   logoUrl: null,
+  privacyUrl: null,
 };
 
 /**

@@ -45,6 +45,7 @@ export interface HostSessionsTable {
   theme_avatar_id?: string;
   theme_logo_id?: string;
   theme_logo_url?: string;
+  theme_privacy_url?: string;
 }
 
 export interface UserSessionsTable {
@@ -105,6 +106,7 @@ export interface WorkspacesTable {
   theme_avatar_id?: string;
   theme_logo_id?: string;
   theme_logo_url?: string;
+  theme_privacy_url?: string;
 }
 
 export interface ThemeImagesTable {
