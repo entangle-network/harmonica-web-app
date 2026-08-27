@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -74,8 +76,9 @@ export default function ShareSettings({
   const [isOpen, setIsOpen] = useState(initialIsOpen || false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState('invite');
+  const t = useTranslations('share');
+  const tCommon = useTranslations('common');
   const isWorkspace = resourceType === 'WORKSPACE';
-  const resourceTypeName = resourceType === 'WORKSPACE' ? 'Project' : 'Session';
   const [urlCopied, setUrlCopied] = useState(false);
   const [localIsPublic, setLocalIsPublic] = useState(!loading && isPublic);
   
@@ -114,11 +117,11 @@ export default function ShareSettings({
       .map((role) => role as Role);
 
   const roleLabelsAndDescription: Record<Role, { label: string; description: string }> = {
-    admin: { label: "Admin", description: "can manage everything" },
-    owner: { label: "Owner", description: "owns this and can delete it" },
-    editor: { label: "Editor", description: `can modify ${resourceTypeName.toLocaleLowerCase()}` },
-    viewer: { label: "Viewer", description: "can view and participate" },
-    none: { label: "None", description: "Should not be able to access this resource" },
+    admin: { label: t('roles.admin'), description: t('roles.adminDesc') },
+    owner: { label: t('roles.owner'), description: t('roles.ownerDesc') },
+    editor: { label: t('roles.editor'), description: t('roles.editorDesc', { type: resourceType }) },
+    viewer: { label: t('roles.viewer'), description: t('roles.viewerDesc') },
+    none: { label: t('roles.none'), description: t('roles.noneDesc') },
   };
 
   console.log("Assignable roles: ", assignableRoles)
@@ -154,13 +157,13 @@ export default function ShareSettings({
       if (result.success && result.visibilityConfig) {
         setLocalVisibilityConfig(result.visibilityConfig);
       } else {
-        throw new Error(result.error || 'Failed to fetch visibility settings');
+        throw new Error(result.error || t('toast.fetchVisibilityFailed'));
       }
     } catch (error) {
       console.error('Error fetching visibility settings:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to load display settings',
+        title: tCommon('error'),
+        description: t('toast.loadVisibilityFailed'),
         variant: 'destructive',
       });
     } finally {
@@ -189,13 +192,13 @@ export default function ShareSettings({
       const result = await updateVisibilitySettings(resourceId, updatedConfig, resourceType);
       
       if (!result.success) {
-        throw new Error(result.error || 'Failed to update display settings');
+        throw new Error(result.error || t('toast.updateVisibilityFailed'));
       }
       
       // Show success toast
       toast({
-        title: 'Settings Updated',
-        description: 'Display settings have been saved',
+        title: t('toast.settingsUpdated'),
+        description: t('toast.settingsSaved'),
       });
     } catch (error) {
       console.error('Error updating visibility settings:', error);
@@ -204,8 +207,8 @@ export default function ShareSettings({
       setLocalVisibilityConfig(originalConfig);
       
       toast({
-        title: 'Error',
-        description: 'Failed to update display settings',
+        title: tCommon('error'),
+        description: t('toast.updateVisibilityFailed'),
         variant: 'destructive',
       });
     }
@@ -230,18 +233,18 @@ export default function ShareSettings({
         await removeResourcePermission(resourceId, 'public', resourceType);
       }
       toast({
-        title: checked ? 'Made Public' : 'Made Private',
+        title: checked ? t('toast.madePublic') : t('toast.madePrivate'),
         description: checked
-          ? `This ${resourceTypeName.toLocaleLowerCase()} is now publicly accessible with the link.`
-          : `This ${resourceTypeName.toLocaleLowerCase()} is now private.`,
+          ? t('toast.nowPublic', { type: resourceType })
+          : t('toast.nowPrivate', { type: resourceType }),
       });
     } catch (error) {
       console.error('Error toggling public status:', error);
       // Revert local state on error
       setLocalIsPublic(!checked);
       toast({
-        title: 'Error',
-        description: `Failed to change public access setting.`,
+        title: tCommon('error'),
+        description: t('toast.publicToggleFailed'),
         variant: 'destructive',
       });
     }
@@ -269,7 +272,7 @@ export default function ShareSettings({
           const permissions = result.permissions.map((p) => ({
             ...p,
             // Fallback values if data isn't available
-            email: p.email || 'Unknown',
+            email: p.email || tCommon('unknown'),
             name: p.name || 'User ' + p.id.substring(0, 8),
           }));
           setUserAndRole(permissions);
@@ -279,13 +282,13 @@ export default function ShareSettings({
           setPendingInvitations(result.pendingInvitations);
         }
       } else {
-        throw new Error(result.error || 'Failed to load permissions');
+        throw new Error(result.error || t('toast.loadPermissionsFailed'));
       }
     } catch (error) {
       console.error('Error fetching permissions:', error);
       toast({
-        title: 'Error',
-        description: `Failed to load ${resourceTypeName.toLocaleLowerCase()} members`,
+        title: tCommon('error'),
+        description: t('toast.loadMembersFailed', { type: resourceType }),
         variant: 'destructive',
       });
     } finally {
@@ -296,8 +299,8 @@ export default function ShareSettings({
   const handleInvite = async () => {
     if (!emails.trim()) {
       toast({
-        title: 'Email Required',
-        description: 'Please enter at least one email address.',
+        title: t('toast.emailRequired'),
+        description: t('toast.emailRequiredDesc'),
         variant: 'destructive',
       });
       return;
@@ -315,7 +318,7 @@ export default function ShareSettings({
       });
 
       if (!result.success) {
-        throw new Error(result.error || 'Failed to send invitations');
+        throw new Error(result.error || t('toast.sendInvitationsFailed'));
       }
 
       // Show success/failure message
@@ -325,19 +328,19 @@ export default function ShareSettings({
           invite_count: result.results?.successful.length,
         });
         toast({
-          title: 'Invitations Sent',
-          description: `Successfully sent ${
-            result.results?.successful.length
-          } invitation${result.results?.successful.length! > 1 ? 's' : ''}.`,
+          title: t('toast.invitationsSent'),
+          description: t('toast.invitationsSentDesc', {
+            count: result.results?.successful.length ?? 0,
+          }),
         });
       }
 
       if (result.results?.failed.length! > 0) {
         toast({
-          title: 'Some Invitations Failed',
-          description: `Failed to send invitations to ${
-            result.results?.failed.length
-          } email${result.results?.failed.length! > 1 ? 's' : ''}.`,
+          title: t('toast.someInvitationsFailed'),
+          description: t('toast.someInvitationsFailedDesc', {
+            count: result.results?.failed.length ?? 0,
+          }),
           variant: 'destructive',
         });
       }
@@ -354,9 +357,9 @@ export default function ShareSettings({
     } catch (error) {
       console.error('Error sending invitations:', error);
       toast({
-        title: 'Invitation Error',
+        title: t('toast.invitationError'),
         description:
-          error instanceof Error ? error.message : 'Failed to send invitations',
+          error instanceof Error ? error.message : t('toast.sendInvitationsFailed'),
         variant: 'destructive',
       });
     } finally {
@@ -378,7 +381,7 @@ export default function ShareSettings({
       );
 
       if (!result.success) {
-        throw new Error(result.error || 'Failed to update permission');
+        throw new Error(result.error || t('toast.updatePermissionFailed'));
       }
 
       // Update local state optimistically
@@ -387,17 +390,17 @@ export default function ShareSettings({
       );
 
       toast({
-        title: 'Permission Updated',
-        description: 'User access level has been updated.',
+        title: t('toast.permissionUpdated'),
+        description: t('toast.permissionUpdatedDesc'),
       });
     } catch (error) {
       console.error('Error updating permission:', error);
       toast({
-        title: 'Update Error',
+        title: t('toast.updateError'),
         description:
           error instanceof Error
             ? error.message
-            : 'Failed to update permission',
+            : t('toast.updatePermissionFailed'),
         variant: 'destructive',
       });
       // Refresh permissions to ensure UI is in sync with server
@@ -410,8 +413,8 @@ export default function ShareSettings({
   const handleRemovePermission = async (userId: string) => {
     if (user?.sub === userId) {
       toast({
-        title: 'Cannot Remove Self',
-        description: `You cannot remove your own access to this ${resourceTypeName.toLocaleLowerCase()}.`,
+        title: t('toast.cannotRemoveSelf'),
+        description: t('toast.cannotRemoveSelfDesc', { type: resourceType }),
         variant: 'destructive',
       });
       return;
@@ -426,22 +429,22 @@ export default function ShareSettings({
       );
 
       if (!result.success) {
-        throw new Error(result.error || 'Failed to remove user');
+        throw new Error(result.error || t('toast.removeUserFailed'));
       }
 
       // Update local state optimistically
       setUserAndRole(userAndRole.filter((p) => p.id !== userId));
 
       toast({
-        title: 'User Removed',
-        description: `User has been removed from the ${resourceTypeName.toLocaleLowerCase()}.`,
+        title: t('toast.userRemoved'),
+        description: t('toast.userRemovedDesc', { type: resourceType }),
       });
     } catch (error) {
       console.error('Error removing user:', error);
       toast({
-        title: 'Remove Error',
+        title: t('toast.removeError'),
         description:
-          error instanceof Error ? error.message : 'Failed to remove user',
+          error instanceof Error ? error.message : t('toast.removeUserFailed'),
         variant: 'destructive',
       });
       // Refresh permissions to ensure UI is in sync with server
@@ -457,7 +460,7 @@ export default function ShareSettings({
       const result = await cancelInvitation(invitationId);
 
       if (!result.success) {
-        throw new Error(result.error || 'Failed to cancel invitation');
+        throw new Error(result.error || t('toast.cancelInvitationFailed'));
       }
 
       // Update local state optimistically
@@ -466,17 +469,17 @@ export default function ShareSettings({
       );
 
       toast({
-        title: 'Invitation Canceled',
-        description: 'The invitation has been canceled.',
+        title: t('toast.invitationCanceled'),
+        description: t('toast.invitationCanceledDesc'),
       });
     } catch (error) {
       console.error('Error canceling invitation:', error);
       toast({
-        title: 'Cancel Error',
+        title: t('toast.cancelError'),
         description:
           error instanceof Error
             ? error.message
-            : 'Failed to cancel invitation',
+            : t('toast.cancelInvitationFailed'),
         variant: 'destructive',
       });
       // Refresh to ensure UI is in sync with server
@@ -492,13 +495,13 @@ export default function ShareSettings({
         <DialogTrigger asChild>
           <Button variant="outline">
             <Users className="w-4 h-4" />
-            Invite team
+            {t('trigger')}
           </Button>
         </DialogTrigger>
       )}
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Share {resourceTypeName}</DialogTitle>
+          <DialogTitle>{t('title', { type: resourceType })}</DialogTitle>
         </DialogHeader>
 
         <div className="border rounded-md p-4 mb-4">
@@ -509,7 +512,7 @@ export default function ShareSettings({
                 htmlFor="public-access"
                 className="text-sm font-medium leading-none"
               >
-                Public Access
+                {t('publicAccess')}
               </label>
             </div>
             {loading
@@ -522,8 +525,7 @@ export default function ShareSettings({
             }
           </div>
           <p className="text-xs text-gray-500 mb-3">
-            When public, anyone with the link can view this{' '}
-            {resourceTypeName.toLocaleLowerCase()}.
+            {t('publicHint', { type: resourceType })}
           </p>
 
           {localIsPublic && (
@@ -550,35 +552,35 @@ export default function ShareSettings({
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-2">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="invite">Invite Users</TabsTrigger>
-            <TabsTrigger value="manage">Manage Access</TabsTrigger>
-            <TabsTrigger value="visibility">Content Display</TabsTrigger>
+            <TabsTrigger value="invite">{t('tabs.invite')}</TabsTrigger>
+            <TabsTrigger value="manage">{t('tabs.manage')}</TabsTrigger>
+            <TabsTrigger value="visibility">{t('tabs.visibility')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="invite" className="mt-4">
             <div className="grid gap-4 py-2">
               <div className="space-y-2">
-                <Label htmlFor="emails">Email Addresses</Label>
+                <Label htmlFor="emails">{t('emailsLabel')}</Label>
                 <Input
                   id="emails"
                   value={emails}
                   onChange={(e) => setEmails(e.target.value)}
-                  placeholder="Enter email addresses (comma-separated)"
+                  placeholder={t('emailsPlaceholder')}
                   disabled={isSubmitting}
                 />
                 <p className="text-xs text-gray-500">
-                  Separate multiple email addresses with commas
+                  {t('emailsHint')}
                 </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="role">Access Level</Label>
+                <Label htmlFor="role">{t('roleLabel')}</Label>
                 <Select
                   value={role}
                   onValueChange={setRole}
                   disabled={isSubmitting}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a role" />
+                    <SelectValue placeholder={t('rolePlaceholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     {assignableRoles.map(role => (
@@ -589,17 +591,16 @@ export default function ShareSettings({
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-gray-500">
-                  Viewers can participate in sessions. Editors can also modify
-                  the {resourceTypeName.toLocaleLowerCase()}.
+                  {t('roleHint', { type: resourceType })}
                 </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="message">Personal Message (Optional)</Label>
+                <Label htmlFor="message">{t('messageLabel')}</Label>
                 <Input
                   id="message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Add a personal message to the invitation"
+                  placeholder={t('messagePlaceholder')}
                   disabled={isSubmitting}
                 />
               </div>
@@ -614,14 +615,14 @@ export default function ShareSettings({
                 </div>
               ) : (
                 <>
-                  <div className="text-sm italic mb-4">Control which content is displayed to visitors:</div>
+                  <div className="text-sm italic mb-4">{t('visibilityIntro')}</div>
                   
                   <div className="flex items-center justify-between space-x-2">
                     <label
                       htmlFor="summary"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      Show Summary
+                      {t('showSummary')}
                     </label>
                     <Switch
                       id="summary"
@@ -636,7 +637,7 @@ export default function ShareSettings({
                         htmlFor="recap"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
-                        Show Session Recap
+                        {t('showRecap')}
                       </label>
                       <Switch
                         id="recap"
@@ -652,7 +653,7 @@ export default function ShareSettings({
                         htmlFor="responses"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
-                        Show Responses
+                        {t('showResponses')}
                       </label>
                       <Switch
                         id="responses"
@@ -668,7 +669,7 @@ export default function ShareSettings({
                         htmlFor="insights"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
-                        Show Custom Insights
+                        {t('showInsights')}
                       </label>
                       <Switch
                         id="insights"
@@ -683,7 +684,7 @@ export default function ShareSettings({
                       htmlFor="chat"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      Show Chat
+                      {t('showChat')}
                     </label>
                     <Switch
                       id="chat"
@@ -698,7 +699,7 @@ export default function ShareSettings({
                         htmlFor="edit-insights"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
-                        Allow Editing Insights
+                        {t('allowEditInsights')}
                       </label>
                       <Switch
                         id="edit-insights"
@@ -722,10 +723,7 @@ export default function ShareSettings({
                 pendingInvitations.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <UserCog className="h-12 w-12 mx-auto mb-2 text-gray-400" />
-                  <p>
-                    No users have access to this{' '}
-                    {resourceTypeName.toLocaleLowerCase()} yet.
-                  </p>
+                  <p>{t('noMembers', { type: resourceType })}</p>
                 </div>
               ) : (
                 <div className="space-y-6">
@@ -733,7 +731,7 @@ export default function ShareSettings({
                   {userAndRole.length > 0 && (
                     <div className="space-y-3">
                       <h3 className="text-sm font-medium text-gray-700">
-                        Members
+                        {t('members')}
                       </h3>
                       {userAndRole.map((usr) => (
                         <div
@@ -758,7 +756,7 @@ export default function ShareSettings({
                                 }
                               >
                                 <SelectTrigger className="w-[140px] h-8">
-                                  <SelectValue placeholder="Select role" />
+                                  <SelectValue placeholder={t('selectRole')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                   {assignableRoles.map(role => (
@@ -793,7 +791,7 @@ export default function ShareSettings({
                   {pendingInvitations.length > 0 && (
                     <div className="space-y-3">
                       <h3 className="text-sm font-medium text-gray-700">
-                        Pending Invitations
+                        {t('pendingInvitations')}
                       </h3>
                       {pendingInvitations.map((invitation) => (
                         <div
@@ -806,7 +804,7 @@ export default function ShareSettings({
                             </p>
                             <div className="flex items-center">
                               <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
-                                Pending
+                                {t('pending')}
                               </span>
                               <span className="text-xs text-gray-500 ml-2">
                                 {new Date(
@@ -853,7 +851,7 @@ export default function ShareSettings({
                 onClick={() => setIsOpen(false)}
                 disabled={isSubmitting || isLoadingPermissions}
               >
-                Close
+                {tCommon('close')}
               </Button>
 
               {activeTab === 'invite' && (
@@ -861,10 +859,10 @@ export default function ShareSettings({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Sending...
+                      {tCommon('sending')}
                     </>
                   ) : (
-                    'Send Invites'
+                    t('sendInvites')
                   )}
                 </Button>
               )}
