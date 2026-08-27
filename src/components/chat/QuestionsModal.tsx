@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -28,6 +29,7 @@ export const QuestionsModal = ({
   questions,
   onSubmit,
 }: QuestionsModalProps) => {
+  const t = useTranslations('questionsForm');
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -47,9 +49,9 @@ export const QuestionsModal = ({
     if (type === QuestionType.EMAIL) {
       const question = questions.find((q) => q.id === id);
       if (question?.required && !value) {
-        setErrors({ ...errors, [id]: 'Email is required' });
+        setErrors({ ...errors, [id]: t('emailRequired') });
       } else if (value && !validateEmail(value)) {
-        setErrors({ ...errors, [id]: 'Please enter a valid email address' });
+        setErrors({ ...errors, [id]: t('emailInvalid') });
       } else {
         const newErrors = { ...errors };
         delete newErrors[id];
@@ -71,7 +73,7 @@ export const QuestionsModal = ({
         answers[q.id] &&
         !validateEmail(answers[q.id])
       ) {
-        newErrors[q.id] = 'Please enter a valid email address';
+        newErrors[q.id] = t('emailInvalid');
       }
     });
 
@@ -105,10 +107,10 @@ export const QuestionsModal = ({
       <Card className="w-[calc(100%-2rem)] max-w-lg bg-white h-5/6 overflow-auto">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-gray-900">
-            A bit about you
+            {t('title')}
           </CardTitle>
           <CardDescription className="text-gray-500">
-            Share a few details about you
+            {t('description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -129,7 +131,7 @@ export const QuestionsModal = ({
                       value={answers[q.id]}
                     >
                       <SelectTrigger className="w-full bg-white border-gray-200 focus:ring-gray-200">
-                        <SelectValue placeholder="Select an option" />
+                        <SelectValue placeholder={t('selectOption')} />
                       </SelectTrigger>
                       <SelectContent>
                         {Array.from(new Set(q.options)).map((opt, index) => (
@@ -167,7 +169,7 @@ export const QuestionsModal = ({
 
               {/* Language Selector */}
               <div className="space-y-2">
-                <Label className="text-gray-700">Select Language</Label>
+                <Label className="text-gray-700">{t('selectLanguageLabel')}</Label>
                 <Select
                   onValueChange={(value) =>
                     handleInputChange(
@@ -179,7 +181,7 @@ export const QuestionsModal = ({
                   value={answers['preferred_language'] || 'en'}
                 >
                   <SelectTrigger className="w-[200px] bg-white border-gray-200 focus:ring-gray-200">
-                    <SelectValue placeholder="Select language" />
+                    <SelectValue placeholder={t('selectLanguagePlaceholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
@@ -200,7 +202,7 @@ export const QuestionsModal = ({
                 type="submit"
                 className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white"
               >
-                Get started <ChevronRight className="h-4 w-4" />
+                {t('getStarted')} <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
           </form>

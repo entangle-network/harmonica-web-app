@@ -33,7 +33,10 @@
     "toggleMenu": "Přepnout nabídku",
     "actions": "Akce",
     "removing": "Odebírám...",
-    "text": "Text"
+    "text": "Text",
+    "continue": "Pokračovat",
+    "submit": "Odeslat",
+    "submitting": "Odesílám..."
   },
   "settings": {
     "title": "Nastavení",
@@ -454,5 +457,46 @@
       "deleteErrorDesc": "Soubor se nepodařilo smazat",
       "deleteFailed": "Soubor se nepodařilo smazat"
     }
+  },
+  "chatIntro": {
+    "loadingSession": "Načítám informace o sezení...",
+    "thanksTitle": "Děkujeme za účast!",
+    "thanksBody": "Vašich podnětů si vážíme. Počkejte prosím, až sezení dokončí všichni účastníci, a dostanete závěrečnou zprávu.",
+    "viewResults": "Zobrazit výsledky",
+    "viewSessionResults": "Zobrazit výsledky sezení",
+    "startNewSession": "Založit nové sezení",
+    "invitationAlt": "Pozvánka",
+    "chatExampleAlt": "Ukázka chatu",
+    "headingClosed": "Toto sezení už skončilo",
+    "headingOpen": "Pozvánka podělit se o váš pohled",
+    "bodyLoading": "Počkejte prosím, načítáme vaše sezení...",
+    "bodyClosed": "Můžete založit nové sezení na libovolné téma a pozvat do něj ostatní.",
+    "bodyOpen": "Vítejte v konverzačním dotazníku. Chcete říct, co si opravdu myslíte? Provedeme vás několika otázkami, které nám pomohou porozumět vašemu pohledu.",
+    "formIntro": "Než začneme, potřebujeme pár údajů",
+    "tip1": "Nechte tuto záložku otevřenou — zavřením přijdete o rozepsaný průběh",
+    "tip2": "Váš přepis vidí pořadatel sezení průběžně",
+    "tip3": "Když si nevíte rady, jak myšlenku formulovat, stačí říct",
+    "begin": "Začít",
+    "privacyNote": "Bezpečnost dat je na prvním místě – vaše data nikdy neprodáme ani nesdílíme. Podrobnosti najdete v <link>zásadách ochrany osobních údajů</link>"
+  },
+  "questionsForm": {
+    "title": "Něco o vás",
+    "description": "Podělte se o pár údajů o sobě",
+    "selectOption": "Vyberte možnost",
+    "selectLanguageLabel": "Vyberte jazyk",
+    "selectLanguagePlaceholder": "Vyberte jazyk",
+    "getStarted": "Začít",
+    "emailRequired": "E-mail je povinný",
+    "emailInvalid": "Zadejte prosím platnou e-mailovou adresu"
+  },
+  "rating": {
+    "thanksTitle": "Skvělé!",
+    "thanksBody": "Vaše zpětná vazba pomáhá dělat konverzace lepší pro všechny",
+    "shareMore": "Chcete říct víc?",
+    "howSatisfied": "Jak jste spokojeni?",
+    "veryDissatisfied": "Velmi nespokojen",
+    "verySatisfied": "Velmi spokojen",
+    "feedbackPlaceholder": "Řekněte nám víc o své zkušenosti...",
+    "submitFeedback": "Odeslat zpětnou vazbu"
   }
 }

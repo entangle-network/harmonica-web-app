@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
@@ -25,6 +27,8 @@ const EMOJI_RATINGS = [
 ];
 
 export const RatingModal = ({ threadId, onClose }: RatingModalProps) => {
+  const t = useTranslations('rating');
+  const tCommon = useTranslations('common');
   const { user } = useUser();
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -98,9 +102,9 @@ export const RatingModal = ({ threadId, onClose }: RatingModalProps) => {
     return (
       <div className="bg-white rounded-lg p-4 shadow-lg w-full max-w-sm text-center">
         <div className="text-4xl mb-2">✨</div>
-        <h2 className="text-lg font-semibold mb-1">Awesome!</h2>
+        <h2 className="text-lg font-semibold mb-1">{t('thanksTitle')}</h2>
         <p className="text-gray-600 text-sm">
-          Your feedback helps make conversations better for everyone
+          {t('thanksBody')}
         </p>
       </div>
     );
@@ -110,7 +114,7 @@ export const RatingModal = ({ threadId, onClose }: RatingModalProps) => {
     <div className="bg-white rounded-lg p-4 shadow-lg w-[320px]">
       <div className="flex justify-between items-start mb-3">
         <h2 className="text-lg font-semibold leading-tight">
-          {showFeedback ? 'Want to share more?' : 'How satisfied are you?'}
+          {showFeedback ? t('shareMore') : t('howSatisfied')}
         </h2>
         <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
           <X className="h-4 w-4" />
@@ -136,14 +140,14 @@ export const RatingModal = ({ threadId, onClose }: RatingModalProps) => {
           </div>
 
           <div className="flex justify-between text-xs text-gray-500 mb-4">
-            <span>Very dissatisfied</span>
-            <span>Very satisfied</span>
+            <span>{t('veryDissatisfied')}</span>
+            <span>{t('verySatisfied')}</span>
           </div>
         </>
       ) : (
         <div className="mb-4">
           <Textarea
-            placeholder="Tell us more about your experience..."
+            placeholder={t('feedbackPlaceholder')}
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             className="w-full h-24 resize-none"
@@ -161,10 +165,10 @@ export const RatingModal = ({ threadId, onClose }: RatingModalProps) => {
         onClick={handleSubmit}
       >
         {isLoading
-          ? 'Submitting...'
+          ? tCommon('submitting')
           : showFeedback
-            ? 'Submit Feedback'
-            : 'Submit'}
+            ? t('submitFeedback')
+            : tCommon('submit')}
       </Button>
     </div>
   );

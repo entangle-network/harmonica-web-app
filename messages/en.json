@@ -33,7 +33,10 @@
     "toggleMenu": "Toggle menu",
     "actions": "Actions",
     "removing": "Removing...",
-    "text": "Text"
+    "text": "Text",
+    "continue": "Continue",
+    "submit": "Submit",
+    "submitting": "Submitting..."
   },
   "settings": {
     "title": "Settings",
@@ -454,5 +457,46 @@
       "deleteErrorDesc": "Could not delete the file",
       "deleteFailed": "Failed to delete file"
     }
+  },
+  "chatIntro": {
+    "loadingSession": "Loading session information...",
+    "thanksTitle": "Thank you for your participation!",
+    "thanksBody": "We appreciate your input. Please wait until all participants have finished to receive the final report.",
+    "viewResults": "View Results",
+    "viewSessionResults": "View Session Results",
+    "startNewSession": "Start a New Session",
+    "invitationAlt": "Invitation",
+    "chatExampleAlt": "Chat Example",
+    "headingClosed": "This session has ended",
+    "headingOpen": "Invitation to share your perspective",
+    "bodyLoading": "Please wait while we load your session...",
+    "bodyClosed": "You can create a new session on any topic and invite others to participate.",
+    "bodyOpen": "Welcome to this conversational survey. Ready to share what you really think? We'll walk you through a few questions that help us understand your perspective.",
+    "formIntro": "Before we start, let's get some key information",
+    "tip1": "Keep this tab open—closing it loses your progress",
+    "tip2": "Your transcript is shared with the session host as you go",
+    "tip3": "Need help articulating your thoughts? Just ask",
+    "begin": "Begin",
+    "privacyNote": "Data security comes first – we will never sell or share your data. For more details, here's our <link>Privacy Policy</link>"
+  },
+  "questionsForm": {
+    "title": "A bit about you",
+    "description": "Share a few details about you",
+    "selectOption": "Select an option",
+    "selectLanguageLabel": "Select Language",
+    "selectLanguagePlaceholder": "Select language",
+    "getStarted": "Get started",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address"
+  },
+  "rating": {
+    "thanksTitle": "Awesome!",
+    "thanksBody": "Your feedback helps make conversations better for everyone",
+    "shareMore": "Want to share more?",
+    "howSatisfied": "How satisfied are you?",
+    "veryDissatisfied": "Very dissatisfied",
+    "verySatisfied": "Very satisfied",
+    "feedbackPlaceholder": "Tell us more about your experience...",
+    "submitFeedback": "Submit Feedback"
   }
 }

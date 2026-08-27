@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { encryptId } from '@/lib/encryptionUtils';
@@ -35,6 +36,10 @@ export const SessionModal = ({
   onStart,
   loadingUserInfo = false,
 }: SessionModalProps) => {
+  const t = useTranslations('chatIntro');
+  const tForm = useTranslations('questionsForm');
+  const tCommon = useTranslations('common');
+  const tChat = useTranslations('chat');
   const [showQuestions, setShowQuestions] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -56,9 +61,9 @@ export const SessionModal = ({
     if (type === QuestionType.EMAIL) {
       const question = hostData?.questions?.find((q) => q.id === id);
       if (question?.required && !value) {
-        setErrors({ ...errors, [id]: 'Email is required' });
+        setErrors({ ...errors, [id]: tForm('emailRequired') });
       } else if (value && !validateEmail(value)) {
-        setErrors({ ...errors, [id]: 'Please enter a valid email address' });
+        setErrors({ ...errors, [id]: tForm('emailInvalid') });
       } else {
         const newErrors = { ...errors };
         delete newErrors[id];
@@ -87,7 +92,7 @@ export const SessionModal = ({
         answers[q.id] &&
         !validateEmail(answers[q.id])
       ) {
-        newErrors[q.id] = 'Please enter a valid email address';
+        newErrors[q.id] = tForm('emailInvalid');
       }
     });
 
@@ -119,21 +124,20 @@ export const SessionModal = ({
           {loadingUserInfo ? (
             <div className="flex flex-col items-center justify-center py-8">
               <Loader2 className="h-8 w-8 text-gray-400 animate-spin mb-4" />
-              <p className="text-gray-600">Loading session information...</p>
+              <p className="text-gray-600">{t('loadingSession')}</p>
             </div>
           ) : userFinished ? (
             <div className="flex flex-col items-center justify-center">
               <h2 className="text-xl font-bold mb-4">
-                Thank you for your participation!
+                {t('thanksTitle')}
               </h2>
               <p className="mb-4">
-                We appreciate your input. Please wait until all participants
-                have finished to receive the final report.
+                {t('thanksBody')}
               </p>
               {user && user.sub && (
                 <Link href={`/sessions/${encryptId(sessionId!)}`} passHref>
                   <Button size="lg" className="mt-4">
-                    View Results
+                    {t('viewResults')}
                   </Button>
                 </Link>
               )}
@@ -144,13 +148,13 @@ export const SessionModal = ({
               <div className="w-full lg:w-3/5 flex flex-col justify-start max-w-xl pb-16">
                 {/* Header content - outside the flex row */}
                 <div className="mb-8 mt-4">
-                  <img src="/invitation.svg" alt="Invitation" className="w-16 mb-4" />
+                  <img src="/invitation.svg" alt={t('invitationAlt')} className="w-16 mb-4" />
                   <h2 className="font-semibold text-muted-foreground mb-4 sm:mb-6">
                     {loadingUserInfo
-                      ? 'Loading...'
+                      ? tCommon('loading')
                       : sessionClosed
-                      ? 'This session has ended'
-                      : 'Invitation to share your perspective'}
+                      ? t('headingClosed')
+                      : t('headingOpen')}
                   </h2>
                 </div>
                 
@@ -160,10 +164,10 @@ export const SessionModal = ({
                     <h3 className="text-2xl font-semibold mb-4">{hostData?.topic}</h3>
                     <p className={`${sessionClosed ? 'sm:mb-8' : ''}`}>
                       {loadingUserInfo
-                        ? 'Please wait while we load your session...'
+                        ? t('bodyLoading')
                         : sessionClosed
-                      ? 'You can create a new session on any topic and invite others to participate.'
-                        : "Welcome to this conversational survey. Ready to share what you really think? We'll walk you through a few questions that help us understand your perspective."}
+                        ? t('bodyClosed')
+                        : t('bodyOpen')}
                     </p>
                   </div>
                 ) : (
@@ -171,7 +175,7 @@ export const SessionModal = ({
                   <div className="bg-gradient-to-b from-amber-50 to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
                     <h3 className="text-2xl font-semibold mb-4">{hostData?.topic}</h3>
                     <p className="text-muted-foreground mb-6">
-                      Before we start, let's get some key information
+                      {t('formIntro')}
                     </p>
                     <form onSubmit={(e) => { e.preventDefault(); handleQuestionsSubmit(); }} className="space-y-4">
                       {hostData?.questions?.map((q, index) => (
@@ -189,7 +193,7 @@ export const SessionModal = ({
                               value={answers[q.id]}
                             >
                               <SelectTrigger className="w-full bg-white border-gray-200 focus:ring-gray-200">
-                                <SelectValue placeholder="Select an option" />
+                                <SelectValue placeholder={tForm('selectOption')} />
                               </SelectTrigger>
                               <SelectContent>
                                 {Array.from(new Set(q.options)).map((opt, index) => (
@@ -227,7 +231,7 @@ export const SessionModal = ({
 
                       {/* Language Selector */}
                       <div className="space-y-2">
-                        <Label className="text-gray-700">Select Language</Label>
+                        <Label className="text-gray-700">{tForm('selectLanguageLabel')}</Label>
                         <Select
                           onValueChange={(value) =>
                             handleInputChange(
@@ -239,7 +243,7 @@ export const SessionModal = ({
                           value={answers['preferred_language'] || 'en'}
                         >
                           <SelectTrigger className="w-[200px] bg-white border-gray-200 focus:ring-gray-200">
-                            <SelectValue placeholder="Select language" />
+                            <SelectValue placeholder={tForm('selectLanguagePlaceholder')} />
                           </SelectTrigger>
                           <SelectContent>
                             {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
@@ -267,7 +271,7 @@ export const SessionModal = ({
                           className="w-full sm:w-auto"
                         >
                           <Button size="lg" className="w-full sm:w-auto">
-                            View Session Results
+                            {t('viewSessionResults')}
                           </Button>
                         </Link>
                       )}
@@ -281,7 +285,7 @@ export const SessionModal = ({
                           variant="ghost"
                           className="w-full sm:w-auto"
                         >
-                          Start a New Session
+                          {t('startNewSession')}
                         </Button>
                       </Link>
                     </div>
@@ -292,15 +296,15 @@ export const SessionModal = ({
                       <div className="flex-1 space-y-2">
                         <div className="flex items-start gap-2">
                           <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                          <p className="text-sm text-muted-foreground">Keep this tab open—closing it loses your progress</p>
+                          <p className="text-sm text-muted-foreground">{t('tip1')}</p>
                         </div>
                         <div className="flex items-start gap-2">
                           <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                          <p className="text-sm text-muted-foreground">Your transcript is shared with the session host as you go</p>
+                          <p className="text-sm text-muted-foreground">{t('tip2')}</p>
                         </div>
                         <div className="flex items-start gap-2">
                           <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                          <p className="text-sm text-muted-foreground">Need help articulating your thoughts? Just ask</p>
+                          <p className="text-sm text-muted-foreground">{t('tip3')}</p>
                         </div>
                       </div>
                       
@@ -315,7 +319,7 @@ export const SessionModal = ({
                           size="lg"
                           className="flex-shrink-0 flex items-center gap-2"
                         >
-                          Continue <ChevronRight className="h-4 w-4" />
+                          {tCommon('continue')} <ChevronRight className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
@@ -330,7 +334,7 @@ export const SessionModal = ({
                         size="lg"
                         className="flex items-center gap-2"
                       >
-                        <ChevronLeft className="h-4 w-4" /> Back
+                        <ChevronLeft className="h-4 w-4" /> {tCommon('back')}
                       </Button>
                       <div className="flex items-center gap-4">
                         <div className="flex gap-1">
@@ -342,7 +346,7 @@ export const SessionModal = ({
                           size="lg"
                           className="flex items-center gap-2"
                         >
-                          Begin <ChevronRight className="h-4 w-4" />
+                          {t('begin')} <ChevronRight className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
@@ -354,7 +358,8 @@ export const SessionModal = ({
               <div className="hidden lg:flex w-full lg:w-2/5 items-start justify-end">
                 <img 
                   src="/chat-example.png" 
-                  alt="Chat Example" 
+                  alt={t('chatExampleAlt')}
+                  
                   className="w-full max-w-md h-auto object-contain"
                 />
               </div>
@@ -364,14 +369,17 @@ export const SessionModal = ({
           {/* Footer */}
           <div className="mt-auto pt-8 text-center flex flex-col md:flex-row justify-center gap-4 md:gap-8 items-center">
             <Link href="/" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-              Powered by{' '}
+              {tChat('poweredBy')}{' '}
               <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
             </Link>
             <p className="text-xs text-muted-foreground">
-              Data security comes first – we will never sell or share your data. For more details, here's our{' '}
-              <Link href="https://harmonica.chat/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
-                Privacy Policy
-              </Link>
+              {t.rich('privacyNote', {
+                link: (chunks) => (
+                  <Link href="https://harmonica.chat/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
+                    {chunks}
+                  </Link>
+                ),
+              })}
             </p>
           </div>
         </div>
