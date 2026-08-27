@@ -129,7 +129,7 @@ export default function ReviewPrompt({
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
               <h2 className="text-lg font-semibold text-yellow-800">
-                Recommended Structure
+                {t('recommendedStructure')}
               </h2>
             </div>
             <p className="text-muted-foreground">{t('generated')}</p>
@@ -141,7 +141,7 @@ export default function ReviewPrompt({
                     <>
                       <div className="mb-4">
                         <span className="text-sm font-medium">
-                          Version {prompts.length + 1}
+                          {t('version', { number: prompts.length + 1 })}
                         </span>
                       </div>
                       <div className="p-4">
@@ -184,7 +184,7 @@ export default function ReviewPrompt({
                   <div className="flex items-center space-x-2">
                     <span className={`text-sm font-medium ${
                       prompt.id === currentVersion && !generating ? 'text-yellow-600' : 'text-gray-600'
-                    }`}>Version {prompts.length - index}</span>
+                    }`}>{t('version', { number: prompts.length - index })}</span>
                   </div>
                   <div className='flex flex-row items-center'>
                   {advancedMode && (
@@ -208,11 +208,11 @@ export default function ReviewPrompt({
                         className="border-[1px]"
                         onClick={() => setCurrentVersion(prompt.id)}
                       >
-                        Select
+                        {t('select')}
                       </Button>
                     ) : (
                       <Button className="border-[1px]" disabled>
-                        Selected
+                        {t('selected')}
                       </Button>
                     )}
                   </div>
@@ -226,7 +226,7 @@ export default function ReviewPrompt({
             <div className="inline-flex items-center space-x-2 p-2 bg-yellow-100 border rounded-md w-fit mt-4">
               <Info className="w-4 h-4 text-yellow-600" />
               <p className="text-sm font-medium">
-                Collect basic participant info like name and email in the next step
+                {t('collectInfoHint')}
               </p>
             </div>
           </div>

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useRef, useState, useEffect } from 'react';
 import MultiStepForm from './MultiStepForm';
 import ReviewPrompt from './review';
@@ -37,6 +39,9 @@ export type VersionedPrompt = {
 const enabledSteps = [true, false, false];
 
 export default function CreationFlow() {
+  const t = useTranslations('createFlow');
+  const tCommon = useTranslations('common');
+  const tEdit = useTranslations('editSession');
   const route = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -213,7 +218,7 @@ IMPORTANT:
     
     if (!currentPrompt || !currentPrompt.fullPrompt) {
       setIsLoading(false);
-      throw new Error('No prompt available. Please create a prompt first.');
+      throw new Error(t('noPrompt'));
     }
     
     const prompt = currentPrompt.fullPrompt;
@@ -380,7 +385,7 @@ IMPORTANT:
                   onClick={() => setIsEditingPrompt(!isEditingPrompt)}
                   className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
-                  {isEditingPrompt ? 'Done Editing' : 'Edit'}
+                  {isEditingPrompt ? tEdit('doneEditing') : tCommon('edit')}
                 </button>
               )}
               
@@ -394,7 +399,7 @@ IMPORTANT:
                 disabled={isLoading}
                 className="px-4 py-2 bg-black text-white rounded-md text-sm font-medium hover:bg-gray-800 disabled:opacity-50 flex items-center gap-2"
               >
-                {isLoading ? 'Loading...' : activeStep === 'Share' ? 'Launch' : 'Next'}
+                {isLoading ? tCommon('loading') : activeStep === 'Share' ? t('launch') : tCommon('next')}
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>

@@ -1,20 +1,12 @@
 'use client'
 
+import { useTranslations } from 'next-intl';
 import { MagicWand } from "@/components/icons";
 import { useEffect, useState } from "react";
 
 export default function LoadingMessage() {
-  const loadingMessages = [
-    'Crafting the perfect session structure, please wait...',
-    'Harmonizing ideas into an engaging flow...',
-    'Composing thought-provoking questions for your group...',
-    'Orchestrating a symphony of collaborative prompts...',
-    'Arranging discussion points for maximum impact...',
-    'Mixing creativity and structure for your ideal session...',
-    'Calibrating our AI facilitator to your needs...',
-    'Designing a session flow to amplify every voice...',
-    'Harmonizing your goals into a perfect session melody...',
-  ];
+  const t = useTranslations('createLoading');
+  const loadingMessages = t.raw('messages') as string[];
   const [loadingMessage, setLoadingMessage] = useState('');
 
   useEffect(() => {

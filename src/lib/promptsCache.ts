@@ -2,6 +2,7 @@ import 'server-only';
 import * as db from './db';
 import { cache } from 'react';
 import { DEFAULT_PROMPTS } from './defaultPrompts';
+import { outputLanguageDirective } from './promptLanguage';
 
 export type Prompt = {
   id: string;
@@ -37,6 +38,13 @@ export const getPromptInstructions = cache(
     }
 
     console.log(`[INFO] Using prompt: ${prompt?.instructions || defaultPrompt} for type ${typeId}`);
-    return prompt?.instructions || defaultPrompt || '';
+
+    // The stored prompts are written in English, including the literal headings
+    // the model copies into its answer, so without this a Czech deployment gets
+    // "Session Title" and "## Structure" in otherwise Czech output. Applying it
+    // here rather than at each call site means paths added later inherit it too,
+    // and a host who rewrites a prompt in their own language loses nothing.
+    const instructions = prompt?.instructions || defaultPrompt || '';
+    return instructions ? instructions + outputLanguageDirective() : '';
   },
 );

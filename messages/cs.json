@@ -62,7 +62,8 @@
     "share": "Sdílet",
     "results": "Výsledky",
     "projects": "Projekty:",
-    "sourceCode": "Zdrojový kód"
+    "sourceCode": "Zdrojový kód",
+    "edit": "Upravit"
   },
   "settings": {
     "title": "Nastavení",
@@ -660,7 +661,12 @@
     "guideTitle": "Prompt pro vedení rozhovoru",
     "guideBody": "Podle tohoto zadání povede AI celé sezení.",
     "generated": "Podle toho, co jste zadali, jsme navrhli doporučenou strukturu sezení.",
-    "changePlaceholder": "Co byste chtěli změnit?"
+    "changePlaceholder": "Co byste chtěli změnit?",
+    "recommendedStructure": "Doporučená struktura",
+    "version": "Verze {number}",
+    "select": "Vybrat",
+    "selected": "Vybráno",
+    "collectInfoHint": "V dalším kroku nastavíte, jaké údaje o účastnících sbírat (jméno, e-mail)"
   },
   "createSession": {
     "nameRequired": "Název sezení je povinný",
@@ -852,5 +858,22 @@
     "sessionDetails": "Údaje o sezení",
     "preSurvey": "Úvodní formulář",
     "appearance": "Vzhled"
+  },
+  "createLoading": {
+    "messages": [
+      "Skládáme ideální strukturu sezení, chvilku strpení...",
+      "Ladíme myšlenky do plynulého toku...",
+      "Skládáme otázky, které rozproudí diskusi...",
+      "Aranžujeme podněty pro společnou práci...",
+      "Rovnáme témata tak, aby měla největší dopad...",
+      "Mícháme kreativitu se strukturou...",
+      "Dolaďujeme AI facilitátora na míru vašemu zadání...",
+      "Navrhujeme průběh tak, aby zazněl každý hlas...",
+      "Převádíme vaše cíle do souzvuku..."
+    ]
+  },
+  "createFlow": {
+    "launch": "Spustit",
+    "noPrompt": "Není k dispozici žádný prompt. Nejdřív nějaký vytvořte."
   }
 }

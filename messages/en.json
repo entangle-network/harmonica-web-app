@@ -62,7 +62,8 @@
     "share": "Share",
     "results": "Results",
     "projects": "Projects:",
-    "sourceCode": "Source code"
+    "sourceCode": "Source code",
+    "edit": "Edit"
   },
   "settings": {
     "title": "Settings",
@@ -660,7 +661,12 @@
     "guideTitle": "Interview Guide Prompt",
     "guideBody": "This is the guide we share with the AI to conduct the session.",
     "generated": "Based on what you shared, we've generated a recommended structure for the session.",
-    "changePlaceholder": "What would you like to change?"
+    "changePlaceholder": "What would you like to change?",
+    "recommendedStructure": "Recommended Structure",
+    "version": "Version {number}",
+    "select": "Select",
+    "selected": "Selected",
+    "collectInfoHint": "Collect basic participant info like name and email in the next step"
   },
   "createSession": {
     "nameRequired": "Session name is required",
@@ -852,5 +858,22 @@
     "sessionDetails": "Session Details",
     "preSurvey": "Pre-survey Form",
     "appearance": "Appearance"
+  },
+  "createLoading": {
+    "messages": [
+      "Crafting the perfect session structure, please wait...",
+      "Harmonizing ideas into an engaging flow...",
+      "Composing thought-provoking questions for your group...",
+      "Orchestrating a symphony of collaborative prompts...",
+      "Arranging discussion points for maximum impact...",
+      "Mixing creativity and structure for your ideal session...",
+      "Calibrating our AI facilitator to your needs...",
+      "Designing a session flow to amplify every voice...",
+      "Harmonizing your goals into a perfect session melody..."
+    ]
+  },
+  "createFlow": {
+    "launch": "Launch",
+    "noPrompt": "No prompt available. Please create a prompt first."
   }
 }
