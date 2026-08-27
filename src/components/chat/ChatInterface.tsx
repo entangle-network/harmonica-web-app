@@ -150,7 +150,7 @@ export const ChatInterface = ({
           <div className="p-6 pt-4 border-t border-gray-200">
             <div className="text-center">
               <Link href="/" className="inline-flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                Powered by{' '}
+                {t('poweredBy')}{' '}
                 <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
               </Link>
             </div>
@@ -193,7 +193,7 @@ export const ChatInterface = ({
                 </div>
                 <div className="pt-2 border-t border-gray-100">
                   <Link href="/" className="inline-flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    Powered by{' '}
+                    {t('poweredBy')}{' '}
                     <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
                   </Link>
                 </div>

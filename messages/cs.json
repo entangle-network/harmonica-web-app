@@ -763,7 +763,8 @@
     "transcriptionFailed": "Přepis se nezdařil",
     "microphoneDenied": "Přístup k mikrofonu byl odepřen. Povolte ho prosím a zkuste to znovu.",
     "aiSuggestion": "Návrh od AI",
-    "generating": "Generuji..."
+    "generating": "Generuji...",
+    "placeholder": "Napište sem svou zprávu..."
   },
   "serverErrors": {
     "unauthorized": "Nemáte oprávnění",

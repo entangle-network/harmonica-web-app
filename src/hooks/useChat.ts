@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import * as db from '@/lib/db';
 import * as llama from '../app/api/llamaUtils';
 import { OpenAIMessage, OpenAIMessageWithContext } from '@/lib/types';
@@ -60,9 +61,8 @@ export function useChat(options: UseChatOptions) {
   const [errorToastMessage, setErrorToastMessage] = useState('');
   const { user } = useUser();
 
-  const placeholder = placeholderText
-    ? placeholderText
-    : 'Type your message here...';
+  const t = useTranslations('chatInput');
+  const placeholder = placeholderText ? placeholderText : t('placeholder');
 
   const [formData, setFormData] = useState<{ messageText: string }>({
     messageText: '',

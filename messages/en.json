@@ -763,7 +763,8 @@
     "transcriptionFailed": "Transcription failed",
     "microphoneDenied": "Microphone access denied, please allow access and try again.",
     "aiSuggestion": "AI Suggestion",
-    "generating": "Generating..."
+    "generating": "Generating...",
+    "placeholder": "Type your message here..."
   },
   "serverErrors": {
     "unauthorized": "Unauthorized",

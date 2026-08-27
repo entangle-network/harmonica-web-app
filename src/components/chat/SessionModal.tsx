@@ -104,6 +104,13 @@ export const SessionModal = ({
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      // The error text renders behind `touched`, which only a blur sets. Without
+      // this, submitting a pristine form sets errors nobody can see: the form
+      // simply refuses to advance and says nothing.
+      setTouched((prev) => ({
+        ...prev,
+        ...Object.fromEntries(Object.keys(newErrors).map((id) => [id, true])),
+      }));
       return;
     }
 
