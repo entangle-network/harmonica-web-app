@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { SetStateAction, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -31,6 +33,8 @@ export default function ReviewPrompt({
   handleEdit: (instructions: string) => void;
   handleReplaceFullPrompt: (fullPrompt: string) => void;
 }) {
+  const t = useTranslations('review');
+  const tCommon = useTranslations('common');
   const [editValue, setEditValue] = useState('');
   const [generating, setGenerating] = useState(false);
   const [showModalState, setShowModalState] = useState(false);
@@ -87,8 +91,8 @@ export default function ReviewPrompt({
           <div className="bg-white border p-8 rounded-lg w-full max-w-3xl mx-4 md:mx-auto my-6 h-full overflow-y-auto flex flex-col">
             <div className="flex justify-between mb-8">
               <div className="flex flex-col">
-                <h2 className="text-2xl font-semibold">Interview Guide Prompt</h2>
-                <p>This is the guide we share with the AI to conduct the session.</p>
+                <h2 className="text-2xl font-semibold">{t('guideTitle')}</h2>
+                <p>{t('guideBody')}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Button onClick={onSaveFullPrompt} disabled={isSaving} className="border-[1px] flex items-center">
@@ -101,7 +105,7 @@ export default function ReviewPrompt({
                     'Save'
                   )}
                 </Button>
-                <Button variant="secondary" onClick={() => setShowModalState(false)} className="border-[1px]">Close</Button>
+                <Button variant="secondary" onClick={() => setShowModalState(false)} className="border-[1px]">{tCommon('close')}</Button>
               </div>
             </div>
 
@@ -128,7 +132,7 @@ export default function ReviewPrompt({
                 Recommended Structure
               </h2>
             </div>
-            <p className="text-muted-foreground">Based on what you shared, we've generated a recommended structure for the session.</p>
+            <p className="text-muted-foreground">{t('generated')}</p>
             </div>
             {summarizedPrompt ||
               (generating ? (
@@ -234,12 +238,12 @@ export default function ReviewPrompt({
                     name="Edit instructions"
                     value={editValue}
                     onChange={handleInputChange}
-                    placeholder="What would you like to change?"
+                    placeholder={t('changePlaceholder')}
                     className="flex-grow"
                   />
                 </div>
                 <Button onClick={handleSubmit}>
-                  {generating ? 'Generating' : 'Submit'}
+                  {generating ? tCommon('generating') : tCommon('submit')}
                 </Button>
               </>
             )}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,8 @@ export default function GenerateResponsesModal({
   onOpenChange,
   sessionId,
 }: GenerateResponsesModalProps) {
+  const t = useTranslations('generateResponses');
+  const tCommon = useTranslations('common');
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingCharacters, setIsGeneratingCharacters] = useState(false);
   const [formData, setFormData] = useState({
@@ -49,23 +52,23 @@ export default function GenerateResponsesModal({
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Failed to generate sessions');
+        throw new Error(error.message || t('toast.generateFailed'));
       }
 
       onOpenChange(false);
 
       toast({
-        title: 'Success',
-        description: `Generated ${formData.numSessions} new session${formData.numSessions > 1 ? 's' : ''}.`,
+        title: tCommon('success'),
+        description: t('toast.generated', { count: formData.numSessions }),
       });
     } catch (error) {
       console.error('Failed to generate sessions:', error);
       toast({
-        title: 'Error',
+        title: tCommon('error'),
         description:
           error instanceof Error
             ? error.message
-            : 'Failed to generate sessions',
+            : t('toast.generateFailed'),
         variant: 'destructive',
       });
     } finally {
@@ -84,7 +87,7 @@ export default function GenerateResponsesModal({
       );
 
       if (!response.ok) {
-        throw new Error('Failed to generate characters');
+        throw new Error(t('toast.charactersFailed'));
       }
 
       const data = await response.json();
@@ -95,8 +98,8 @@ export default function GenerateResponsesModal({
     } catch (error) {
       console.error('Failed to generate characters:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to generate characters',
+        title: tCommon('error'),
+        description: t('toast.charactersFailed'),
         variant: 'destructive',
       });
     } finally {
@@ -108,16 +111,16 @@ export default function GenerateResponsesModal({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>Generate Responses</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>
-            Configure parameters for response generation
+            {t('description')}
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
             <div className="flex justify-between items-center">
-              <Label htmlFor="prompt">Character Prompt</Label>
+              <Label htmlFor="prompt">{t('promptLabel')}</Label>
               <Button
                 variant="outline"
                 size="sm"
@@ -127,12 +130,12 @@ export default function GenerateResponsesModal({
                 {isGeneratingCharacters ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
+                    {tCommon('generating')}
                   </>
                 ) : (
                   <>
                     <UserPlus className="mr-2 h-4 w-4" />
-                    Add Characters
+                    {t('addCharacters')}
                   </>
                 )}
               </Button>
@@ -143,14 +146,14 @@ export default function GenerateResponsesModal({
               onChange={(e) =>
                 setFormData({ ...formData, prompt: e.target.value })
               }
-              placeholder="Enter your character prompt..."
+              placeholder={t('promptPlaceholder')}
               className="min-h-[200px]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="sessions">Number of Sessions</Label>
+              <Label htmlFor="sessions">{t('sessionsLabel')}</Label>
               <Input
                 id="sessions"
                 type="number"
@@ -166,7 +169,7 @@ export default function GenerateResponsesModal({
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="temperature">Temperature</Label>
+              <Label htmlFor="temperature">{t('temperatureLabel')}</Label>
               <Input
                 id="temperature"
                 type="number"
@@ -185,7 +188,7 @@ export default function GenerateResponsesModal({
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="maxAnswers">Max Number of Answers</Label>
+            <Label htmlFor="maxAnswers">{t('maxAnswersLabel')}</Label>
             <Input
               id="maxAnswers"
               type="number"
@@ -207,10 +210,10 @@ export default function GenerateResponsesModal({
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating...
+                {tCommon('generating')}
               </>
             ) : (
-              'Generate'
+              tCommon('generate')
             )}
           </Button>
         </div>

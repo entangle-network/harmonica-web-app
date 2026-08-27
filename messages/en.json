@@ -41,7 +41,13 @@
     "saveChanges": "Save Changes",
     "success": "Success",
     "title": "Title",
-    "description": "Description"
+    "description": "Description",
+    "upload": "Upload",
+    "uploading": "Uploading...",
+    "generating": "Generating...",
+    "generate": "Generate",
+    "file": "File",
+    "unknownError": "An unknown error occurred"
   },
   "settings": {
     "title": "Settings",
@@ -586,5 +592,85 @@
       "Finished": "Finished",
       "Draft": "Draft"
     }
+  },
+  "importResponses": {
+    "title": "Import Responses",
+    "description": "Upload a file containing participant responses. Supported formats: PDF, TXT, JSON.",
+    "maxSize": "Max file size: 10MB",
+    "purposeLabel": "File Purpose",
+    "knowledgeFile": "Knowledge File",
+    "transcript": "Transcript",
+    "transcriptHint": "Transcript files will be analyzed for participants, messages, and key topics.",
+    "knowledgeHint": "Knowledge files are stored as reference materials.",
+    "selected": "Selected:",
+    "toast": {
+      "noFile": "No file selected",
+      "noFileDesc": "Please select a file to upload",
+      "authRequired": "Authentication required",
+      "authRequiredDesc": "You must be logged in to upload files",
+      "pdfProcessed": "PDF processed successfully",
+      "pdfProcessedDesc": "Text has been extracted and processed.",
+      "uploaded": "File uploaded successfully",
+      "uploadedDesc": "{name} has been uploaded and processed.",
+      "uploadFailed": "Upload failed"
+    }
+  },
+  "generateResponses": {
+    "title": "Generate Responses",
+    "description": "Configure parameters for response generation",
+    "promptLabel": "Character Prompt",
+    "promptPlaceholder": "Enter your character prompt...",
+    "addCharacters": "Add Characters",
+    "sessionsLabel": "Number of Sessions",
+    "temperatureLabel": "Temperature",
+    "maxAnswersLabel": "Max Number of Answers",
+    "toast": {
+      "generated": "{count, plural, one {Generated # new session.} other {Generated # new sessions.}}",
+      "generateFailed": "Failed to generate sessions",
+      "charactersFailed": "Failed to generate characters"
+    }
+  },
+  "chooseTemplate": {
+    "objectiveLabel": "What do you want to find out?",
+    "objectivePlaceholder": "Be specific about what you want to achieve...",
+    "objectiveRequired": "Please enter your session objective",
+    "howItWorks": "How it works",
+    "justShare": "Just share:",
+    "step1": "Your Objective (or Choose Template)",
+    "step2": "Some context about your session",
+    "step3": "What you want to know about users",
+    "outro": "We’ll brief our AI-facilitator and you can send.",
+    "needHelp": "Still need help?",
+    "readGuide": "Read Beginners Guide",
+    "orSelect": "Or Select Template"
+  },
+  "review": {
+    "guideTitle": "Interview Guide Prompt",
+    "guideBody": "This is the guide we share with the AI to conduct the session.",
+    "generated": "Based on what you shared, we've generated a recommended structure for the session.",
+    "changePlaceholder": "What would you like to change?"
+  },
+  "createSession": {
+    "nameRequired": "Session name is required",
+    "objectiveRequired": "Session objective is required"
+  },
+  "summaryCard": {
+    "editPrompt": "Edit Summary Prompt",
+    "waitGenerating": "Please wait while a {title} is generated",
+    "refresh": "Refresh {title}",
+    "statusUnknown": "Unknown update status",
+    "statusUpToDate": "Up to date",
+    "statusPending": "Auto-refreshing soon",
+    "statusOutdated": "Summary out of date"
+  },
+  "participants": {
+    "title": "Responses",
+    "description": "View participants progress and transcripts",
+    "headerStatus": "Status",
+    "headerCreated": "Created",
+    "headerUpdated": "Updated",
+    "headerIncludeInSummary": "Include in summary",
+    "statusStarted": "Started",
+    "statusFinished": "Finished"
   }
 }

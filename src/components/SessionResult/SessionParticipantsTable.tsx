@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Card,
   CardContent,
@@ -35,6 +36,7 @@ export default function SessionParticipantsTable({
   hostData: HostSession;
   onIncludeInSummaryChange: (userId: string, included: boolean) => void;
 }) {
+  const t = useTranslations('participants');
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
@@ -47,19 +49,19 @@ export default function SessionParticipantsTable({
   const tableHeaders: TableHeaderData[] = [
     { label: 'Name', sortKey: 'userName', className: '' },
     {
-      label: 'Status',
+      label: t('headerStatus'),
       sortKey: 'sessionStatus',
       className: 'hidden md:table-cell',
     },
     {
-      label: 'Created',
+      label: t('headerCreated'),
       sortKey: 'createdDate',
       sortBy: dateSorter,
       className: 'hidden md:table-cell',
     },
-    { label: 'Updated', sortKey: 'updatedDate', sortBy: dateSorter },
+    { label: t('headerUpdated'), sortKey: 'updatedDate', sortBy: dateSorter },
     {
-      label: 'Include in summary',
+      label: t('headerIncludeInSummary'),
       sortKey: 'includeInSummary',
       sortBy: (dir, a: boolean, b: boolean) => {
         return dir === 'asc' ? Number(b) - Number(a) : Number(a) - Number(b);
@@ -70,7 +72,7 @@ export default function SessionParticipantsTable({
 
   const sortableData: ParticipantsTableData[] = userData.map((data) => ({
     userName: data.user_name ?? 'anonymous',
-    sessionStatus: data.active ? 'Started' : 'Finished',
+    sessionStatus: data.active ? t('statusStarted') : t('statusFinished'),
     createdDate: new Date(data.start_time),
     updatedDate: new Date(data.last_edit),
     includeInSummary: data.include_in_summary,
@@ -92,9 +94,9 @@ export default function SessionParticipantsTable({
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle className="text-xl">Responses</CardTitle>
+            <CardTitle className="text-xl">{t('title')}</CardTitle>
             <CardDescription>
-              View participants progress and transcripts
+              {t('description')}
             </CardDescription>
           </div>
           <div className="flex gap-2">

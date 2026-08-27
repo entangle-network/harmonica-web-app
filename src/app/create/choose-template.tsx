@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Card,
   CardContent,
@@ -47,12 +48,14 @@ export default function ChooseTemplate({
   onTemplateSelect,
   onNext,
 }: ChooseTemplateProps) {
+  const t = useTranslations('chooseTemplate');
+  const tCommon = useTranslations('common');
   const [objective, setObjective] = useState('');
   const [error, setError] = useState('');
 
   const handleGenerateClick = () => {
     if (!objective.trim()) {
-      setError('Please enter your session objective');
+      setError(t('objectiveRequired'));
       return;
     }
 
@@ -69,7 +72,7 @@ export default function ChooseTemplate({
         <div className="border rounded-xl bg-gradient-to-b from-white to-amber-100 p-6 flex flex-col justify-between h-full">
           <div className="space-y-2">
             <Label htmlFor="objective" className="text-base font-medium">
-              What do you want to find out?
+              {t('objectiveLabel')}
             </Label>
             <Textarea
               id="objective"
@@ -78,7 +81,7 @@ export default function ChooseTemplate({
                 setObjective(e.target.value);
                 setError(''); // Clear error when user starts typing
               }}
-              placeholder="Be specific about what you want to achieve..."
+              placeholder={t('objectivePlaceholder')}
               className={`min-h-[80px] resize-none ${
                 error ? 'border-red-500 focus-visible:ring-red-500' : ''
               }`}
@@ -91,31 +94,31 @@ export default function ChooseTemplate({
               className="flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4" strokeWidth={1.5} />
-              Generate
+              {tCommon('generate')}
             </Button>
           </div>
         </div>
         <div className="p-6 flex flex-col justify-between h-full">
           <div>
             <div className="mt-2 mb-6">
-              <Label>How it works</Label>
+              <Label>{t('howItWorks')}</Label>
             </div>
-            <p className="text-sm text-muted-foreground">Just share:</p>
+            <p className="text-sm text-muted-foreground">{t('justShare')}</p>
             <ol className="list-decimal pl-5 text-sm text-muted-foreground">
-              <li>Your Objective (or Choose Template)</li>
-              <li>Some context about your session</li>
-              <li>What you want to know about users</li>
+              <li>{t('step1')}</li>
+              <li>{t('step2')}</li>
+              <li>{t('step3')}</li>
             </ol>
-            <p className="text-sm text-muted-foreground">We’ll brief our AI-facilitator and you can send.</p>
+            <p className="text-sm text-muted-foreground">{t('outro')}</p>
           </div>
           <div className="flex justify-between mt-4">
-            <span className="text-sm text-muted-foreground">Still need help?</span>
-            <Link target="_blank" href="https://help.harmonica.chat" className="text-sm hover:underline">Read Beginners Guide</Link>
+            <span className="text-sm text-muted-foreground">{t('needHelp')}</span>
+            <Link target="_blank" href="https://help.harmonica.chat" className="text-sm hover:underline">{t('readGuide')}</Link>
           </div>
         </div>
       </div>
 
-      <h4 className="text-xl font-semibold">Or Select Template</h4>
+      <h4 className="text-xl font-semibold">{t('orSelect')}</h4>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {templates.templates.map((template) => {
           const Icon =

@@ -41,7 +41,13 @@
     "saveChanges": "Uložit změny",
     "success": "Hotovo",
     "title": "Název",
-    "description": "Popis"
+    "description": "Popis",
+    "upload": "Nahrát",
+    "uploading": "Nahrávám...",
+    "generating": "Generuji...",
+    "generate": "Vygenerovat",
+    "file": "Soubor",
+    "unknownError": "Došlo k neznámé chybě"
   },
   "settings": {
     "title": "Nastavení",
@@ -473,7 +479,7 @@
     "invitationAlt": "Pozvánka",
     "chatExampleAlt": "Ukázka chatu",
     "headingClosed": "Toto sezení už skončilo",
-    "headingOpen": "Pozvánka podělit se o váš pohled",
+    "headingOpen": "Podělte se o váš pohled",
     "bodyLoading": "Počkejte prosím, načítáme vaše sezení...",
     "bodyClosed": "Můžete založit nové sezení na libovolné téma a pozvat do něj ostatní.",
     "bodyOpen": "Vítejte v konverzačním dotazníku. Chcete říct, co si opravdu myslíte? Provedeme vás několika otázkami, které nám pomohou porozumět vašemu pohledu.",
@@ -586,5 +592,85 @@
       "Finished": "Ukončeno",
       "Draft": "Koncept"
     }
+  },
+  "importResponses": {
+    "title": "Importovat odpovědi",
+    "description": "Nahrajte soubor s odpovědmi účastníků. Podporované formáty: PDF, TXT, JSON.",
+    "maxSize": "Maximální velikost souboru: 10 MB",
+    "purposeLabel": "K čemu soubor slouží",
+    "knowledgeFile": "Podkladový soubor",
+    "transcript": "Přepis",
+    "transcriptHint": "Přepisy se analyzují — vytáhnou se z nich účastníci, zprávy a klíčová témata.",
+    "knowledgeHint": "Podkladové soubory se ukládají jako referenční materiály.",
+    "selected": "Vybráno:",
+    "toast": {
+      "noFile": "Nevybrán žádný soubor",
+      "noFileDesc": "Vyberte prosím soubor k nahrání",
+      "authRequired": "Vyžaduje přihlášení",
+      "authRequiredDesc": "Pro nahrávání souborů musíte být přihlášeni",
+      "pdfProcessed": "PDF zpracováno",
+      "pdfProcessedDesc": "Text byl vyextrahován a zpracován.",
+      "uploaded": "Soubor nahrán",
+      "uploadedDesc": "Soubor {name} byl nahrán a zpracován.",
+      "uploadFailed": "Nahrání selhalo"
+    }
+  },
+  "generateResponses": {
+    "title": "Vygenerovat odpovědi",
+    "description": "Nastavte parametry generování odpovědí",
+    "promptLabel": "Prompt pro postavy",
+    "promptPlaceholder": "Zadejte prompt pro postavy...",
+    "addCharacters": "Přidat postavy",
+    "sessionsLabel": "Počet sezení",
+    "temperatureLabel": "Teplota",
+    "maxAnswersLabel": "Maximální počet odpovědí",
+    "toast": {
+      "generated": "{count, plural, one {Vygenerováno # nové sezení.} few {Vygenerována # nová sezení.} other {Vygenerováno # nových sezení.}}",
+      "generateFailed": "Sezení se nepodařilo vygenerovat",
+      "charactersFailed": "Postavy se nepodařilo vygenerovat"
+    }
+  },
+  "chooseTemplate": {
+    "objectiveLabel": "Co chcete zjistit?",
+    "objectivePlaceholder": "Buďte konkrétní v tom, čeho chcete dosáhnout...",
+    "objectiveRequired": "Zadejte prosím cíl sezení",
+    "howItWorks": "Jak to funguje",
+    "justShare": "Stačí nám říct:",
+    "step1": "Váš cíl (nebo vyberte šablonu)",
+    "step2": "Něco o kontextu vašeho sezení",
+    "step3": "Co se chcete o uživatelích dozvědět",
+    "outro": "My zadané informace předáme AI facilitátorovi a vy můžete rozesílat.",
+    "needHelp": "Potřebujete poradit?",
+    "readGuide": "Přečíst průvodce pro začátečníky",
+    "orSelect": "Nebo vyberte šablonu"
+  },
+  "review": {
+    "guideTitle": "Prompt pro vedení rozhovoru",
+    "guideBody": "Podle tohoto zadání povede AI celé sezení.",
+    "generated": "Podle toho, co jste zadali, jsme navrhli doporučenou strukturu sezení.",
+    "changePlaceholder": "Co byste chtěli změnit?"
+  },
+  "createSession": {
+    "nameRequired": "Název sezení je povinný",
+    "objectiveRequired": "Cíl sezení je povinný"
+  },
+  "summaryCard": {
+    "editPrompt": "Upravit prompt pro shrnutí",
+    "waitGenerating": "Počkejte prosím, generujeme {title}",
+    "refresh": "Obnovit: {title}",
+    "statusUnknown": "Neznámý stav aktualizace",
+    "statusUpToDate": "Aktuální",
+    "statusPending": "Brzy se automaticky obnoví",
+    "statusOutdated": "Shrnutí není aktuální"
+  },
+  "participants": {
+    "title": "Odpovědi",
+    "description": "Přehled průběhu a přepisů od účastníků",
+    "headerStatus": "Stav",
+    "headerCreated": "Vytvořeno",
+    "headerUpdated": "Aktualizováno",
+    "headerIncludeInSummary": "Zahrnout do shrnutí",
+    "statusStarted": "Zahájeno",
+    "statusFinished": "Dokončeno"
   }
 }

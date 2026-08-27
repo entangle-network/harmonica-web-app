@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -25,6 +27,8 @@ export default function CreateSession({
   onFormDataChange: (form: Partial<SessionBuilderData>) => void;
   onValidationError: (hasErrors: boolean) => void;
 }) {
+  const t = useTranslations('createSession');
+  const tCreate = useTranslations('create');
   const [errors, setErrors] = useState<{
     sessionName?: string;
     goal?: string;
@@ -63,11 +67,11 @@ export default function CreateSession({
     const newErrors: typeof errors = {};
 
     if (!formData.sessionName?.trim()) {
-      newErrors.sessionName = 'Session name is required';
+      newErrors.sessionName = t('nameRequired');
     }
 
     if (!formData.goal?.trim()) {
-      newErrors.goal = 'Session objective is required';
+      newErrors.goal = t('objectiveRequired');
     }
 
     setErrors(newErrors);
@@ -98,7 +102,7 @@ export default function CreateSession({
           name="sessionName"
           value={formData.sessionName}
           onChange={handleInputChange}
-          placeholder="Your session name"
+          placeholder={tCreate('name.placeholder')}
           required
           className={
             isSubmitAttempted && errors.sessionName
@@ -126,7 +130,7 @@ export default function CreateSession({
           name="goal"
           value={formData.goal}
           onChange={handleInputChange}
-          placeholder="I want to understand user preferences on our new product features."
+          placeholder={tCreate('objective.placeholder')}
           required
           className={
             isSubmitAttempted && errors.goal
@@ -151,7 +155,7 @@ export default function CreateSession({
           name="critical"
           value={formData.critical}
           onChange={handleInputChange}
-          placeholder="Participants should provide examples of their workflows or describe challenges they face."
+          placeholder={tCreate('critical.placeholder')}
           required
         />
         <p className="text-sm text-muted-foreground">
@@ -210,7 +214,7 @@ export default function CreateSession({
           name="context"
           value={formData.context}
           onChange={handleInputChange}
-          placeholder="Our company is developing a new app, and this session is part of our usability testing to gather user feedback on key features."
+          placeholder={tCreate('context.placeholder')}
           rows={7}
         />
         <p className="text-sm text-muted-foreground">

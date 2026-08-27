@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { HRMarkdown } from '@/components/HRMarkdown';
 import { Download, RefreshCw, Edit2 } from 'lucide-react';
@@ -57,6 +58,7 @@ export const SummaryCard = ({
   loading,
   className,
 }: SummaryCardProps) => {
+  const t = useTranslations('summaryCard');
   const refreshStatusRef = useRef(SummaryUpdateManager.getState(resourceId).status);
 
   // Only update if status actually changes
@@ -86,7 +88,7 @@ export const SummaryCard = ({
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="top" align="end">
-                      <p>Edit Summary Prompt</p>
+                      <p>{t('editPrompt')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -125,21 +127,21 @@ export const SummaryCard = ({
                     </TooltipTrigger>
                     <TooltipContent side="top" align="end">
                       {isUpdating ? (
-                        <p>Please wait while a {title} is generated</p>
+                        <p>{t('waitGenerating', { title })}</p>
                       ) : (
                         <div>
-                          <p>Refresh {title}</p>
+                          <p>{t('refresh', { title })}</p>
                           {refreshStatusRef.current === RefreshStatus.Unknown && (
-                            <p className="text-xs text-gray-600">Unknown update status</p>
+                            <p className="text-xs text-gray-600">{t('statusUnknown')}</p>
                           )}
                           {refreshStatusRef.current === RefreshStatus.UpToDate && (
-                            <p className="text-xs text-green-600">Up to date</p>
+                            <p className="text-xs text-green-600">{t('statusUpToDate')}</p>
                           )}
                           {refreshStatusRef.current === RefreshStatus.UpdatePending && (
-                            <p className="text-xs text-yellow-600">Auto-refreshing soon</p>
+                            <p className="text-xs text-yellow-600">{t('statusPending')}</p>
                           )}
                           {refreshStatusRef.current === RefreshStatus.Outdated && (
-                            <p className="text-xs text-red-600">Summary out of date</p>
+                            <p className="text-xs text-red-600">{t('statusOutdated')}</p>
                           )}
                         </div>
                       )}
