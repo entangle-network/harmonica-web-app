@@ -23,7 +23,17 @@
     "close": "Zavřít",
     "error": "Chyba",
     "unknown": "Neznámý",
-    "sending": "Odesílám..."
+    "sending": "Odesílám...",
+    "more": "Více",
+    "duplicate": "Duplikovat",
+    "adding": "Přidávám...",
+    "areYouSure": "Opravdu?",
+    "open": "Otevřít",
+    "openMenu": "Otevřít nabídku",
+    "toggleMenu": "Přepnout nabídku",
+    "actions": "Akce",
+    "removing": "Odebírám...",
+    "text": "Text"
   },
   "settings": {
     "title": "Nastavení",
@@ -340,6 +350,109 @@
       "cancelInvitationFailed": "Pozvánku se nepodařilo zrušit",
       "loadPermissionsFailed": "Nepodařilo se načíst oprávnění",
       "fetchVisibilityFailed": "Nepodařilo se načíst nastavení zobrazení"
+    }
+  },
+  "sessionControls": {
+    "title": "Řízení sezení",
+    "reopen": "Znovu otevřít",
+    "endSession": "Ukončit sezení",
+    "editSession": "Upravit sezení",
+    "inviteTeam": "Pozvat tým",
+    "deleteWarning": "Trvale se smaže sezení i všechna jeho data. Tuto akci nelze vzít zpět.",
+    "toast": {
+      "promptUpdateFailed": "Prompt se nepodařilo změnit",
+      "promptUpdateFailedDesc": "Při úpravě promptu došlo k chybě.",
+      "crossPollinationUpdated": "Sdílení odpovědí změněno",
+      "crossPollinationOn": "Účastníci nyní vidí odpovědi ostatních",
+      "crossPollinationOff": "Účastníci už odpovědi ostatních nevidí",
+      "settingUpdateFailed": "Nastavení se nepodařilo změnit",
+      "settingUpdateFailedDesc": "Při úpravě sdílení odpovědí došlo k chybě.",
+      "cloned": "Sezení zduplikováno",
+      "clonedDesc": "Přesměrujeme vás na nové sezení.",
+      "cloneFailed": "Sezení se nepodařilo zduplikovat",
+      "cloneFailedDesc": "Při duplikování sezení došlo k chybě.",
+      "deleted": "Sezení smazáno",
+      "deletedDesc": "Sezení bylo úspěšně smazáno.",
+      "deleteFailed": "Sezení se nepodařilo smazat",
+      "deleteFailedDesc": "Při mazání sezení došlo k chybě.",
+      "updated": "Sezení upraveno",
+      "updatedDesc": "Údaje o sezení byly úspěšně změněny.",
+      "updateFailed": "Sezení se nepodařilo upravit",
+      "updateFailedDesc": "Při úpravě sezení došlo k chybě.",
+      "promptUpdated": "Prompt upraven",
+      "promptUpdatedDesc": "Facilitační prompt byl úspěšně změněn.",
+      "questionsUpdated": "Otázky upraveny",
+      "questionsUpdatedDesc": "Otázky úvodního formuláře byly úspěšně změněny.",
+      "questionsUpdateFailed": "Otázky se nepodařilo změnit",
+      "questionsUpdateFailedDesc": "Při úpravě otázek došlo k chybě.",
+      "editSession": "Upravit sezení",
+      "editSessionDesc": "Přejdete do režimu úprav sezení."
+    }
+  },
+  "addToProject": {
+    "trigger": "Přidat do projektu",
+    "title": "Projekty sezení",
+    "currentProjects": "Současné projekty",
+    "availableProjects": "Dostupné projekty",
+    "noOther": "Žádné další projekty nejsou k dispozici.",
+    "noneYet": "Zatím žádné projekty. Nejdřív nějaký vytvořte.",
+    "addSelected": "Přidat do vybraných projektů",
+    "toast": {
+      "loadFailed": "Projekty se nepodařilo načíst",
+      "loadFailedDesc": "Při načítání projektů došlo k chybě.",
+      "removed": "Sezení odebráno z projektu",
+      "removedDesc": "Sezení bylo z projektu odebráno.",
+      "removeFailed": "Sezení se nepodařilo z projektu odebrat",
+      "removeFailedDesc": "Při odebírání sezení z projektu došlo k chybě.",
+      "noneSelected": "Nevybrán žádný projekt",
+      "noneSelectedDesc": "Vyberte prosím alespoň jeden projekt, do kterého se má sezení přidat.",
+      "added": "Sezení přidáno do projektů",
+      "addedDesc": "{count, plural, one {Sezení bylo přidáno do # projektu.} few {Sezení bylo přidáno do # projektů.} other {Sezení bylo přidáno do # projektů.}}",
+      "addFailed": "Sezení se nepodařilo přidat do projektů",
+      "addFailedDesc": "Při přidávání sezení do projektů došlo k chybě."
+    }
+  },
+  "workspacesTable": {
+    "inviteTeam": "Pozvat tým",
+    "removeFromProject": "Odebrat z projektu",
+    "statusActive": "Probíhá",
+    "statusFinished": "Ukončeno",
+    "headerProject": "Projekt",
+    "headerSessions": "Sezení",
+    "headerCreated": "Vytvořeno",
+    "toast": {
+      "removed": "Sezení odebráno",
+      "removedDesc": "Sezení bylo z tohoto projektu odebráno.",
+      "removeFailed": "Sezení se nepodařilo odebrat",
+      "removeFailedDesc": "Při odebírání sezení došlo k chybě."
+    }
+  },
+  "sessionFiles": {
+    "title": "Soubory sezení",
+    "description": "Soubory nahrané k tomuto sezení",
+    "addFile": "Přidat soubor",
+    "emptyTitle": "Zatím nejsou nahrané žádné soubory",
+    "emptyBody": "Nahrajte přepisy nebo podkladové soubory, ať máte důležité informace a poznatky ze sezení pohromadě.",
+    "uploadFiles": "Nahrát soubory",
+    "totalFiles": "Souborů celkem",
+    "totalSize": "Celková velikost",
+    "transcripts": "Přepisy",
+    "knowledgeFiles": "Podkladové soubory",
+    "columnFile": "Soubor",
+    "columnType": "Typ",
+    "columnSize": "Velikost",
+    "columnUploaded": "Nahráno",
+    "deleteTitle": "Smazat soubor?",
+    "deleteBody": "Opravdu chcete smazat <name></name>? Tuto akci nelze vzít zpět.",
+    "toast": {
+      "loadFailed": "Chyba při načítání souborů",
+      "loadFailedDesc": "Soubory sezení se nepodařilo načíst",
+      "fetchFailed": "Soubory sezení se nepodařilo načíst",
+      "deleted": "Soubor smazán",
+      "deletedDesc": "Soubor byl úspěšně smazán",
+      "deleteError": "Chyba při mazání souboru",
+      "deleteErrorDesc": "Soubor se nepodařilo smazat",
+      "deleteFailed": "Soubor se nepodařilo smazat"
     }
   }
 }

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useState, useEffect } from 'react';
 import {
   Dialog,
@@ -39,6 +41,8 @@ export function AddToProjectDialog({
   open,
   onOpenChange,
 }: AddToProjectDialogProps) {
+  const t = useTranslations('addToProject');
+  const tCommon = useTranslations('common');
   const [availableWorkspaces, setAvailableWorkspaces] = useState<Workspace[]>(
     []
   );
@@ -89,8 +93,8 @@ export function AddToProjectDialog({
     } catch (error) {
       console.error('Error loading workspaces:', error);
       toast({
-        title: 'Failed to load projects',
-        description: 'An error occurred while loading your projects.',
+        title: t('toast.loadFailed'),
+        description: t('toast.loadFailedDesc'),
         variant: 'destructive',
       });
     }
@@ -122,25 +126,22 @@ export function AddToProjectDialog({
         }
 
         toast({
-          title: 'Session removed from project',
-          description: 'The session has been removed from the project.',
+          title: t('toast.removed'),
+          description: t('toast.removedDesc'),
         });
         router.refresh(); // Refresh the page to update the breadcrumb
       } else {
         toast({
-          title: 'Failed to remove session from project',
-          description:
-            result.error ||
-            'An error occurred while removing the session from the project.',
+          title: t('toast.removeFailed'),
+          description: result.error || t('toast.removeFailedDesc'),
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Error removing session from project:', error);
       toast({
-        title: 'Failed to remove session from project',
-        description:
-          'An error occurred while removing the session from the project.',
+        title: t('toast.removeFailed'),
+        description: t('toast.removeFailedDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -151,9 +152,8 @@ export function AddToProjectDialog({
   const handleAddToProjects = async () => {
     if (selectedWorkspaces.length === 0) {
       toast({
-        title: 'No projects selected',
-        description:
-          'Please select at least one project to add the session to.',
+        title: t('toast.noneSelected'),
+        description: t('toast.noneSelectedDesc'),
         variant: 'destructive',
       });
       return;
@@ -178,28 +178,23 @@ export function AddToProjectDialog({
         setCurrentWorkspaces((prev) => [...prev, ...addedWorkspaces]);
 
         toast({
-          title: 'Session added to projects',
-          description: `The session has been added to ${result.count} project${
-            result.count !== 1 ? 's' : ''
-          }.`,
+          title: t('toast.added'),
+          description: t('toast.addedDesc', { count: result.count ?? 0 }),
         });
         setSelectedWorkspaces([]);
         router.refresh(); // Refresh the page to update the breadcrumb
       } else {
         toast({
-          title: 'Failed to add session to projects',
-          description:
-            result.message ||
-            'An error occurred while adding the session to the projects.',
+          title: t('toast.addFailed'),
+          description: result.message || t('toast.addFailedDesc'),
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Error adding session to projects:', error);
       toast({
-        title: 'Failed to add session to projects',
-        description:
-          'An error occurred while adding the session to the projects.',
+        title: t('toast.addFailed'),
+        description: t('toast.addFailedDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -217,20 +212,20 @@ export function AddToProjectDialog({
           onClick={() => handleOpenChange(true)}
         >
           <FolderPlus className="h-3 w-3" />
-          Add to project
+          {t('trigger')}
         </Button>
       )}
 
       <Dialog open={isOpen} onOpenChange={handleOpenChange}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Manage Session Projects</DialogTitle>
+            <DialogTitle>{t('title')}</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             {/* Current Projects Section */}
             {currentWorkspaces.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-sm font-medium mb-3">Current Projects</h3>
+                <h3 className="text-sm font-medium mb-3">{t('currentProjects')}</h3>
                 <div className="space-y-3 max-h-[150px] overflow-y-auto">
                   {currentWorkspaces.map((workspace) => (
                     <div
@@ -255,12 +250,12 @@ export function AddToProjectDialog({
 
             {/* Available Projects Section */}
             <div>
-              <h3 className="text-sm font-medium mb-3">Available Projects</h3>
+              <h3 className="text-sm font-medium mb-3">{t('availableProjects')}</h3>
               {availableWorkspaces.length === 0 ? (
                 <p className="text-center text-gray-500">
                   {currentWorkspaces.length > 0
-                    ? 'No other projects available.'
-                    : 'No available projects yet. Create a project first.'}
+                    ? t('noOther')
+                    : t('noneYet')}
                 </p>
               ) : (
                 <div className="space-y-3 max-h-[200px] overflow-y-auto">
@@ -285,13 +280,13 @@ export function AddToProjectDialog({
           </div>
           <div className="flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline">{tCommon('close')}</Button>
             </DialogClose>
             <Button
               onClick={handleAddToProjects}
               disabled={selectedWorkspaces.length === 0 || isAddingToProject}
             >
-              {isAddingToProject ? 'Adding...' : 'Add to Selected Projects'}
+              {isAddingToProject ? tCommon('adding') : t('addSelected')}
             </Button>
           </div>
         </DialogContent>

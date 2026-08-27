@@ -23,7 +23,17 @@
     "close": "Close",
     "error": "Error",
     "unknown": "Unknown",
-    "sending": "Sending..."
+    "sending": "Sending...",
+    "more": "More",
+    "duplicate": "Duplicate",
+    "adding": "Adding...",
+    "areYouSure": "Are you sure?",
+    "open": "Open",
+    "openMenu": "Open menu",
+    "toggleMenu": "Toggle menu",
+    "actions": "Actions",
+    "removing": "Removing...",
+    "text": "Text"
   },
   "settings": {
     "title": "Settings",
@@ -340,6 +350,109 @@
       "cancelInvitationFailed": "Failed to cancel invitation",
       "loadPermissionsFailed": "Failed to load permissions",
       "fetchVisibilityFailed": "Failed to fetch visibility settings"
+    }
+  },
+  "sessionControls": {
+    "title": "Session Controls",
+    "reopen": "Reopen",
+    "endSession": "End session",
+    "editSession": "Edit Session",
+    "inviteTeam": "Invite team",
+    "deleteWarning": "This will permanently delete the session and all its data. This action cannot be undone.",
+    "toast": {
+      "promptUpdateFailed": "Failed to update prompt",
+      "promptUpdateFailedDesc": "An error occurred while updating the prompt.",
+      "crossPollinationUpdated": "Cross-pollination setting updated",
+      "crossPollinationOn": "Participants can now see each other's responses",
+      "crossPollinationOff": "Participants can no longer see each other's responses",
+      "settingUpdateFailed": "Failed to update setting",
+      "settingUpdateFailedDesc": "An error occurred while updating cross-pollination.",
+      "cloned": "Session cloned successfully",
+      "clonedDesc": "You'll be redirected to the new session.",
+      "cloneFailed": "Failed to clone session",
+      "cloneFailedDesc": "An error occurred while cloning the session.",
+      "deleted": "Session deleted",
+      "deletedDesc": "The session has been successfully deleted.",
+      "deleteFailed": "Failed to delete session",
+      "deleteFailedDesc": "An error occurred while deleting the session.",
+      "updated": "Session updated",
+      "updatedDesc": "The session details have been successfully updated.",
+      "updateFailed": "Failed to update session",
+      "updateFailedDesc": "An error occurred while updating the session.",
+      "promptUpdated": "Prompt updated",
+      "promptUpdatedDesc": "The facilitation prompt has been successfully updated.",
+      "questionsUpdated": "Questions updated",
+      "questionsUpdatedDesc": "The pre-survey form questions have been successfully updated.",
+      "questionsUpdateFailed": "Failed to update questions",
+      "questionsUpdateFailedDesc": "An error occurred while updating the questions.",
+      "editSession": "Edit Session",
+      "editSessionDesc": "This will take you to the session editing flow."
+    }
+  },
+  "addToProject": {
+    "trigger": "Add to project",
+    "title": "Manage Session Projects",
+    "currentProjects": "Current Projects",
+    "availableProjects": "Available Projects",
+    "noOther": "No other projects available.",
+    "noneYet": "No available projects yet. Create a project first.",
+    "addSelected": "Add to Selected Projects",
+    "toast": {
+      "loadFailed": "Failed to load projects",
+      "loadFailedDesc": "An error occurred while loading your projects.",
+      "removed": "Session removed from project",
+      "removedDesc": "The session has been removed from the project.",
+      "removeFailed": "Failed to remove session from project",
+      "removeFailedDesc": "An error occurred while removing the session from the project.",
+      "noneSelected": "No projects selected",
+      "noneSelectedDesc": "Please select at least one project to add the session to.",
+      "added": "Session added to projects",
+      "addedDesc": "{count, plural, one {The session has been added to # project.} other {The session has been added to # projects.}}",
+      "addFailed": "Failed to add session to projects",
+      "addFailedDesc": "An error occurred while adding the session to the projects."
+    }
+  },
+  "workspacesTable": {
+    "inviteTeam": "Invite Team",
+    "removeFromProject": "Remove from Project",
+    "statusActive": "Active",
+    "statusFinished": "Finished",
+    "headerProject": "Project",
+    "headerSessions": "Sessions",
+    "headerCreated": "Created",
+    "toast": {
+      "removed": "Session removed",
+      "removedDesc": "The session has been removed from this project.",
+      "removeFailed": "Failed to remove session",
+      "removeFailedDesc": "An error occurred while removing the session."
+    }
+  },
+  "sessionFiles": {
+    "title": "Session Files",
+    "description": "Files uploaded for this session",
+    "addFile": "Add File",
+    "emptyTitle": "No files uploaded yet",
+    "emptyBody": "Upload transcripts or knowledge files to keep track of important information and insights from your session.",
+    "uploadFiles": "Upload Files",
+    "totalFiles": "Total Files",
+    "totalSize": "Total Size",
+    "transcripts": "Transcripts",
+    "knowledgeFiles": "Knowledge Files",
+    "columnFile": "File",
+    "columnType": "Type",
+    "columnSize": "Size",
+    "columnUploaded": "Uploaded",
+    "deleteTitle": "Delete file?",
+    "deleteBody": "Are you sure you want to delete <name></name>? This action cannot be undone.",
+    "toast": {
+      "loadFailed": "Error loading files",
+      "loadFailedDesc": "Could not load session files",
+      "fetchFailed": "Failed to fetch session files",
+      "deleted": "File deleted",
+      "deletedDesc": "The file has been deleted successfully",
+      "deleteError": "Error deleting file",
+      "deleteErrorDesc": "Could not delete the file",
+      "deleteFailed": "Failed to delete file"
     }
   }
 }

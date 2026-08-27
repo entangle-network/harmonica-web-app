@@ -1,5 +1,7 @@
 'use client';
 
+import { useLocale, useTranslations } from 'next-intl';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -39,6 +41,9 @@ function SessionRow({
   workspaceId: string;
   onRemove: (sessionId: string) => void;
 }) {
+  const t = useTranslations('workspacesTable');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [isRemoving, setIsRemoving] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
 
@@ -51,22 +56,21 @@ function SessionRow({
       if (result.success) {
         onRemove(session.id);
         toast({
-          title: 'Session removed',
-          description: 'The session has been removed from this project.',
+          title: t('toast.removed'),
+          description: t('toast.removedDesc'),
         });
       } else {
         toast({
-          title: 'Failed to remove session',
-          description:
-            result.error || 'An error occurred while removing the session.',
+          title: t('toast.removeFailed'),
+          description: result.error || t('toast.removeFailedDesc'),
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Error removing session:', error);
       toast({
-        title: 'Failed to remove session',
-        description: 'An error occurred while removing the session.',
+        title: t('toast.removeFailed'),
+        description: t('toast.removeFailedDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -86,12 +90,12 @@ function SessionRow({
           variant="outline"
           className={session.active ? 'bg-lime-100 text-lime-900' : ''}
         >
-          {session.active ? 'Active' : 'Finished'}
+          {session.active ? t('statusActive') : t('statusFinished')}
         </Badge>
       </TableCell>
 
       <TableCell>
-        {new Intl.DateTimeFormat(undefined, {
+        {new Intl.DateTimeFormat(locale, {
           dateStyle: 'medium',
           timeStyle: 'short',
         }).format(new Date(session.start_time))}
@@ -105,20 +109,20 @@ function SessionRow({
           >
             <Button variant="outline" size="sm">
               <ExternalLink className="h-4 w-4" />
-              <span className="sr-only">Open</span>
+              <span className="sr-only">{tCommon('open')}</span>
             </Button>
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">{tCommon('openMenu')}</span>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setShowShareDialog(true)}>
                 <Share2 className="mr-2 h-4 w-4" />
-                <span>Invite Team</span>
+                <span>{t('inviteTeam')}</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={handleRemoveSession}
@@ -126,7 +130,7 @@ function SessionRow({
                 className="text-red-600"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                {isRemoving ? 'Removing...' : 'Remove from Project'}
+                {isRemoving ? tCommon('removing') : t('removeFromProject')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -145,6 +149,9 @@ function SessionRow({
 }
 
 function WorkspaceRow({ workspace }: { workspace: WorkspaceWithSessions }) {
+  const t = useTranslations('workspacesTable');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [localSessions, setLocalSessions] = useState(workspace.sessions);
@@ -194,7 +201,7 @@ function WorkspaceRow({ workspace }: { workspace: WorkspaceWithSessions }) {
           </Badge>
         </TableCell>
         <TableCell>
-          {new Intl.DateTimeFormat(undefined, {
+          {new Intl.DateTimeFormat(locale, {
             dateStyle: 'medium',
             timeStyle: 'short',
           }).format(new Date(workspace.created_at))}
@@ -208,27 +215,27 @@ function WorkspaceRow({ workspace }: { workspace: WorkspaceWithSessions }) {
             >
               <Button variant="outline" size="sm">
                 <ExternalLink className="h-4 w-4" />
-                <span className="sr-only">Open</span>
+                <span className="sr-only">{tCommon('open')}</span>
               </Button>
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button aria-haspopup="true" size="icon" variant="ghost">
                   <MoreHorizontal className="h-4 w-4" />
-                  <span className="sr-only">Toggle menu</span>
+                  <span className="sr-only">{tCommon('toggleMenu')}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setShowShareDialog(true)}>
                   <Share2 className="mr-2 h-4 w-4" />
-                  <span>Invite Team</span>
+                  <span>{t('inviteTeam')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={handleDelete}
                   className="text-red-600"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  <span>Delete</span>
+                  <span>{tCommon('delete')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -262,19 +269,20 @@ export function WorkspacesTable({
 }: {
   workspaces: WorkspaceWithSessions[];
 }) {
+  const t = useTranslations('workspacesTable');
   const tableHeaders = [
     {
-      label: 'Project',
+      label: t('headerProject'),
       sortKey: 'title',
       className: 'cursor-pointer',
     },
     {
-      label: 'Sessions',
+      label: t('headerSessions'),
       sortKey: 'num_sessions',
       className: 'cursor-pointer',
     },
     {
-      label: 'Created',
+      label: t('headerCreated'),
       sortKey: 'created_at',
       className: 'cursor-pointer',
       sortBy: (sortDirection: string, a: string, b: string) => {

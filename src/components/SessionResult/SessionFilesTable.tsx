@@ -1,5 +1,8 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import { useDateLocale } from '@/lib/dateLocale';
+
 import { useEffect, useState } from 'react';
 import {
   Card,
@@ -68,6 +71,9 @@ export default function SessionFilesTable({
   sessionId: string;
   refreshTrigger?: number;
 }) {
+  const t = useTranslations('sessionFiles');
+  const tCommon = useTranslations('common');
+  const dateLocale = useDateLocale();
   const [files, setFiles] = useState<SessionFile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -78,13 +84,13 @@ export default function SessionFilesTable({
     setIsLoading(true);
     try {
       const response = await fetch(`/api/sessions/${sessionId}/files`);
-      if (!response.ok) throw new Error('Failed to fetch session files');
+      if (!response.ok) throw new Error(t('toast.fetchFailed'));
       const data = await response.json();
       setFiles(data.files || []);
     } catch (error) {
       toast({
-        title: 'Error loading files',
-        description: 'Could not load session files',
+        title: t('toast.loadFailed'),
+        description: t('toast.loadFailedDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -104,16 +110,16 @@ export default function SessionFilesTable({
           method: 'DELETE',
         },
       );
-      if (!response.ok) throw new Error('Failed to delete file');
+      if (!response.ok) throw new Error(t('toast.deleteFailed'));
       toast({
-        title: 'File deleted',
-        description: 'The file has been deleted successfully',
+        title: t('toast.deleted'),
+        description: t('toast.deletedDesc'),
       });
       loadFiles(); // Refresh the list
     } catch (error) {
       toast({
-        title: 'Error deleting file',
-        description: 'Could not delete the file',
+        title: t('toast.deleteError'),
+        description: t('toast.deleteErrorDesc'),
         variant: 'destructive',
       });
     }
@@ -135,7 +141,7 @@ export default function SessionFilesTable({
   const getFriendlyFileType = (fileType: string) => {
     if (fileType === 'application/pdf') return 'PDF';
     if (fileType === 'application/json') return 'JSON';
-    if (fileType === 'text/plain') return 'Text';
+    if (fileType === 'text/plain') return tCommon('text');
     return fileType;
   };
 
@@ -161,15 +167,16 @@ export default function SessionFilesTable({
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete file?</AlertDialogTitle>
+            <AlertDialogTitle>{t('deleteTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete <b>{fileToDelete?.file_name}</b>?
-              This action cannot be undone.
+              {t.rich('deleteBody', {
+                name: () => <b>{fileToDelete?.file_name}</b>,
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setFileToDelete(null)}>
-              Cancel
+              {tCommon('cancel')}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
@@ -245,7 +252,7 @@ export default function SessionFilesTable({
         {formatFileSize(file.file_size)}
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        {format(new Date(file.uploaded_at), 'MMM d, yyyy')}
+        {format(new Date(file.uploaded_at), 'PP', { locale: dateLocale })}
       </TableCell>
       <TableCell className="text-right">{renderFileActions(file)}</TableCell>
     </TableRow>
@@ -277,14 +284,13 @@ export default function SessionFilesTable({
           <path d="M16 18v-3" />
         </svg>
       </div>
-      <h3 className="text-lg font-semibold mb-2">No files uploaded yet</h3>
+      <h3 className="text-lg font-semibold mb-2">{t('emptyTitle')}</h3>
       <p className="text-muted-foreground text-center mb-6 max-w-sm">
-        Upload transcripts or knowledge files to keep track of important
-        information and insights from your session.
+        {t('emptyBody')}
       </p>
       <Button onClick={() => setIsImportModalOpen(true)} size="lg">
         <Upload className="mr-2 h-5 w-5" />
-        Upload Files
+        {t('uploadFiles')}
       </Button>
     </div>
   );
@@ -294,13 +300,13 @@ export default function SessionFilesTable({
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle className="text-xl flex items-center">
-            Session Files
+            {t('title')}
           </CardTitle>
-          <CardDescription>Files uploaded for this session</CardDescription>
+          <CardDescription>{t('description')}</CardDescription>
         </div>
         <Button onClick={() => setIsImportModalOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Add File
+          {t('addFile')}
         </Button>
       </CardHeader>
       <CardContent>
@@ -334,13 +340,13 @@ export default function SessionFilesTable({
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-4 bg-muted/50 rounded-lg">
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">
-                  Total Files
+                  {t('totalFiles')}
                 </p>
                 <p className="text-2xl font-bold">{files.length}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">
-                  Total Size
+                  {t('totalSize')}
                 </p>
                 <p className="text-2xl font-bold">
                   {formatFileSize(
@@ -350,13 +356,13 @@ export default function SessionFilesTable({
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">
-                  Transcripts
+                  {t('transcripts')}
                 </p>
                 <p className="text-2xl font-bold">{transcriptFiles.length}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">
-                  Knowledge Files
+                  {t('knowledgeFiles')}
                 </p>
                 <p className="text-2xl font-bold">{knowledgeFiles.length}</p>
               </div>
@@ -364,28 +370,28 @@ export default function SessionFilesTable({
 
             {transcriptFiles.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-3">Transcripts</h3>
+                <h3 className="text-lg font-semibold mb-3">{t('transcripts')}</h3>
                 {transcriptFiles.map(renderTranscriptFile)}
               </div>
             )}
 
             {knowledgeFiles.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold mb-3">Knowledge Files</h3>
+                <h3 className="text-lg font-semibold mb-3">{t('knowledgeFiles')}</h3>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>File</TableHead>
+                      <TableHead>{t('columnFile')}</TableHead>
                       <TableHead className="hidden md:table-cell">
-                        Type
+                        {t('columnType')}
                       </TableHead>
                       <TableHead className="hidden md:table-cell">
-                        Size
+                        {t('columnSize')}
                       </TableHead>
                       <TableHead className="hidden md:table-cell">
-                        Uploaded
+                        {t('columnUploaded')}
                       </TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead className="text-right">{tCommon('actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -68,6 +70,8 @@ export default function SessionResultControls({
   sessionData,
   questions = [],
 }: SessionResultControlsProps) {
+  const t = useTranslations('sessionControls');
+  const tCommon = useTranslations('common');
   const [loadSummary, setLoadSummary] = useState(false);
   const [isCloning, setIsCloning] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -92,8 +96,8 @@ export default function SessionResultControls({
     } catch (error) {
       console.error('Failed to update prompt:', error);
       toast({
-        title: 'Failed to update prompt',
-        description: 'An error occurred while updating the prompt.',
+        title: t('toast.promptUpdateFailed'),
+        description: t('toast.promptUpdateFailedDesc'),
         variant: 'destructive',
       });
     }
@@ -109,10 +113,10 @@ export default function SessionResultControls({
 
       // Show success toast
       toast({
-        title: 'Cross-pollination setting updated',
+        title: t('toast.crossPollinationUpdated'),
         description: checked
-          ? "Participants can now see each other's responses"
-          : "Participants can no longer see each other's responses",
+          ? t('toast.crossPollinationOn')
+          : t('toast.crossPollinationOff'),
       });
 
       // Refresh the page to ensure all components reflect the new state
@@ -122,8 +126,8 @@ export default function SessionResultControls({
       setLocalCrossPollination(!checked);
       console.error('Failed to update cross-pollination:', error);
       toast({
-        title: 'Failed to update setting',
-        description: 'An error occurred while updating cross-pollination.',
+        title: t('toast.settingUpdateFailed'),
+        description: t('toast.settingUpdateFailedDesc'),
         variant: 'destructive',
       });
     }
@@ -150,22 +154,22 @@ export default function SessionResultControls({
       const newSessionId = await cloneSession(id);
       if (newSessionId) {
         toast({
-          title: 'Session cloned successfully',
-          description: "You'll be redirected to the new session.",
+          title: t('toast.cloned'),
+          description: t('toast.clonedDesc'),
         });
         router.push(`/sessions/${encryptId(newSessionId)}`);
       } else {
         toast({
-          title: 'Failed to clone session',
-          description: 'An error occurred while cloning the session.',
+          title: t('toast.cloneFailed'),
+          description: t('toast.cloneFailedDesc'),
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Error cloning session:', error);
       toast({
-        title: 'Failed to clone session',
-        description: 'An error occurred while cloning the session.',
+        title: t('toast.cloneFailed'),
+        description: t('toast.cloneFailedDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -178,15 +182,15 @@ export default function SessionResultControls({
     try {
       await db.deleteHostSession(id);
       toast({
-        title: 'Session deleted',
-        description: 'The session has been successfully deleted.',
+        title: t('toast.deleted'),
+        description: t('toast.deletedDesc'),
       });
       router.push('/');
     } catch (error) {
       console.error('Error deleting session:', error);
       toast({
-        title: 'Failed to delete session',
-        description: 'An error occurred while deleting the session.',
+        title: t('toast.deleteFailed'),
+        description: t('toast.deleteFailedDesc'),
         variant: 'destructive',
       });
     } finally {
@@ -208,8 +212,8 @@ export default function SessionResultControls({
       await db.updateHostSession(id, dbUpdates);
       
       toast({
-        title: 'Session updated',
-        description: 'The session details have been successfully updated.',
+        title: t('toast.updated'),
+        description: t('toast.updatedDesc'),
       });
       
       // Refresh the page to show updated data
@@ -217,8 +221,8 @@ export default function SessionResultControls({
     } catch (error) {
       console.error('Failed to update session:', error);
       toast({
-        title: 'Failed to update session',
-        description: 'An error occurred while updating the session.',
+        title: t('toast.updateFailed'),
+        description: t('toast.updateFailedDesc'),
         variant: 'destructive',
       });
     }
@@ -228,15 +232,15 @@ export default function SessionResultControls({
     try {
       await db.updateHostSession(id, { prompt: prompt.fullPrompt, prompt_summary: prompt.summary });
       toast({
-        title: 'Prompt updated',
-        description: 'The facilitation prompt has been successfully updated.',
+        title: t('toast.promptUpdated'),
+        description: t('toast.promptUpdatedDesc'),
       });
       router.refresh();
     } catch (error) {
       console.error('Failed to update prompt:', error);
       toast({
-        title: 'Failed to update prompt',
-        description: 'An error occurred while updating the prompt.',
+        title: t('toast.promptUpdateFailed'),
+        description: t('toast.promptUpdateFailedDesc'),
         variant: 'destructive',
       });
     }
@@ -257,15 +261,15 @@ export default function SessionResultControls({
       ) as unknown as JSON;
       await db.updateHostSession(id, { questions: questionsJson });
       toast({
-        title: 'Questions updated',
-        description: 'The pre-survey form questions have been successfully updated.',
+        title: t('toast.questionsUpdated'),
+        description: t('toast.questionsUpdatedDesc'),
       });
       router.refresh();
     } catch (error) {
       console.error('Failed to update questions:', error);
       toast({
-        title: 'Failed to update questions',
-        description: 'An error occurred while updating the questions.',
+        title: t('toast.questionsUpdateFailed'),
+        description: t('toast.questionsUpdateFailedDesc'),
         variant: 'destructive',
       });
     }
@@ -276,8 +280,8 @@ export default function SessionResultControls({
     // This will need to be implemented to take users to the refine step
     // with the current session data pre-populated
     toast({
-      title: 'Edit Session',
-      description: 'This will take you to the session editing flow.',
+      title: t('toast.editSession'),
+      description: t('toast.editSessionDesc'),
     });
   };
 
@@ -285,7 +289,7 @@ export default function SessionResultControls({
     <Card className="flex flex-col">
       <CardHeader className="pb-0">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-md">Session Controls</CardTitle>
+          <CardTitle className="text-md">{t('title')}</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
@@ -300,11 +304,11 @@ export default function SessionResultControls({
             disabled={loadSummary || isCloning || isDeleting}
           >
             {isFinished ? (
-              'Reopen'
+              t('reopen')
             ) : (
               <>
                 <StopCircle className="h-4 w-4 text-red-600" />
-                <span className="px-1">End session</span>
+                <span className="px-1">{t('endSession')}</span>
               </>
             )}
           </Button>
@@ -315,7 +319,7 @@ export default function SessionResultControls({
             disabled={isCloning || isDeleting}
           >
             <Pencil className="h-4 w-4" />
-            Edit Session
+            {t('editSession')}
           </Button>
 
           <Button
@@ -324,20 +328,20 @@ export default function SessionResultControls({
             disabled={isCloning || isDeleting}
           >
             <Users className="h-4 w-4" />
-            Invite team
+            {t('inviteTeam')}
           </Button>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" disabled={isCloning || isDeleting}>
-                More
+                {tCommon('more')}
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={handleCloneSession} disabled={isCloning}>
                 <Copy className="h-4 w-4 mr-2" />
-                Duplicate
+                {tCommon('duplicate')}
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => setShowDeleteDialog(true)} 
@@ -345,7 +349,7 @@ export default function SessionResultControls({
                 className="text-red-600 focus:text-red-600 focus:bg-red-50"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete
+                {tCommon('delete')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -355,10 +359,9 @@ export default function SessionResultControls({
         <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Are you sure?</DialogTitle>
+              <DialogTitle>{tCommon('areYouSure')}</DialogTitle>
               <DialogDescription>
-                This will permanently delete the session and all its data. This
-                action cannot be undone.
+                {t('deleteWarning')}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
@@ -367,14 +370,14 @@ export default function SessionResultControls({
                 onClick={() => setShowDeleteDialog(false)}
                 disabled={isDeleting}
               >
-                Cancel
+                {tCommon('cancel')}
               </Button>
               <Button
                 onClick={handleDeleteSession}
                 disabled={isDeleting}
                 variant="destructive"
               >
-                {isDeleting ? 'Deleting...' : 'Delete'}
+                {isDeleting ? tCommon('deleting') : tCommon('delete')}
               </Button>
             </DialogFooter>
           </DialogContent>
