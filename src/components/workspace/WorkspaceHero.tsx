@@ -196,7 +196,10 @@ export default function WorkspaceHero({
 
   const editDialog = (
     <Dialog open={isEditing} onOpenChange={setIsEditing}>
-      <DialogContent className="sm:max-w-[500px]">
+      {/* The dialog grew past the viewport once appearance settings were added,
+          and DialogContent does not scroll on its own — it just centres and
+          clips. Cap it and let the body scroll instead. */}
+      <DialogContent className="sm:max-w-[500px] max-h-[calc(100vh-4rem)] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{t('editTitle')}</DialogTitle>
         </DialogHeader>
