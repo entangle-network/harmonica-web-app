@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { SourceLink } from '@/components/SourceLink';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { encryptId } from '@/lib/encryptionUtils';
@@ -388,6 +389,7 @@ export const SessionModal = ({
               {tChat('poweredBy')}{' '}
               <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
             </Link>
+            <SourceLink />
             <p className="text-xs text-muted-foreground">
               {t.rich('privacyNote', {
                 link: (chunks) => (

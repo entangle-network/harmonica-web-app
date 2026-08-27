@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { SourceLink } from '@/components/SourceLink';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { HelpCircle, ChevronDown } from 'lucide-react';
@@ -153,6 +154,11 @@ export const ChatInterface = ({
                 {t('poweredBy')}{' '}
                 <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
               </Link>
+              {/* AGPL-3.0 §13: the running version's source must be reachable
+                  from the interface participants actually use. */}
+              <div className="mt-1">
+                <SourceLink />
+              </div>
             </div>
           </div>
         </div>
@@ -196,6 +202,9 @@ export const ChatInterface = ({
                     {t('poweredBy')}{' '}
                     <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
                   </Link>
+                  <div className="mt-1">
+                    <SourceLink />
+                  </div>
                 </div>
               </div>
             </div>

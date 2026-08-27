@@ -41,6 +41,14 @@ ENV AUTH0_BASE_URL=$AUTH0_BASE_URL
 ARG SERVER_ACTIONS_ALLOWED_ORIGINS
 ENV SERVER_ACTIONS_ALLOWED_ORIGINS=$SERVER_ACTIONS_ALLOWED_ORIGINS
 
+# AGPL-3.0 §13 requires offering the source of the *running* version, so the
+# in-app link points at the commit this image was built from. Coolify passes
+# SOURCE_COMMIT automatically; without it the link falls back to the branch.
+ARG SOURCE_COMMIT
+ARG NEXT_PUBLIC_SOURCE_URL
+ENV NEXT_PUBLIC_SOURCE_COMMIT=$SOURCE_COMMIT
+ENV NEXT_PUBLIC_SOURCE_URL=$NEXT_PUBLIC_SOURCE_URL
+
 # Build-time-only placeholders. `next build` evaluates module scope of every
 # route, and two modules construct clients eagerly:
 #   - src/lib/schema.ts reads POSTGRES_URL (a 'localhost' value selects the pg

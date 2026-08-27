@@ -24,6 +24,14 @@
 
 ---
 
+> **This is a modified version of Harmonica**, maintained by
+> [entangle-network](https://github.com/entangle-network/harmonica-web-app) and
+> localised into Czech. It is distributed under the same AGPL-3.0 licence as the
+> original. See [NOTICE.md](NOTICE.md) for what was changed and
+> [docs/FORK.md](docs/FORK.md) for how the fork is kept in sync with upstream.
+
+---
+
 ## What is Harmonica?
 
 Harmonica is an open-source platform for AI-facilitated group deliberation. Deploy it on your own infrastructure with your choice of LLM—whether self-hosted (Ollama, vLLM) or cloud providers (OpenAI, Anthropic, Google).

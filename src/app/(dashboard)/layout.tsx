@@ -16,6 +16,7 @@ import { Analytics } from '@vercel/analytics/react';
 import User from '../../components/user';
 import Providers from './providers';
 import { SearchInput } from './search';
+import { SourceLink } from '@/components/SourceLink';
 
 export default function DashboardLayout({
   children,
@@ -35,6 +36,12 @@ export default function DashboardLayout({
           <div className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4">
             {children}
           </div>
+          {/* AGPL-3.0 §13: hosts interact with this instance over the network
+              too, so the source of the running version has to be reachable from
+              their side of the app as well, not only from the chat. */}
+          <footer className="mt-8 px-4 sm:px-6 text-center">
+            <SourceLink />
+          </footer>
         </div>
         <Analytics />
       </div>

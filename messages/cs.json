@@ -61,7 +61,8 @@
     "test": "Test",
     "share": "Sdílet",
     "results": "Výsledky",
-    "projects": "Projekty:"
+    "projects": "Projekty:",
+    "sourceCode": "Zdrojový kód"
   },
   "settings": {
     "title": "Nastavení",
