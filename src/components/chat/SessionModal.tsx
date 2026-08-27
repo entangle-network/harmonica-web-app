@@ -5,7 +5,12 @@ import { encryptId } from '@/lib/encryptionUtils';
 import type { UserProfile } from '@auth0/nextjs-auth0/client';
 import { ChevronRight, AlertCircle, Loader2, ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
-import { QuestionsModal, SUPPORTED_LANGUAGES } from './QuestionsModal';
+import {
+  QuestionsModal,
+  SUPPORTED_LANGUAGES,
+  resolveLanguageName,
+  useDefaultLanguageCode,
+} from './QuestionsModal';
 import { QuestionInfo, QuestionType } from 'app/create/types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -40,6 +45,7 @@ export const SessionModal = ({
   const tForm = useTranslations('questionsForm');
   const tCommon = useTranslations('common');
   const tChat = useTranslations('chat');
+  const defaultLanguage = useDefaultLanguageCode();
   const [showQuestions, setShowQuestions] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -104,7 +110,10 @@ export const SessionModal = ({
     // Pass answers directly to onStart (no transformation)
     onStart({
       ...answers,
-      preferred_language: answers.preferred_language || 'English',
+      preferred_language: resolveLanguageName(
+        answers.preferred_language,
+        defaultLanguage,
+      ),
     });
   };
 
@@ -240,7 +249,7 @@ export const SessionModal = ({
                               QuestionType.OPTIONS,
                             )
                           }
-                          value={answers['preferred_language'] || 'en'}
+                          value={answers['preferred_language'] || defaultLanguage}
                         >
                           <SelectTrigger className="w-[200px] bg-white border-gray-200 focus:ring-gray-200">
                             <SelectValue placeholder={tForm('selectLanguagePlaceholder')} />

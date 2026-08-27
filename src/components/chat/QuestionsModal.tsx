@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,6 +30,7 @@ export const QuestionsModal = ({
   onSubmit,
 }: QuestionsModalProps) => {
   const t = useTranslations('questionsForm');
+  const defaultLanguage = useDefaultLanguageCode();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -96,7 +97,10 @@ export const QuestionsModal = ({
 
     const finalAnswers = {
       ...transformedAnswers,
-      preferred_language: answers.preferred_language || 'English',
+      preferred_language: resolveLanguageName(
+        answers.preferred_language,
+        defaultLanguage,
+      ),
     };
 
     onSubmit(finalAnswers);
@@ -178,7 +182,7 @@ export const QuestionsModal = ({
                       QuestionType.OPTIONS,
                     )
                   }
-                  value={answers['preferred_language'] || 'en'}
+                  value={answers['preferred_language'] || defaultLanguage}
                 >
                   <SelectTrigger className="w-[200px] bg-white border-gray-200 focus:ring-gray-200">
                     <SelectValue placeholder={t('selectLanguagePlaceholder')} />
@@ -244,3 +248,29 @@ export const SUPPORTED_LANGUAGES = {
   uk: 'Українська',
   vi: 'Tiếng Việt',
 } as const;
+
+export type LanguageCode = keyof typeof SUPPORTED_LANGUAGES;
+
+/**
+ * Language pre-selected in the participant form, taken from the UI locale so a
+ * deployment in a given language does not ask its participants to switch away
+ * from English first. Falls back to English when the UI locale is not one of
+ * the supported conversation languages.
+ */
+export function useDefaultLanguageCode(): LanguageCode {
+  const locale = useLocale();
+  return locale in SUPPORTED_LANGUAGES ? (locale as LanguageCode) : 'en';
+}
+
+/**
+ * The facilitator prompt is given a language name, but the select stores codes.
+ * Resolving here keeps both paths in one shape — otherwise an untouched form
+ * sends "English" while an explicit pick of the same option sends "en".
+ */
+export function resolveLanguageName(
+  code: string | undefined,
+  fallback: LanguageCode,
+): string {
+  const key = (code ?? fallback) as LanguageCode;
+  return SUPPORTED_LANGUAGES[key] ?? SUPPORTED_LANGUAGES[fallback];
+}
