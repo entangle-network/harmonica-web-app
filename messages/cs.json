@@ -56,7 +56,12 @@
     "started": "Zahájeno",
     "saving": "Ukládám...",
     "toggleTheme": "Přepnout motiv",
-    "sessions": "Sezení"
+    "sessions": "Sezení",
+    "search": "Hledat...",
+    "test": "Test",
+    "share": "Sdílet",
+    "results": "Výsledky",
+    "projects": "Projekty:"
   },
   "settings": {
     "title": "Nastavení",
@@ -743,5 +748,14 @@
   },
   "sessionSummaryCard": {
     "removeConfirm": "Odebrat sezení „{topic}“ z tohoto projektu?"
+  },
+  "misc": {
+    "readyToLaunch": "Můžeme spustit?",
+    "beforeStart": "Než účastníci začnou",
+    "generatedSession": "Vaše vygenerované sezení",
+    "errorTitle": "Jejda, něco se pokazilo!",
+    "exploreTemplates": "Procházet šablony",
+    "formQuestions": "Otázky úvodního formuláře",
+    "notSpecified": "Neuvedeno"
   }
 }

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, User } from "lucide-react";
@@ -17,6 +18,7 @@ export default function SessionResultStatus({
   numSessions,
   completedSessions
 }: SessionResultStatusProps) {
+  const t = useTranslations('common');
   // In the past, some sessions did not have a start time. Just set 'a while ago' for those.
   const startTimeString = !startTime ? 'a while ago' : format(new Date(startTime), ' dd MMM yyyy');
   
@@ -25,7 +27,7 @@ export default function SessionResultStatus({
       <Card className="flex-grow flex flex-col">
         <CardHeader className="pb-0">
           <div className="flex justify-between items-center">
-            <CardTitle className="text-md">Status</CardTitle>
+            <CardTitle className="text-md">{t('status')}</CardTitle>
             <Badge variant="outline" className={
             status === SessionStatus.ACTIVE ? "bg-lime-100 text-lime-900"
               : status === SessionStatus.DRAFT ? "text-purple-900 bg-purple-100"

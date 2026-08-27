@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { HostSession, UserSession } from '@/lib/schema';
 import React, { useEffect } from 'react';
 import { mutate } from 'swr';
@@ -26,6 +28,7 @@ export default function SessionResultsSection({
   showShare?: boolean;
   chatEntryMessage?: OpenAIMessage;
 }) {
+  const t = useTranslations('common');
   const hasMessages = userData.length > 0;
   const { hasNewMessages, lastMessage, lastSummaryUpdate } =
     checkSummaryAndMessageTimes(hostData, userData);
@@ -34,7 +37,7 @@ export default function SessionResultsSection({
 
   return (
     <>
-      <h2 className="text-2xl font-medium mb-4 mt-12">Results</h2>
+      <h2 className="text-2xl font-medium mb-4 mt-12">{t('results')}</h2>
           <ResultTabs
             hostData={[hostData]}
             userData={userData}

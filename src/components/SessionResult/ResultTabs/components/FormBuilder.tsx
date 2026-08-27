@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useState, useEffect, useRef } from 'react';
 import { QuestionInfo, QuestionType } from 'app/create/types';
 import QuestionModal from 'app/create/QuestionModal';
@@ -15,6 +17,7 @@ export function FormBuilder({
   questions: initialQuestions,
   onQuestionsUpdate,
 }: FormBuilderProps) {
+  const t = useTranslations('misc');
   const [questions, setQuestions] = useState<QuestionInfo[]>(initialQuestions);
   const [modalOpen, setModalOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<QuestionInfo | null>(
@@ -113,7 +116,7 @@ export function FormBuilder({
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">Pre-survey Form Questions</h3>
+        <h3 className="text-lg font-semibold">{t('formQuestions')}</h3>
         <p className="text-sm text-muted-foreground">
           Collect information from participants before they start the session.
         </p>

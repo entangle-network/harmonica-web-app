@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useRouter } from 'next/navigation';
 import {
   Card,
@@ -39,6 +41,7 @@ const iconMap = {
 } as const;
 
 export default function TemplatesClient() {
+  const t = useTranslations('misc');
   const router = useRouter();
 
   const handleTemplateSelect = (templateDefaults: Partial<SessionBuilderData>) => {
@@ -71,7 +74,7 @@ export default function TemplatesClient() {
           </div>
 
           <div className="flex w-full flex-col items-center space-y-2 text-center md:w-3/5">
-            <h1 className="text-4xl font-semibold tracking-tight">Explore Templates</h1>
+            <h1 className="text-4xl font-semibold tracking-tight">{t('exploreTemplates')}</h1>
             <p className="text-muted-foreground">
               Choose a template to get started quickly
             </p>

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,6 +31,7 @@ export function SessionField({
   onCancel,
   placeholder,
 }: SessionFieldProps) {
+  const t = useTranslations('misc');
   const [editValue, setEditValue] = useState(value);
   const [showEditButton, setShowEditButton] = useState(false);
 
@@ -56,7 +59,7 @@ export function SessionField({
     if (typeof value === 'string') {
       return (
         <div className="text-sm text-gray-700 whitespace-pre-wrap">
-          {value || <span className="text-muted-foreground italic">Not specified</span>}
+          {value || <span className="text-muted-foreground italic">{t('notSpecified')}</span>}
         </div>
       );
     }

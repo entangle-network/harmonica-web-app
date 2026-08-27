@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
 import { Analytics } from '@vercel/analytics/react';
@@ -32,6 +33,7 @@ export default function SessionLayout({
 }
 
 async function ProjectBar({ sessionId }: { sessionId: string }) {
+  const t = await getTranslations('common');
   const projects = await getWorkspacesForSession(sessionId);
 
 
@@ -40,7 +42,7 @@ async function ProjectBar({ sessionId }: { sessionId: string }) {
     <div className="flex px-5 md:px-8 items-center space-x-2 overflow-x-auto">
       {projects.length > 0 && (
         <>
-          <span className="text-sm text-muted-foreground">Projects:</span>
+          <span className="text-sm text-muted-foreground">{t('projects')}</span>
           <div className="flex gap-2">
             {projects.map((project) => (
               <Link

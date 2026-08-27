@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
@@ -7,6 +9,7 @@ import { Spinner } from '@/components/icons';
 import { SearchIcon } from '@/components/icons';
 
 export function SearchInput() {
+  const t = useTranslations('common');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -24,7 +27,7 @@ export function SearchInput() {
       <Input
         name="q"
         type="search"
-        placeholder="Search..."
+        placeholder={t('search')}
         className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
       />
       {isPending && <Spinner />}

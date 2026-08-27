@@ -1,4 +1,6 @@
-'use client'; // Error boundaries must be Client Components
+'use client';
+
+import { useTranslations } from 'next-intl'; // Error boundaries must be Client Components
 
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
@@ -10,6 +12,7 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations('misc');
   useEffect(() => {
     console.error('Error from main app: ', error);
   }, [error]);
@@ -17,7 +20,7 @@ export default function Error({
   return (
     <div className="pt-16 sm:px-14 pb-16 ">
       <div className="flex flex-col items-center justify-center gap-4">
-        <h2>Oops, something went wrong!</h2>
+        <h2>{t('errorTitle')}</h2>
         {error.message}
         <Button
           onClick={

@@ -1,4 +1,6 @@
 'use client'
+
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import QRCode from 'qrcode.react';
 import { useEffect, useState } from 'react';
@@ -11,6 +13,7 @@ export default function ShareSession({
 }: {
   makeSessionId: string;
 }) {
+  const t = useTranslations('common');
   const [chatUrl, setChatUrl] = useState(''); 
   const [showToast, setShowToast] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -36,7 +39,7 @@ export default function ShareSession({
     <Card className='w-fit'>
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle className="text-md">Share</CardTitle>
+          <CardTitle className="text-md">{t('share')}</CardTitle>
           <Share />
         </div>
       </CardHeader>

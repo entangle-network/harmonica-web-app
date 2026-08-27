@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import {
   Dialog,
   DialogContent,
@@ -18,11 +19,12 @@ export function LaunchModal({
   setShowLaunchModal, 
   handleShareComplete 
 }: LaunchModalProps) {
+  const t = useTranslations('misc');
   return (
     <Dialog open={showLaunchModal} onOpenChange={setShowLaunchModal}>
       <DialogContent className="max-w-[400px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Ready to launch?</DialogTitle>
+          <DialogTitle className="text-2xl">{t('readyToLaunch')}</DialogTitle>
           <DialogDescription className="text-base pt-2">
             Deploy your new session in one-click.
           </DialogDescription>

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 import { QuestionInfo, QuestionType } from './types';
 import QuestionModal from './QuestionModal';
@@ -15,6 +16,7 @@ export default function ShareParticipants({
   onQuestionsUpdate,
   sessionPreview,
 }: ShareParticipantsProps) {
+  const t = useTranslations('misc');
   const [questions, setQuestions] = useState<QuestionInfo[]>([
     {
       id: 'name',
@@ -114,7 +116,7 @@ export default function ShareParticipants({
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Check className="w-4 h-4 text-yellow-500" />
-              <h3 className="text-lg font-medium">Your Generated Session</h3>
+              <h3 className="text-lg font-medium">{t('generatedSession')}</h3>
             </div>
             
             {sessionPreview ? (

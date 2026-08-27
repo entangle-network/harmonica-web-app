@@ -56,7 +56,12 @@
     "started": "Started",
     "saving": "Saving...",
     "toggleTheme": "Toggle theme",
-    "sessions": "Sessions"
+    "sessions": "Sessions",
+    "search": "Search...",
+    "test": "Test",
+    "share": "Share",
+    "results": "Results",
+    "projects": "Projects:"
   },
   "settings": {
     "title": "Settings",
@@ -743,5 +748,14 @@
   },
   "sessionSummaryCard": {
     "removeConfirm": "Remove \"{topic}\" from this workspace?"
+  },
+  "misc": {
+    "readyToLaunch": "Ready to launch?",
+    "beforeStart": "Before participants start",
+    "generatedSession": "Your Generated Session",
+    "errorTitle": "Oops, something went wrong!",
+    "exploreTemplates": "Explore Templates",
+    "formQuestions": "Pre-survey Form Questions",
+    "notSpecified": "Not specified"
   }
 }

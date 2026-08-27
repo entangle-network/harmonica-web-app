@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
@@ -103,6 +104,11 @@ const BreadcrumbBarSeparator = ({
 )
 BreadcrumbBarSeparator.displayName = "BreadcrumbBarSeparator"
 
+const BreadcrumbEllipsisLabel = () => {
+  const t = useTranslations('common');
+  return <span className="sr-only">{t('more')}</span>;
+};
+
 const BreadcrumbEllipsis = ({
   className,
   ...props
@@ -114,7 +120,7 @@ const BreadcrumbEllipsis = ({
     {...props}
   >
     <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More</span>
+    <BreadcrumbEllipsisLabel />
   </span>
 )
 BreadcrumbEllipsis.displayName = "BreadcrumbElipssis"

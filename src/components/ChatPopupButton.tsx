@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { memo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,6 +17,7 @@ const ChatPopupButton = ({
 }: {
   prompt: VersionedPrompt;
 }) => {
+  const t = useTranslations('common');
   const [isOpen, setIsOpen] = useState(false);
   const entryMessage: OpenAIMessage = {
       role: 'assistant',
@@ -37,12 +39,12 @@ Please type your name or "anonymous" if you prefer
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="mr-2" onClick={handleTestVersion}>
-          Test
+          {t('test')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] md:max-w-[700px] lg:max-w-[900px]">
         <DialogHeader>
-          <DialogTitle>Test</DialogTitle>
+          <DialogTitle>{t('test')}</DialogTitle>
         </DialogHeader>
         <div>
           <EmbeddedChat entryMessage={entryMessage} />
