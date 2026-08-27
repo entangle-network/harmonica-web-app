@@ -192,7 +192,7 @@ export const SessionModal = ({
                         ? t('bodyLoading')
                         : sessionClosed
                         ? t('bodyClosed')
-                        : t('bodyOpen')}
+                        : theme.introText || t('bodyOpen')}
                     </p>
                   </div>
                 ) : (
@@ -316,23 +316,7 @@ export const SessionModal = ({
                     </div>
                 ) : !showForm ? (
                     <>
-                    <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-6">
-                      {/* 3 points on the left */}
-                      <div className="flex-1 space-y-2">
-                        <div className="flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                          <p className="text-sm text-muted-foreground">{t('tip1')}</p>
-                        </div>
-                        <div className="flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                          <p className="text-sm text-muted-foreground">{t('tip2')}</p>
-                        </div>
-                        <div className="flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                          <p className="text-sm text-muted-foreground">{t('tip3')}</p>
-                        </div>
-                      </div>
-                      
+                    <div className="flex items-center justify-end gap-4">
                       {/* Start button and dots on the right */}
                       <div className="flex items-center gap-4">
                         <div className="flex gap-1">

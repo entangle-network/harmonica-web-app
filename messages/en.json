@@ -498,9 +498,6 @@
     "bodyClosed": "You can create a new session on any topic and invite others to participate.",
     "bodyOpen": "Welcome to this conversational survey. Ready to share what you really think? We'll walk you through a few questions that help us understand your perspective.",
     "formIntro": "Before we start, let's get some key information",
-    "tip1": "Keep this tab open—closing it loses your progress",
-    "tip2": "Your transcript is shared with the session host as you go",
-    "tip3": "Need help articulating your thoughts? Just ask",
     "begin": "Begin",
     "privacyLink": "Privacy policy"
   },
@@ -846,7 +843,9 @@
     "logoUrl": "Logo link",
     "logoUrlHint": "Where the logo takes people. Opens in a new tab.",
     "privacyUrl": "Privacy policy link",
-    "privacyUrlHint": "Shown to participants on the invitation card. Leave empty to use the default."
+    "privacyUrlHint": "Shown to participants on the invitation card. Leave empty to use the default.",
+    "introText": "Welcome paragraph",
+    "introTextHint": "Shown to participants under the session title. Leave empty for the default wording."
   },
   "sessionNav": {
     "editSession": "Edit Session",

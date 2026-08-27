@@ -498,9 +498,6 @@
     "bodyClosed": "Můžete založit nové sezení na libovolné téma a pozvat do něj ostatní.",
     "bodyOpen": "Vítejte v konverzačním dotazníku. Chcete říct, co si opravdu myslíte? Provedeme vás několika otázkami, které nám pomohou porozumět vašemu pohledu.",
     "formIntro": "Než začneme, potřebujeme pár údajů",
-    "tip1": "Nechte tuto záložku otevřenou — zavřením přijdete o rozepsaný průběh",
-    "tip2": "Váš přepis vidí pořadatel sezení průběžně",
-    "tip3": "Když si nevíte rady, jak myšlenku formulovat, stačí říct",
     "begin": "Začít",
     "privacyLink": "Zásady ochrany osobních údajů"
   },
@@ -846,7 +843,9 @@
     "logoUrl": "Odkaz z loga",
     "logoUrlHint": "Kam logo lidi zavede. Otevře se v nové záložce.",
     "privacyUrl": "Odkaz na zásady ochrany osobních údajů",
-    "privacyUrlHint": "Zobrazí se účastníkům na úvodní kartě. Prázdné použije výchozí odkaz."
+    "privacyUrlHint": "Zobrazí se účastníkům na úvodní kartě. Prázdné použije výchozí odkaz.",
+    "introText": "Uvítací text",
+    "introTextHint": "Zobrazí se účastníkům pod názvem sezení. Prázdné použije výchozí znění."
   },
   "sessionNav": {
     "editSession": "Upravit sezení",

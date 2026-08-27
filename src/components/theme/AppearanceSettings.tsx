@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Loader2, Upload, X } from 'lucide-react';
 import { useToast } from 'hooks/use-toast';
@@ -49,6 +50,7 @@ export function AppearanceSettings({
   });
   const [logoUrl, setLogoUrl] = useState('');
   const [privacyUrl, setPrivacyUrl] = useState('');
+  const [introText, setIntroText] = useState('');
 
   useEffect(() => {
     getOwnTheme(target.kind, target.id).then((own) => {
@@ -64,6 +66,7 @@ export function AppearanceSettings({
       });
       setLogoUrl(own.logoUrl ?? '');
       setPrivacyUrl(own.privacyUrl ?? '');
+      setIntroText(own.introText ?? '');
     });
   }, [target.kind, target.id]);
   const [isSaving, setIsSaving] = useState(false);
@@ -82,6 +85,7 @@ export function AppearanceSettings({
         surface: colors.surface || null,
         logoUrl: logoUrl.trim() || null,
         privacyUrl: privacyUrl.trim() || null,
+        introText: introText.trim() || null,
       });
       toast({ title: t('saved') });
     } catch (error) {
@@ -233,6 +237,19 @@ export function AppearanceSettings({
         {inheritedNote && (
           <p className="text-xs text-muted-foreground">{inheritedNote}</p>
         )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="theme-intro-text">{t('introText')}</Label>
+        <Textarea
+          id="theme-intro-text"
+          value={introText}
+          placeholder={t('inheritPlaceholder')}
+          onChange={(e) => setIntroText(e.target.value)}
+          rows={3}
+          className="resize-none"
+        />
+        <p className="text-xs text-muted-foreground">{t('introTextHint')}</p>
       </div>
 
       {colorField('primary', t('buttonColor'), t('buttonColorHint'))}
