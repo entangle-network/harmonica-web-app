@@ -36,6 +36,15 @@ export interface HostSessionsTable {
   visibility_settings?: ResultTabsVisibilityConfig;
   cross_pollination: Generated<boolean>; // Default to false
   distribution: string | null;
+  // Participant-facing theming; see migration 039. Each value is inherited
+  // independently (session overrides its project), so nulls are meaningful.
+  theme_primary?: string;
+  theme_gradient_from?: string;
+  theme_surface?: string;
+  theme_intro_image_id?: string;
+  theme_avatar_id?: string;
+  theme_logo_id?: string;
+  theme_logo_url?: string;
 }
 
 export interface UserSessionsTable {
@@ -87,6 +96,22 @@ export interface WorkspacesTable {
   last_modified: Generated<Date>;
   visibility_settings?: ResultTabsVisibilityConfig;
   summary_prompt?: string;
+  // Participant-facing theming; see migration 039. Each value is inherited
+  // independently (session overrides its project), so nulls are meaningful.
+  theme_primary?: string;
+  theme_gradient_from?: string;
+  theme_surface?: string;
+  theme_intro_image_id?: string;
+  theme_avatar_id?: string;
+  theme_logo_id?: string;
+  theme_logo_url?: string;
+}
+
+export interface ThemeImagesTable {
+  id: Generated<string>;
+  mime_type: string;
+  data: Buffer;
+  created_at: Generated<Date>;
 }
 
 export interface ResultTabsVisibilityConfig {
@@ -168,6 +193,8 @@ export type NewMessage = Insertable<MessagesTable>;
 export type CustomResponse = Selectable<CustomResponsesTable>;
 export type NewCustomResponse = Insertable<CustomResponsesTable>;
 export type CustomResponseUpdate = Updateable<CustomResponsesTable>;
+export type ThemeImage = Selectable<ThemeImagesTable>;
+export type NewThemeImage = Insertable<ThemeImagesTable>;
 export type Workspace = Selectable<WorkspacesTable>;
 export type NewWorkspace = Insertable<WorkspacesTable>;
 export type WorkspaceUpdate = Updateable<WorkspacesTable>;

@@ -188,7 +188,7 @@ export function ChatInput({
               }
             }}
             placeholder={placeholder}
-            className={`flex-grow pr-12 ${hasBottomLeftButtons ? 'pb-16' : 'pb-4'} text-base min-h-[44px] max-h-[144px] overflow-y-auto resize-none focus:ring-0 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-yellow-300`}
+            className={`flex-grow pr-12 ${hasBottomLeftButtons ? 'pb-16' : 'pb-4'} text-base min-h-[44px] max-h-[144px] overflow-y-auto resize-none focus:ring-0 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-session-ring`}
             ref={textareaRef}
           />
           {isHost && generateParticipantSuggestion && (

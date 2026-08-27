@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { AppearanceSettings } from '@/components/theme/AppearanceSettings';
 import { MapPin, Upload, ImageIcon, Pencil } from 'lucide-react';
 import {
   Dialog,
@@ -330,6 +331,13 @@ export default function WorkspaceHero({
               />
             </TabsContent>
           </Tabs>
+
+          {/* Participant-facing appearance. Saved on its own — the colours and
+              images are stored per resource by their own action, not through
+              this dialog's Save. */}
+          <div className="border-t pt-6">
+            <AppearanceSettings target={{ kind: 'WORKSPACE', id: workspaceId }} />
+          </div>
 
           <div className="flex justify-between">
             <div className="flex">

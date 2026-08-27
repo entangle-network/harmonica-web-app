@@ -1,4 +1,6 @@
 import { Message } from '@/lib/schema';
+import { useSessionTheme } from '@/components/SessionTheme';
+import { themeImageUrl } from '@/lib/themeColors';
 import { HRMarkdown } from './HRMarkdown';
 import { Button } from './ui/button';
 import { ChevronRight } from 'lucide-react';
@@ -19,6 +21,7 @@ export function ChatMessage({
   showButtons = false,
   hideProfilePicture = false,
 }: ChatMessageProps) {
+  const theme = useSessionTheme();
   const { isPublic } = usePermissions(sessionId ?? '');
   const isUser = message.role === 'user';
   const router = useRouter();
@@ -26,8 +29,8 @@ export function ChatMessage({
     <div className={`${isUser ? 'flex justify-end' : 'flex'}`}>
       {!isUser && !hideProfilePicture && (
         <img
-          className="h-10 w-10 flex-none rounded-full hidden md:block"
-          src="/hm-chat-icon.svg"
+          className="h-10 w-10 flex-none rounded-full hidden md:block object-cover"
+          src={themeImageUrl(theme.avatarId) ?? '/hm-chat-icon.svg'}
           alt=""
         />
       )}

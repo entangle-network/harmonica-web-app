@@ -785,7 +785,9 @@
     "resourceIdRequired": "resourceId and resourceType are required",
     "invitationsFetchFailed": "Failed to fetch invitations",
     "userEmailMissing": "User email or ID (sub) not available",
-    "invitationsProcessFailed": "Failed to process invitations"
+    "invitationsProcessFailed": "Failed to process invitations",
+    "imageTypeUnsupported": "Unsupported image format",
+    "imageTooLarge": "Image is too large (max 2 MB)"
   },
   "invitationEmail": {
     "logoAlt": "Harmonica Logo",
@@ -817,5 +819,38 @@
     "workspaceDescription": "Analyse multiple sessions with Harmonicas AI powered workspaces",
     "chatDescription": "Join an AI-facilitated conversation to share your thoughts and help shape collective decisions. Contribute meaningfully to your group's goals through guided dialogue.",
     "poweredBySuffix": " | powered by Harmonica"
+  },
+  "appearance": {
+    "title": "Appearance",
+    "subtitle": "How this looks to participants — the invitation card and the chat.",
+    "inheritedNote": "Anything left empty is inherited from the project.",
+    "buttonColor": "Button colour",
+    "buttonColorHint": "Used for the main buttons participants click.",
+    "gradientColor": "Card gradient",
+    "gradientColorHint": "Top colour of the invitation card; it fades to white.",
+    "surfaceColor": "Chat background",
+    "surfaceColorHint": "Solid background behind the conversation.",
+    "introImage": "Invitation card image",
+    "introImageHint": "Shown above the session title on the invitation card.",
+    "avatarImage": "Chat avatar",
+    "avatarImageHint": "The picture next to the facilitator messages. A face works well here.",
+    "inheritPlaceholder": "inherited",
+    "reset": "Reset",
+    "chooseImage": "Choose image",
+    "removeImage": "Remove",
+    "saved": "Appearance saved",
+    "saveFailed": "Could not save the appearance",
+    "imageUploaded": "Image uploaded",
+    "uploadFailed": "Could not upload the image",
+    "logo": "Footer logo",
+    "logoHint": "Replaces the \"Powered by Harmonica\" lockup in the chat and on the invitation card.",
+    "logoUrl": "Logo link",
+    "logoUrlHint": "Where the logo takes people. Opens in a new tab."
+  },
+  "sessionNav": {
+    "editSession": "Edit Session",
+    "sessionDetails": "Session Details",
+    "preSurvey": "Pre-survey Form",
+    "appearance": "Appearance"
   }
 }

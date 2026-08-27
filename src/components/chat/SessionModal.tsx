@@ -1,5 +1,8 @@
 import { useTranslations } from 'next-intl';
 import { SourceLink } from '@/components/SourceLink';
+import { useSessionTheme } from '@/components/SessionTheme';
+import { ParticipantFooterBrand } from '@/components/theme/ParticipantFooterBrand';
+import { themeImageUrl } from '@/lib/themeColors';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { encryptId } from '@/lib/encryptionUtils';
@@ -47,6 +50,7 @@ export const SessionModal = ({
   const tCommon = useTranslations('common');
   const tChat = useTranslations('chat');
   const defaultLanguage = useDefaultLanguageCode();
+  const theme = useSessionTheme();
   const [showQuestions, setShowQuestions] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -165,7 +169,11 @@ export const SessionModal = ({
               <div className="w-full lg:w-3/5 flex flex-col justify-start max-w-xl pb-16">
                 {/* Header content - outside the flex row */}
                 <div className="mb-8 mt-4">
-                  <img src="/invitation.svg" alt={t('invitationAlt')} className="w-16 mb-4" />
+                  <img
+                    src={themeImageUrl(theme.introImageId) ?? '/invitation.svg'}
+                    alt={t('invitationAlt')}
+                    className={themeImageUrl(theme.introImageId) ? 'h-16 w-16 mb-4 rounded-lg object-cover' : 'w-16 mb-4'}
+                  />
                   <h2 className="font-semibold text-muted-foreground mb-4 sm:mb-6">
                     {loadingUserInfo
                       ? tCommon('loading')
@@ -177,7 +185,7 @@ export const SessionModal = ({
                 
                 {!showForm ? (
                   /* Welcome Card */
-                  <div className="bg-gradient-to-b from-amber-50 to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
+                  <div className="bg-gradient-to-b from-session-gradient to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
                     <h3 className="text-2xl font-semibold mb-4">{hostData?.topic}</h3>
                     <p className={`${sessionClosed ? 'sm:mb-8' : ''}`}>
                       {loadingUserInfo
@@ -189,7 +197,7 @@ export const SessionModal = ({
                   </div>
                 ) : (
                   /* Form Card */
-                  <div className="bg-gradient-to-b from-amber-50 to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
+                  <div className="bg-gradient-to-b from-session-gradient to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
                     <h3 className="text-2xl font-semibold mb-4">{hostData?.topic}</h3>
                     <p className="text-muted-foreground mb-6">
                       {t('formIntro')}
@@ -328,8 +336,8 @@ export const SessionModal = ({
                       {/* Start button and dots on the right */}
                       <div className="flex items-center gap-4">
                         <div className="flex gap-1">
-                          <div className={`w-2 h-2 rounded-full ${!showForm ? 'bg-amber-400' : 'bg-gray-300'}`}></div>
-                          <div className={`w-2 h-2 rounded-full ${showForm ? 'bg-amber-400' : 'bg-gray-300'}`}></div>
+                          <div className={`w-2 h-2 rounded-full ${!showForm ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                          <div className={`w-2 h-2 rounded-full ${showForm ? 'bg-primary' : 'bg-gray-300'}`}></div>
                         </div>
                         <Button
                           onClick={handleStart}
@@ -355,8 +363,8 @@ export const SessionModal = ({
                       </Button>
                       <div className="flex items-center gap-4">
                         <div className="flex gap-1">
-                          <div className={`w-2 h-2 rounded-full ${!showForm ? 'bg-amber-400' : 'bg-gray-300'}`}></div>
-                          <div className={`w-2 h-2 rounded-full ${showForm ? 'bg-amber-400' : 'bg-gray-300'}`}></div>
+                          <div className={`w-2 h-2 rounded-full ${!showForm ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                          <div className={`w-2 h-2 rounded-full ${showForm ? 'bg-primary' : 'bg-gray-300'}`}></div>
                         </div>
                         <Button
                           onClick={() => handleQuestionsSubmit({})}
@@ -385,10 +393,7 @@ export const SessionModal = ({
           
           {/* Footer */}
           <div className="mt-auto pt-8 text-center flex flex-col md:flex-row justify-center gap-4 md:gap-8 items-center">
-            <Link href="/" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-              {tChat('poweredBy')}{' '}
-              <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
-            </Link>
+            <ParticipantFooterBrand className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors" />
             <SourceLink />
             <p className="text-xs text-muted-foreground">
               {t.rich('privacyNote', {

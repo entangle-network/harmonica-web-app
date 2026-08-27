@@ -21,6 +21,7 @@ const userTableName = 'user_db';
 const messageTableName = 'messages_db';
 const customResponsesTableName = 'custom_responses';
 const workspaceTableName = 'workspaces';
+const themeImagesTableName = 'theme_images';
 const workspaceSessionsTableName = 'workspace_sessions';
 const permissionsTableName = 'permissions';
 const invitationsTableName = 'invitations';
@@ -37,6 +38,7 @@ interface Databases {
   [messageTableName]: s.MessagesTable;
   [customResponsesTableName]: s.CustomResponsesTable;
   [workspaceTableName]: s.WorkspacesTable;
+  [themeImagesTableName]: s.ThemeImagesTable;
   [workspaceSessionsTableName]: s.WorkspaceSessionsTable;
   [permissionsTableName]: s.PermissionsTable;
   [invitationsTableName]: s.InvitationsTable;

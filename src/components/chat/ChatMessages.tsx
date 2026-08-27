@@ -1,5 +1,8 @@
 'use client';
 
+import { useSessionTheme } from '@/components/SessionTheme';
+import { themeImageUrl } from '@/lib/themeColors';
+
 import { OpenAIMessage } from '@/lib/types';
 import { ChatMessage } from '../ChatMessage';
 import { useEffect, useRef } from 'react';
@@ -24,6 +27,7 @@ export function ChatMessages({
   chat,
   className = "flex-1 flex flex-col gap-y-6 px-4 max-w-3xl mx-auto w-full overflow-y-auto",
 }: ChatMessagesProps) {
+  const theme = useSessionTheme();
   const {
     messages,
     customMessageEnhancement,
@@ -67,8 +71,8 @@ export function ChatMessages({
         <div className="flex">
           {!isAskAi && (
             <img
-              className="h-10 w-10 flex-none rounded-full"
-              src="/hm-chat-icon.svg"
+              className="h-10 w-10 flex-none rounded-full object-cover"
+              src={themeImageUrl(theme.avatarId) ?? '/hm-chat-icon.svg'}
               alt=""
             />
           )}

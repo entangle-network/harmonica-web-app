@@ -15,6 +15,9 @@ import { SessionModal } from '@/components/chat/SessionModal';
 import { ChatInterface } from '@/components/chat/ChatInterface';
 import { QuestionInfo } from 'app/create/types';
 import { usePermissions } from '@/lib/permissions';
+import { SessionTheme } from '@/components/SessionTheme';
+import { getSessionTheme } from '@/lib/theme';
+import { EMPTY_THEME, type SessionTheme as Theme } from '@/lib/themeColors';
 
 const StandaloneChat = () => {
   const [message, setMessage] = useState<OpenAIMessage>({
@@ -29,6 +32,9 @@ Please type your name or "anonymous" if you prefer
   const sessionId = searchParams.get('s');
   const assistantId = searchParams.get('a');
 
+  // The appearance is resolved server-side because it depends on which project
+  // the session belongs to, which the client does not know.
+  const [theme, setTheme] = useState<Theme>(EMPTY_THEME);
   const [hostData, addHostData] = useSessionStore((state) => [
     sessionId ? state.hostData[sessionId] : null,
     state.addHostData,
@@ -92,6 +98,10 @@ Please type your name or "anonymous" if you prefer
 
     window.addEventListener('message', handleMessage);
 
+    if (sessionId) {
+      getSessionTheme(sessionId).then(setTheme);
+    }
+
     if (sessionId && !hostData) {
       setIsLoading(true);
       getHostSessionById(sessionId).then((data) => {
@@ -140,7 +150,7 @@ Please type your name or "anonymous" if you prefer
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-svh bg-gradient-to-t bg-amber-50">
+    <SessionTheme theme={theme} className="flex flex-col md:flex-row h-svh bg-gradient-to-t bg-session-surface">
       <div className="hidden">
         <div data-tf-live="01JB9CRNXPX488VHX879VNF3E6"></div>
         <script src="//embed.typeform.com/next/embed.js"></script>
@@ -202,7 +212,7 @@ Please type your name or "anonymous" if you prefer
           questions={hostData?.questions}
         />
       )}
-    </div>
+    </SessionTheme>
   );
 };
 

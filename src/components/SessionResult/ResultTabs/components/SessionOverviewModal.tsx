@@ -16,13 +16,15 @@ import { FormBuilder } from './FormBuilder';
 import { SessionDetailsTab } from './SessionDetailsTab';
 import { SessionDetailsActionBar } from './SessionDetailsActionBar';
 import { EditSessionTab } from './EditSessionTab';
+import { AppearanceSettings } from '@/components/theme/AppearanceSettings';
 import { SidebarNavigation } from './SidebarNavigation';
 
-type TabType = 'session-details' | 'edit-session' | 'pre-survey';
+type TabType = 'session-details' | 'edit-session' | 'pre-survey' | 'appearance';
 
 interface SessionOverviewModalProps {
   isOpen: boolean;
   onClose: () => void;
+  sessionId: string;
   sessionData: {
     topic: string;
     goal: string;
@@ -42,6 +44,7 @@ interface SessionOverviewModalProps {
 export function SessionOverviewModal({
   isOpen,
   onClose,
+  sessionId,
   sessionData,
   questions: initialQuestions = [],
   onUpdateSession,
@@ -275,6 +278,11 @@ export function SessionOverviewModal({
             questions={localQuestions}
             onQuestionsUpdate={handleQuestionsUpdate}
           />
+        );
+
+      case 'appearance':
+        return (
+          <AppearanceSettings target={{ kind: 'SESSION', id: sessionId }} />
         );
 
       default:

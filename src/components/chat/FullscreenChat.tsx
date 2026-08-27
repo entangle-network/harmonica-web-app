@@ -22,7 +22,7 @@ export function FullscreenChat(props: UseChatOptions) {
       <ChatInput
         chat={chat}
         hasBottomLeftButtons={true}
-        className="flex-shrink-0 pb-2 w-full border-t border-gray-200 px-3 bg-amber-50"
+        className="flex-shrink-0 pb-2 w-full border-t border-gray-200 px-3 bg-session-surface"
       />
     </div>
   );

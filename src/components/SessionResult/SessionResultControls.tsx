@@ -387,6 +387,7 @@ export default function SessionResultControls({
           <SessionOverviewModal
             isOpen={showSessionOverviewModal}
             onClose={() => setShowSessionOverviewModal(false)}
+            sessionId={id}
             sessionData={sessionData}
             questions={questions}
             onUpdateSession={handleSessionUpdate}

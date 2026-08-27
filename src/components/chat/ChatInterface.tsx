@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { SourceLink } from '@/components/SourceLink';
+import { ParticipantFooterBrand } from '@/components/theme/ParticipantFooterBrand';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { HelpCircle, ChevronDown } from 'lucide-react';
@@ -108,7 +109,7 @@ export const ChatInterface = ({
   return (
     <div className="flex h-screen w-full">
       {/* Sidebar */}
-      <aside className="hidden md:flex flex-col w-80 fixed top-0 left-0 h-screen border-r border-gray-200 bg-amber-50 z-20">
+      <aside className="hidden md:flex flex-col w-80 fixed top-0 left-0 h-screen border-r border-gray-200 bg-session-surface z-20">
         <div className="p-6 pb-4">
           <p className="text-sm text-muted-foreground mb-2">{t('yourSession')}</p>
           <h1 className="text-xl font-semibold mb-4 break-words" title={hostData?.topic}>
@@ -124,7 +125,7 @@ export const ChatInterface = ({
           <div className="border-t border-gray-200">
             <button
               onClick={() => setIsHowItWorksExpanded(!isHowItWorksExpanded)}
-              className="w-full p-4 flex items-center justify-between text-left hover:bg-amber-100 transition-colors"
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-session-accent transition-colors"
             >
               <h3 className="text-sm font-medium text-gray-900">{t('howItWorks')}</h3>
               <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${isHowItWorksExpanded ? 'rotate-180' : ''}`} />
@@ -133,15 +134,15 @@ export const ChatInterface = ({
               <div className="px-4 pb-4">
                 <div className="space-y-2 pt-4">
                   <div className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">1</span>
+                    <span className="flex-shrink-0 w-5 h-5 bg-session-accent text-session-accent-foreground text-xs font-medium rounded-full flex items-center justify-center">1</span>
                     <p className="text-xs text-gray-600">{t('tip1')}</p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">2</span>
+                    <span className="flex-shrink-0 w-5 h-5 bg-session-accent text-session-accent-foreground text-xs font-medium rounded-full flex items-center justify-center">2</span>
                     <p className="text-xs text-gray-600">{t('tip2')}</p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">3</span>
+                    <span className="flex-shrink-0 w-5 h-5 bg-session-accent text-session-accent-foreground text-xs font-medium rounded-full flex items-center justify-center">3</span>
                     <p className="text-xs text-gray-600">{t('tip3')}</p>
                   </div>
                 </div>
@@ -150,10 +151,7 @@ export const ChatInterface = ({
           </div>
           <div className="p-6 pt-4 border-t border-gray-200">
             <div className="text-center">
-              <Link href="/" className="inline-flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                {t('poweredBy')}{' '}
-                <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
-              </Link>
+              <ParticipantFooterBrand />
               {/* AGPL-3.0 §13: the running version's source must be reachable
                   from the interface participants actually use. */}
               <div className="mt-1">
@@ -165,9 +163,9 @@ export const ChatInterface = ({
       </aside>
 
       {/* Main Content */}
-      <main ref={mainPanelRef} className="md:ml-80 flex-1 h-screen overflow-y-auto flex flex-col relative bg-amber-50 px-3">
+      <main ref={mainPanelRef} className="md:ml-80 flex-1 h-screen overflow-y-auto flex flex-col relative bg-session-surface px-3">
         {/* Top nav (mobile) */}
-        <div className="md:hidden w-full border-b border-gray-200 bg-amber-50 px-4 min-h-12 flex-shrink-0 flex flex-col">
+        <div className="md:hidden w-full border-b border-gray-200 bg-session-surface px-4 min-h-12 flex-shrink-0 flex flex-col">
           <div className="flex items-center justify-between w-full py-3">
             <h1 className="text-lg font-semibold truncate flex-1 mr-4" title={hostData?.topic}>
               {hostData?.topic ?? 'Test'}
@@ -186,22 +184,19 @@ export const ChatInterface = ({
             <div className="mb-2 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">1</span>
+                  <span className="flex-shrink-0 w-5 h-5 bg-session-accent text-session-accent-foreground text-xs font-medium rounded-full flex items-center justify-center">1</span>
                   <p className="text-sm text-gray-600">{t('tip1')}</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">2</span>
+                  <span className="flex-shrink-0 w-5 h-5 bg-session-accent text-session-accent-foreground text-xs font-medium rounded-full flex items-center justify-center">2</span>
                   <p className="text-sm text-gray-600">{t('tip2')}</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full flex items-center justify-center">3</span>
+                  <span className="flex-shrink-0 w-5 h-5 bg-session-accent text-session-accent-foreground text-xs font-medium rounded-full flex items-center justify-center">3</span>
                   <p className="text-sm text-gray-600">{t('tip3')}</p>
                 </div>
                 <div className="pt-2 border-t border-gray-100">
-                  <Link href="/" className="inline-flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    {t('poweredBy')}{' '}
-                    <img src="/harmonica-lockup.svg" alt="Harmonica" className="h-3 w-auto" />
-                  </Link>
+                  <ParticipantFooterBrand />
                   <div className="mt-1">
                     <SourceLink />
                   </div>

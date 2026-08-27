@@ -785,7 +785,9 @@
     "resourceIdRequired": "Chybí resourceId a resourceType",
     "invitationsFetchFailed": "Pozvánky se nepodařilo načíst",
     "userEmailMissing": "E-mail nebo ID uživatele není k dispozici",
-    "invitationsProcessFailed": "Pozvánky se nepodařilo zpracovat"
+    "invitationsProcessFailed": "Pozvánky se nepodařilo zpracovat",
+    "imageTypeUnsupported": "Nepodporovaný formát obrázku",
+    "imageTooLarge": "Obrázek je příliš velký (max 2 MB)"
   },
   "invitationEmail": {
     "logoAlt": "Logo Harmonica",
@@ -817,5 +819,38 @@
     "workspaceDescription": "Analyzujte více sezení najednou v projektech Harmoniky s podporou AI",
     "chatDescription": "Zapojte se do konverzace vedené AI, podělte se o svůj pohled a pomozte utvářet společné rozhodnutí. Váš příspěvek pomůže skupině posunout se k cíli.",
     "poweredBySuffix": " | běží na Harmonice"
+  },
+  "appearance": {
+    "title": "Vzhled",
+    "subtitle": "Jak to uvidí účastníci — úvodní karta a chat.",
+    "inheritedNote": "Co necháte prázdné, zdědí se z projektu.",
+    "buttonColor": "Barva tlačítek",
+    "buttonColorHint": "Použije se pro hlavní tlačítka, na která účastníci klikají.",
+    "gradientColor": "Přechod na kartě",
+    "gradientColorHint": "Horní barva úvodní karty, dole přechází do bílé.",
+    "surfaceColor": "Pozadí chatu",
+    "surfaceColorHint": "Jednolité pozadí za konverzací.",
+    "introImage": "Obrázek na úvodní kartě",
+    "introImageHint": "Zobrazí se nad názvem sezení na úvodní kartě.",
+    "avatarImage": "Avatar v chatu",
+    "avatarImageHint": "Obrázek u zpráv facilitátora. Dobře funguje obličej.",
+    "inheritPlaceholder": "zděděno",
+    "reset": "Zrušit",
+    "chooseImage": "Vybrat obrázek",
+    "removeImage": "Odebrat",
+    "saved": "Vzhled uložen",
+    "saveFailed": "Vzhled se nepodařilo uložit",
+    "imageUploaded": "Obrázek nahrán",
+    "uploadFailed": "Obrázek se nepodařilo nahrát",
+    "logo": "Logo v patičce",
+    "logoHint": "Nahradí nápis „Běží na Harmonica\" v chatu i na úvodní kartě.",
+    "logoUrl": "Odkaz z loga",
+    "logoUrlHint": "Kam logo lidi zavede. Otevře se v nové záložce."
+  },
+  "sessionNav": {
+    "editSession": "Upravit sezení",
+    "sessionDetails": "Údaje o sezení",
+    "preSurvey": "Úvodní formulář",
+    "appearance": "Vzhled"
   }
 }

@@ -18,6 +18,16 @@ module.exports = {
     },
     extend: {
       colors: {
+        // Participant-facing surfaces a host can recolour per project or session
+        // (see src/components/SessionTheme.tsx). The fallbacks are amber-50, the
+        // colour these surfaces had before, so an unthemed session looks exactly
+        // as it did.
+        'session-gradient': 'var(--session-gradient-from, #fffbeb)',
+        'session-surface': 'var(--session-surface, #fffbeb)',
+        // Small tinted accents; fallbacks are the ambers these had before.
+        'session-accent': 'var(--session-accent, #fef3c7)',
+        'session-accent-foreground': 'var(--session-accent-foreground, #92400e)',
+        'session-ring': 'var(--session-ring, #fcd34d)',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

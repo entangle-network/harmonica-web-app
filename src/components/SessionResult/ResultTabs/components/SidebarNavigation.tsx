@@ -1,9 +1,10 @@
 'use client';
 
-import { FileText, Settings, FormInput } from 'lucide-react';
+import { FileText, Settings, FormInput, Palette } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/clientUtils';
 
-type TabType = 'session-details' | 'edit-session' | 'pre-survey';
+type TabType = 'session-details' | 'edit-session' | 'pre-survey' | 'appearance';
 
 interface SidebarNavigationProps {
   activeTab: TabType;
@@ -14,6 +15,8 @@ export function SidebarNavigation({
   activeTab,
   onTabChange,
 }: SidebarNavigationProps) {
+  const t = useTranslations('sessionNav');
+
   return (
     <nav className="flex flex-col pt-2 pb-2 px-2 gap-[2px] overflow-y-auto">
       <button
@@ -34,7 +37,7 @@ export function SidebarNavigation({
             <Settings className="w-5 h-5" />
           </div>
           <div className="text-sm leading-none text-foreground flex items-center">
-            Edit Session
+            {t('editSession')}
           </div>
         </div>
       </button>
@@ -57,7 +60,7 @@ export function SidebarNavigation({
             <FileText className="w-5 h-5" />
           </div>
           <div className="text-sm leading-none text-foreground flex items-center">
-            Session Details
+            {t('sessionDetails')}
           </div>
         </div>
       </button>
@@ -80,7 +83,30 @@ export function SidebarNavigation({
             <FormInput className="w-5 h-5" />
           </div>
           <div className="text-sm leading-none text-foreground flex items-center">
-            Pre-survey Form
+            {t('preSurvey')}
+          </div>
+        </div>
+      </button>
+
+      <button
+        onClick={() => onTabChange('appearance')}
+        role="tab"
+        aria-selected={activeTab === 'appearance'}
+        className={`select-none transition-[background] duration-200 ease-in cursor-pointer flex items-center justify-between px-2 py-0 rounded-md mt-[2px] mb-0 h-7 relative ${
+          activeTab === 'appearance'
+            ? 'bg-muted text-foreground'
+            : 'text-muted-foreground hover:bg-muted/50'
+        }`}
+      >
+        <div className="flex items-center font-medium leading-none">
+          <div className={cn(
+            "w-6 h-6 mr-2 flex-shrink-0 flex items-center justify-center",
+            activeTab === 'appearance' ? "text-foreground" : "text-muted-foreground"
+          )}>
+            <Palette className="w-5 h-5" />
+          </div>
+          <div className="text-sm leading-none text-foreground flex items-center">
+            {t('appearance')}
           </div>
         </div>
       </button>
