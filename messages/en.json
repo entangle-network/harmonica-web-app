@@ -574,5 +574,17 @@
       "promptFailedDesc": "An error occurred while updating the prompt.",
       "refreshFailed": "Failed to refresh workspace data"
     }
+  },
+  "sessionsTable": {
+    "headerName": "Name",
+    "headerStatus": "Status",
+    "headerStarted": "Started",
+    "headerFinished": "Finished",
+    "headerCreatedOn": "Created on",
+    "status": {
+      "Active": "Active",
+      "Finished": "Finished",
+      "Draft": "Draft"
+    }
   }
 }

@@ -574,5 +574,17 @@
       "promptFailedDesc": "Při úpravě promptu došlo k chybě.",
       "refreshFailed": "Data projektu se nepodařilo obnovit"
     }
+  },
+  "sessionsTable": {
+    "headerName": "Název",
+    "headerStatus": "Stav",
+    "headerStarted": "Zahájili",
+    "headerFinished": "Dokončili",
+    "headerCreatedOn": "Vytvořeno",
+    "status": {
+      "Active": "Probíhá",
+      "Finished": "Ukončeno",
+      "Draft": "Koncept"
+    }
   }
 }

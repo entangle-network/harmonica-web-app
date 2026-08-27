@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Session } from './session';
 import { Key, useEffect, useState } from 'react';
@@ -19,29 +21,30 @@ export type SessionTableData = {
 };
 
 export function SessionsTable({ sessions }: { sessions: HostSession[] }) {
+  const t = useTranslations('sessionsTable');
   const tableHeaders = [
     {
-      label: 'Name',
+      label: t('headerName'),
       sortKey: 'topic',
       className: 'cursor-pointer',
     },
     {
-      label: 'Status',
+      label: t('headerStatus'),
       sortKey: 'status',
       className: 'cursor-pointer',
     },
     {
-      label: 'Started',
+      label: t('headerStarted'),
       sortKey: 'num_sessions',
       className: 'hidden md:table-cell',
     },
     {
-      label: 'Finished',
+      label: t('headerFinished'),
       sortKey: 'num_finished',
       className: 'hidden md:table-cell',
     },
     {
-      label: 'Created on',
+      label: t('headerCreatedOn'),
       sortKey: 'created_on',
       className: 'hidden md:table-cell',
       sortBy: (sortDirection: string, a: string, b: string) => {

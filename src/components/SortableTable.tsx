@@ -1,3 +1,4 @@
+import { useLocale, useTranslations } from 'next-intl';
 import {
   Table,
   TableBody,
@@ -35,11 +36,16 @@ export default function SortableTable({
   data: ColumnData;
   defaultSort?: { column: string, direction: Direction };
 }) {
+  const t = useTranslations('common');
+  const locale = useLocale();
 
   const defaultLocalCompare = (sortDirection: Direction, a: any, b: any) => {
-    return sortDirection === 'asc' ? 
-      String(a).localeCompare(String(b), undefined, { numeric: true }) :
-      String(b).localeCompare(String(a), undefined, { numeric: true });
+    // Sort in the active locale rather than the runtime default: Czech orders
+    // ch after h and treats accented letters as their own positions, so the
+    // default collation puts names in the wrong order.
+    return sortDirection === 'asc' ?
+      String(a).localeCompare(String(b), locale, { numeric: true }) :
+      String(b).localeCompare(String(a), locale, { numeric: true });
   };
 
   type SortColumn = TableHeaderData['sortKey'];
@@ -92,7 +98,7 @@ export default function SortableTable({
             </TableHead>
           ))}
           <TableHead>
-            <span className="sr-only">Actions</span>
+            <span className="sr-only">{t('actions')}</span>
           </TableHead>
         </TableRow>
       </TableHeader>

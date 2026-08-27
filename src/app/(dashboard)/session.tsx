@@ -102,6 +102,7 @@ export function Session({
 }) {
   const t = useTranslations('sessionRow');
   const tCommon = useTranslations('common');
+  const tStatus = useTranslations('sessionsTable');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isCloning, setIsCloning] = useState(false);
   const [showProjectDialog, setShowProjectDialog] = useState(false);
@@ -157,7 +158,7 @@ export function Session({
                 : '' // Finished, remain white
           }`}
         >
-          {session.status}
+          {tStatus(`status.${session.status}`)}
         </Badge>
       </TableCell>
       <TableCell className="hidden md:table-cell">
