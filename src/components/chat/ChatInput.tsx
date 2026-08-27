@@ -80,13 +80,18 @@ export function ChatInput({
       mediaRecorder.onstop = async () => {
         setRecordingStatus('processing');
         
-        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        
+        // Label the blob with what the recorder actually produced. MediaRecorder
+        // was created without options, so the container is the browser's choice —
+        // Safari and iOS record audio/mp4, and calling that webm makes the
+        // transcription service reject the upload as corrupted.
+        const recordedType = mediaRecorder.mimeType || 'audio/webm';
+        const audioBlob = new Blob(chunksRef.current, { type: recordedType });
+
         try {
           const audioFormData = new FormData();
           audioFormData.append('audio', audioBlob);
-          // Without this Deepgram falls back to English and transcribes Czech
-          // speech into English-looking words.
+          // Told nothing, the transcription service defaults to English and
+          // renders Czech speech as English-looking words.
           audioFormData.append('language', locale);
           
           const response = await fetch('/api/transcribe', {
