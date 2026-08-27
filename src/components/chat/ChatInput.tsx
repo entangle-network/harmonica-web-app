@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, StartRecording, StopRecording } from '../icons';
@@ -45,6 +45,7 @@ export function ChatInput({
   } = chat;
 
   const t = useTranslations('chatInput');
+  const locale = useLocale();
   const [recordingStatus, setRecordingStatus] = useState<'idle' | 'recording' | 'processing'>('idle');
   const [error, setError] = useState<string | null>(null);
   
@@ -84,6 +85,9 @@ export function ChatInput({
         try {
           const audioFormData = new FormData();
           audioFormData.append('audio', audioBlob);
+          // Without this Deepgram falls back to English and transcribes Czech
+          // speech into English-looking words.
+          audioFormData.append('language', locale);
           
           const response = await fetch('/api/transcribe', {
             method: 'POST',

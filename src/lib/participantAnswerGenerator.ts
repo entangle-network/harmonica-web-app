@@ -30,7 +30,9 @@ When responding:
 5. Respond directly to the content of the previous message
 6. If asked about what worked well or challenges, mention specific design activities, collaboration moments, or tools used
 
-IMPORTANT: Your responses must be extremely brief, focused, and directly relevant to the conversation. Use session data to ground your responses in the specific context of the discussion.`;
+IMPORTANT: Your responses must be extremely brief, focused, and directly relevant to the conversation. Use session data to ground your responses in the specific context of the discussion.
+
+LANGUAGE: Write your response in the same language the conversation is being held in. The suggestion is text the participant is about to send as their own, so a reply in a different language from the one they are writing in is unusable. Do not translate or comment on the language — just answer in it.`;
 
 export async function generateParticipantAnswer(
   config: AnswerGeneratorConfig,
