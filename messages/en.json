@@ -37,7 +37,11 @@
     "continue": "Continue",
     "submit": "Submit",
     "submitting": "Submitting...",
-    "clone": "Clone"
+    "clone": "Clone",
+    "saveChanges": "Save Changes",
+    "success": "Success",
+    "title": "Title",
+    "description": "Description"
   },
   "settings": {
     "title": "Settings",
@@ -524,6 +528,51 @@
       "cloned": "Session cloned successfully",
       "cloneFailed": "Failed to clone session",
       "cloneFailedDesc": "An error occurred while cloning the session."
+    }
+  },
+  "workspaceHero": {
+    "addTitle": "Add Project Title",
+    "addDescription": "Add a description for your project",
+    "addLocation": "Add location",
+    "editTitle": "Edit Project Details",
+    "titlePlaceholder": "Enter project title",
+    "descriptionPlaceholder": "Enter project description",
+    "locationLabel": "Location/Organization",
+    "locationPlaceholder": "Enter location or organization",
+    "tabImage": "Image",
+    "tabGradient": "Gradient",
+    "dropImage": "Drag & drop an image here, or click to select",
+    "removeImage": "Remove Image",
+    "gradientFrom": "From Color",
+    "gradientTo": "To Color",
+    "deleteProject": "Delete Project"
+  },
+  "insightsGrid": {
+    "heading": "Individual Session Insights",
+    "noGoal": "No goal set",
+    "createTitle": "Create New Session",
+    "createBody": "Start a new discussion session from scratch",
+    "linkTitle": "Link Existing Session",
+    "linkBody": "Connect an existing session to this project",
+    "linkDialogTitle": "Link Existing Sessions",
+    "noSessions": "No available sessions yet. Create one first.",
+    "linking": "Linking...",
+    "linkSelected": "Link Selected Sessions",
+    "toast": {
+      "linked": "Sessions linked successfully",
+      "linkFailed": "Failed to link sessions to project",
+      "removed": "Session removed",
+      "removedDesc": "The session has been removed from this project",
+      "removeFailed": "Failed to remove session from project"
+    }
+  },
+  "workspaceContent": {
+    "loading": "Loading workspace...",
+    "toast": {
+      "promptFailed": "Failed to update prompt",
+      "promptFailedUnsaved": "An error occurred while updating the prompt. Changes were not saved.",
+      "promptFailedDesc": "An error occurred while updating the prompt.",
+      "refreshFailed": "Failed to refresh workspace data"
     }
   }
 }

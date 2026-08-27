@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import ResultTabs from '@/components/SessionResult/ResultTabs';
 import WorkspaceHero from '@/components/workspace/WorkspaceHero';
 import ShareSettings from '@/components/ShareSettings';
@@ -37,6 +39,8 @@ export default function WorkspaceContent({
   extendedWorkspaceData,
   workspaceId,
 }: WorkspaceContentProps) {
+  const t = useTranslations('workspaceContent');
+  const tCommon = useTranslations('common');
   const initialWorkspaceData = extendedWorkspaceData?.workspace;
   const [workspaceData, setWorkspaceData] = useState<Workspace | NewWorkspace>(
     initialWorkspaceData,
@@ -110,17 +114,16 @@ export default function WorkspaceContent({
           }));
         } else {
           toast({
-            title: 'Failed to update prompt',
-            description:
-              'An error occurred while updating the prompt. Changes were not saved.',
+            title: t('toast.promptFailed'),
+            description: t('toast.promptFailedUnsaved'),
             variant: 'destructive',
           });
         }
       } catch (error) {
         console.error('Failed to update prompt:', error);
         toast({
-          title: 'Failed to update prompt',
-          description: 'An error occurred while updating the prompt.',
+          title: t('toast.promptFailed'),
+          description: t('toast.promptFailedDesc'),
           variant: 'destructive',
         });
       }
@@ -139,8 +142,8 @@ export default function WorkspaceContent({
     } catch (error) {
       console.error('Failed to update workspace data:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to refresh workspace data',
+        title: tCommon('error'),
+        description: t('toast.refreshFailed'),
         variant: 'destructive',
       });
     }
@@ -166,7 +169,7 @@ Here are some questions you might want to ask:
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 text-gray-400 animate-spin" />
-          <p className="text-gray-600">Loading workspace...</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </div>
     );

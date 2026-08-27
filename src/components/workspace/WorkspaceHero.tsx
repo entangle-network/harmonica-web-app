@@ -1,4 +1,6 @@
 'use client';
+
+import { useTranslations } from 'next-intl';
 import { MapPin, Upload, ImageIcon, Pencil } from 'lucide-react';
 import {
   Dialog,
@@ -44,6 +46,8 @@ export default function WorkspaceHero({
   initialUseGradient,
   onUpdate,
 }: WorkspaceHeroProps) {
+  const t = useTranslations('workspaceHero');
+  const tCommon = useTranslations('common');
   const [bannerImage, setBannerImage] = useState<string | undefined>(
     bannerImageUrl
   );
@@ -173,16 +177,16 @@ export default function WorkspaceHero({
         onClick={() => !exists && isEditable && setIsEditing(true)}
       >
         <h1 className="text-4xl font-bold mb-4">
-          {values.title || (!exists && 'Add Project Title')}
+          {values.title || (!exists && t('addTitle'))}
         </h1>
         <p className="text-xl mb-4">
           {values.description ||
-            (!exists && 'Add a description for your project')}
+            (!exists && t('addDescription'))}
         </p>
         {(values.location || !exists) && (
           <div className="flex items-center gap-2 text-blue-100">
             <MapPin className="h-5 w-5" />
-            <span>{values.location || (!exists && 'Add location')}</span>
+            <span>{values.location || (!exists && t('addLocation'))}</span>
           </div>
         )}
       </div>
@@ -193,22 +197,22 @@ export default function WorkspaceHero({
     <Dialog open={isEditing} onOpenChange={setIsEditing}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Edit Project Details</DialogTitle>
+          <DialogTitle>{t('editTitle')}</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">{tCommon('title')}</Label>
             <Input
               id="title"
               value={values.title}
               onChange={(e) =>
                 setValues((prev) => ({ ...prev, title: e.target.value }))
               }
-              placeholder="Enter project title"
+              placeholder={t('titlePlaceholder')}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{tCommon('description')}</Label>
             <Textarea
               id="description"
               value={values.description}
@@ -218,18 +222,18 @@ export default function WorkspaceHero({
                   description: e.target.value,
                 }))
               }
-              placeholder="Enter project description"
+              placeholder={t('descriptionPlaceholder')}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="location">Location/Organization</Label>
+            <Label htmlFor="location">{t('locationLabel')}</Label>
             <Input
               id="location"
               value={values.location}
               onChange={(e) =>
                 setValues((prev) => ({ ...prev, location: e.target.value }))
               }
-              placeholder="Enter location or organization"
+              placeholder={t('locationPlaceholder')}
             />
           </div>
 
@@ -241,14 +245,14 @@ export default function WorkspaceHero({
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="image" onClick={() => setUseGradient(false)}>
                 <ImageIcon className="w-4 h-4 mr-2" />
-                Image
+                {t('tabImage')}
               </TabsTrigger>
               <TabsTrigger
                 value="gradient"
                 onClick={() => setUseGradient(true)}
               >
                 <div className="w-4 h-4 rounded bg-gradient-to-r from-purple-600 to-purple-400 mr-2" />
-                Gradient
+                {t('tabGradient')}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="image" className="space-y-4">
@@ -278,7 +282,7 @@ export default function WorkspaceHero({
                   }}
                 >
                   <Upload className="w-8 h-8 mx-auto mb-2 text-gray-500" />
-                  <p>Drag & drop an image here, or click to select</p>
+                  <p>{t('dropImage')}</p>
                 </Button>
               </div>
               {bannerImage && (
@@ -287,14 +291,14 @@ export default function WorkspaceHero({
                   className="w-full"
                   onClick={() => setBannerImage(undefined)}
                 >
-                  Remove Image
+                  {t('removeImage')}
                 </Button>
               )}
             </TabsContent>
             <TabsContent value="gradient" className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="gradientFrom">From Color</Label>
+                  <Label htmlFor="gradientFrom">{t('gradientFrom')}</Label>
                   <div className="flex space-x-2">
                     <Input
                       id="gradientFrom"
@@ -306,7 +310,7 @@ export default function WorkspaceHero({
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="gradientTo">To Color</Label>
+                  <Label htmlFor="gradientTo">{t('gradientTo')}</Label>
                   <div className="flex space-x-2">
                     <Input
                       id="gradientTo"
@@ -330,14 +334,14 @@ export default function WorkspaceHero({
           <div className="flex justify-between">
             <div className="flex">
                 <Button variant="destructive" onClick={handleDelete}>
-                  Delete Project
+                  {t('deleteProject')}
                 </Button>
             </div>
             <div className="flex justify-end space-x-2">
               <Button variant="outline" onClick={() => setIsEditing(false)}>
-                Cancel
+                {tCommon('cancel')}
               </Button>
-              <Button onClick={handleSave}>Save Changes</Button>
+              <Button onClick={handleSave}>{tCommon('saveChanges')}</Button>
             </div>
           </div>
         </div>

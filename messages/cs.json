@@ -37,7 +37,11 @@
     "continue": "Pokračovat",
     "submit": "Odeslat",
     "submitting": "Odesílám...",
-    "clone": "Duplikovat"
+    "clone": "Duplikovat",
+    "saveChanges": "Uložit změny",
+    "success": "Hotovo",
+    "title": "Název",
+    "description": "Popis"
   },
   "settings": {
     "title": "Nastavení",
@@ -524,6 +528,51 @@
       "cloned": "Sezení zduplikováno",
       "cloneFailed": "Sezení se nepodařilo zduplikovat",
       "cloneFailedDesc": "Při duplikování sezení došlo k chybě."
+    }
+  },
+  "workspaceHero": {
+    "addTitle": "Přidat název projektu",
+    "addDescription": "Přidat popis projektu",
+    "addLocation": "Přidat místo",
+    "editTitle": "Upravit údaje projektu",
+    "titlePlaceholder": "Zadejte název projektu",
+    "descriptionPlaceholder": "Zadejte popis projektu",
+    "locationLabel": "Místo / organizace",
+    "locationPlaceholder": "Zadejte místo nebo organizaci",
+    "tabImage": "Obrázek",
+    "tabGradient": "Přechod",
+    "dropImage": "Přetáhněte sem obrázek, nebo klikněte pro výběr",
+    "removeImage": "Odebrat obrázek",
+    "gradientFrom": "Počáteční barva",
+    "gradientTo": "Koncová barva",
+    "deleteProject": "Smazat projekt"
+  },
+  "insightsGrid": {
+    "heading": "Poznatky z jednotlivých sezení",
+    "noGoal": "Cíl není nastaven",
+    "createTitle": "Vytvořit nové sezení",
+    "createBody": "Začněte nové sezení od začátku",
+    "linkTitle": "Připojit existující sezení",
+    "linkBody": "Připojte k tomuto projektu již existující sezení",
+    "linkDialogTitle": "Připojit existující sezení",
+    "noSessions": "Zatím nejsou k dispozici žádná sezení. Nejdřív nějaké vytvořte.",
+    "linking": "Připojuji...",
+    "linkSelected": "Připojit vybraná sezení",
+    "toast": {
+      "linked": "Sezení byla připojena",
+      "linkFailed": "Sezení se nepodařilo k projektu připojit",
+      "removed": "Sezení odebráno",
+      "removedDesc": "Sezení bylo z tohoto projektu odebráno",
+      "removeFailed": "Sezení se nepodařilo z projektu odebrat"
+    }
+  },
+  "workspaceContent": {
+    "loading": "Načítám projekt...",
+    "toast": {
+      "promptFailed": "Prompt se nepodařilo změnit",
+      "promptFailedUnsaved": "Při úpravě promptu došlo k chybě. Změny nebyly uloženy.",
+      "promptFailedDesc": "Při úpravě promptu došlo k chybě.",
+      "refreshFailed": "Data projektu se nepodařilo obnovit"
     }
   }
 }

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import SessionSummaryCard from '@/components/SessionResult/SessionSummaryCard';
 import { HostSession, UserSession } from '@/lib/schema';
@@ -39,6 +40,8 @@ export default function SessionInsightsGrid({
   availableSessions = [],
   onSessionsUpdate,
 }: SessionInsightsGridProps) {
+  const t = useTranslations('insightsGrid');
+  const tCommon = useTranslations('common');
   const router = useRouter();
   const { toast } = useToast();
   const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
@@ -110,14 +113,14 @@ export default function SessionInsightsGrid({
 
       setDialogOpen(false);
       toast({
-        title: 'Success',
-        description: 'Sessions linked successfully',
+        title: tCommon('success'),
+        description: t('toast.linked'),
       });
     } catch (error) {
       console.error('Failed to link sessions:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to link sessions to project',
+        title: tCommon('error'),
+        description: t('toast.linkFailed'),
         variant: 'destructive',
       });
     } finally {
@@ -140,14 +143,14 @@ export default function SessionInsightsGrid({
       onSessionsUpdate?.();
 
       toast({
-        title: 'Session removed',
-        description: 'The session has been removed from this project',
+        title: t('toast.removed'),
+        description: t('toast.removedDesc'),
       });
     } catch (error) {
       console.error('Failed to remove session:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to remove session from project',
+        title: tCommon('error'),
+        description: t('toast.removeFailed'),
         variant: 'destructive',
       });
 
@@ -159,7 +162,7 @@ export default function SessionInsightsGrid({
   return (
     <Card className="mt-4 relative group">
       <CardHeader>
-        <h2 className="text-2xl font-semibold">Individual Session Insights</h2>
+        <h2 className="text-2xl font-semibold">{t('heading')}</h2>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-auto-fit gap-4">
@@ -178,7 +181,7 @@ export default function SessionInsightsGrid({
                 key={hostData.id}
                 hostData={{
                   ...hostData,
-                  goal: hostData.goal || 'No goal set',
+                  goal: hostData.goal || t('noGoal'),
                   num_sessions: participantCount,
                 }}
                 userData={sessionUserData}
@@ -200,9 +203,9 @@ export default function SessionInsightsGrid({
                     <Plus className="w-6 h-6 text-primary" />
                   </div>
                   <div className="text-center">
-                    <h3 className="font-semibold mb-2">Create New Session</h3>
+                    <h3 className="font-semibold mb-2">{t('createTitle')}</h3>
                     <p className="text-sm text-gray-500">
-                      Start a new discussion session from scratch
+                      {t('createBody')}
                     </p>
                   </div>
                 </CardContent>
@@ -218,10 +221,10 @@ export default function SessionInsightsGrid({
                       </div>
                       <div className="text-center">
                         <h3 className="font-semibold mb-2">
-                          Link Existing Session
+                          {t('linkTitle')}
                         </h3>
                         <p className="text-sm text-gray-500">
-                          Connect an existing session to this project
+                          {t('linkBody')}
                         </p>
                       </div>
                     </CardContent>
@@ -229,12 +232,12 @@ export default function SessionInsightsGrid({
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
-                    <DialogTitle>Link Existing Sessions</DialogTitle>
+                    <DialogTitle>{t('linkDialogTitle')}</DialogTitle>
                   </DialogHeader>
                   <div className="py-4">
                     {sessionsToLink.length === 0 ? (
                       <p className="text-center text-gray-500">
-                        No available sessions yet. Create one first.
+                        {t('noSessions')}
                       </p>
                     ) : (
                       <div className="space-y-4 max-h-[300px] overflow-y-auto">
@@ -270,13 +273,13 @@ export default function SessionInsightsGrid({
                   </div>
                   <div className="flex justify-end gap-2">
                     <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
+                      <Button variant="outline">{tCommon('cancel')}</Button>
                     </DialogClose>
                     <Button
                       onClick={handleLinkSessions}
                       disabled={selectedSessions.length === 0 || isLinking}
                     >
-                      {isLinking ? 'Linking...' : 'Link Selected Sessions'}
+                      {isLinking ? t('linking') : t('linkSelected')}
                     </Button>
                   </div>
                 </DialogContent>
