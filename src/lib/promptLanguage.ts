@@ -18,18 +18,46 @@ const LANGUAGE_NAMES: Record<string, string> = {
   pl: 'Polish',
 };
 
+/**
+ * Terms the model would otherwise render inconsistently with the interface
+ * around it. Left to itself a model calls a session "relace" in Czech, while
+ * every button and heading in the app says "sezení" — the same thing under two
+ * names inside one screen.
+ */
+const GLOSSARIES: Record<string, string[]> = {
+  cs: [
+    'session = sezení (nikoli "relace")',
+    'participant = účastník',
+    'facilitator = facilitátor',
+    'host = pořadatel',
+    'summary = shrnutí',
+    'insights = poznatky',
+  ],
+};
+
 export function outputLanguageDirective(): string {
   const locale = process.env.APP_LOCALE || 'en';
   const name = LANGUAGE_NAMES[locale] ?? locale;
 
   if (locale === 'en') return '';
 
-  return [
+  const lines = [
     '',
     '',
     `LANGUAGE: Write your entire output in ${name}, including all headings,`,
     'section titles and labels. Do not leave any part in English and do not add',
     'a translation or a note about the language — the reader only reads',
     `${name}.`,
-  ].join('\n');
+  ];
+
+  const glossary = GLOSSARIES[locale];
+  if (glossary) {
+    lines.push(
+      '',
+      'Use these terms so the text matches the interface it appears in:',
+      ...glossary.map((entry) => `- ${entry}`),
+    );
+  }
+
+  return lines.join('\n');
 }
