@@ -50,7 +50,13 @@
     "unknownError": "An unknown error occurred",
     "name": "Name",
     "status": "Status",
-    "anonymous": "Anonymous"
+    "anonymous": "Anonymous",
+    "objective": "Objective",
+    "participants": "Participants",
+    "started": "Started",
+    "saving": "Saving...",
+    "toggleTheme": "Toggle theme",
+    "sessions": "Sessions"
   },
   "settings": {
     "title": "Settings",
@@ -713,5 +719,29 @@
     "deselectAll": "Deselect all",
     "statusStarted": "Started",
     "statusFinished": "Finished"
+  },
+  "sessionShare": {
+    "title": "Invite Participants",
+    "finished": "This session is finished",
+    "linkLabel": "Your unique session link:",
+    "copied": "URL copied to clipboard"
+  },
+  "promptSettings": {
+    "facilitationPlaceholder": "Enter your facilitation prompt...",
+    "summaryPlaceholder": "Enter your summary prompt..."
+  },
+  "workspaceFooter": {
+    "setLogo": "Set Logo",
+    "logoUrlLabel": "Enter logo URL",
+    "dropLabel": "Or drop an image file",
+    "dropHint": "Drag & drop or click to browse",
+    "institutionPlaceholder": "Enter institution name...",
+    "twitterPlaceholder": "Add Twitter URL",
+    "linkedinPlaceholder": "Add LinkedIn URL",
+    "phonePlaceholder": "Add phone number",
+    "uploadFailed": "Failed to upload image"
+  },
+  "sessionSummaryCard": {
+    "removeConfirm": "Remove \"{topic}\" from this workspace?"
   }
 }

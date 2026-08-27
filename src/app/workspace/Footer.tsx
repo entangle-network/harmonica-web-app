@@ -1,4 +1,6 @@
 'use client';
+
+import { useTranslations } from 'next-intl';
 import React, { useState, useEffect } from 'react';
 import { FooterConfig } from './footer';
 import { Check, ImageIcon, Pencil, Save, Upload, X } from 'lucide-react';
@@ -8,6 +10,7 @@ import { uploadLogo } from 'actions/upload-logo';
 import { footerConfigs } from './footerConfig';
 
 export function Footer({ workspaceId }: { workspaceId: string }) {
+  const t = useTranslations('workspaceFooter');
 
   const config = footerConfigs[workspaceId] || footerConfigs.default; 
   const onUpdate = async (newConfig: FooterConfig) => {
@@ -138,7 +141,7 @@ export function Footer({ workspaceId }: { workspaceId: string }) {
             setShowPopup(false);
           } catch (error) {
             console.error('Error uploading file:', error);
-            setError(error instanceof Error ? error.message : 'Failed to upload image');
+            setError(error instanceof Error ? error.message : t('uploadFailed'));
           } finally {
             setIsUploading(false);
           }
@@ -197,10 +200,10 @@ export function Footer({ workspaceId }: { workspaceId: string }) {
               className="bg-white shadow-lg rounded-lg p-4 w-[300px] z-10"
               onClick={e => e.stopPropagation()}
             >
-              <h3 className="text-sm font-semibold mb-3">Set Logo</h3>
+              <h3 className="text-sm font-semibold mb-3">{t('setLogo')}</h3>
             
               <div className="mb-3">
-                <label className="block text-xs text-gray-600 mb-1">Enter logo URL</label>
+                <label className="block text-xs text-gray-600 mb-1">{t('logoUrlLabel')}</label>
                 <div className="flex gap-1">
                   <input 
                     type="text"
@@ -220,7 +223,7 @@ export function Footer({ workspaceId }: { workspaceId: string }) {
               </div>
             
               <div className="mb-1">
-                <label className="block text-xs text-gray-600 mb-1">Or drop an image file</label>
+                <label className="block text-xs text-gray-600 mb-1">{t('dropLabel')}</label>
                 <div 
                   className={`border-2 ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-dashed border-gray-300'} rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer text-gray-500`}
                   onDragOver={handleDragOver}
@@ -228,7 +231,7 @@ export function Footer({ workspaceId }: { workspaceId: string }) {
                   onDrop={handleDrop}
                 >
                   <Upload className="h-6 w-6 mb-2" />
-                  <p className="text-xs">Drag & drop or click to browse</p>
+                  <p className="text-xs">{t('dropHint')}</p>
                 </div>
               </div>
             
@@ -339,7 +342,7 @@ export function Footer({ workspaceId }: { workspaceId: string }) {
                           value={institution.name}
                           onChange={(value) => handleInstitutionChange(index, 'name', value)}
                           className="hover:text-blue-600"
-                          placeholder="Enter institution name..."
+                          placeholder={t('institutionPlaceholder')}
                         />
                       </div>
                       <div className="ml-10 text-xs text-gray-500 mt-1">
@@ -458,14 +461,14 @@ export function Footer({ workspaceId }: { workspaceId: string }) {
                     value={editedConfig.contact.social.twitter || ''}
                     onChange={(value) => handleSocialChange('twitter', value)}
                     className="inline"
-                    placeholder="Add Twitter URL"
+                    placeholder={t('twitterPlaceholder')}
                   />
                   <br />
                   LinkedIn URL: <EditableContent
                     value={editedConfig.contact.social.linkedin || ''}
                     onChange={(value) => handleSocialChange('linkedin', value)}
                     className="inline"
-                    placeholder="Add LinkedIn URL"
+                    placeholder={t('linkedinPlaceholder')}
                   />
                 </div>
               )}
@@ -490,7 +493,7 @@ export function Footer({ workspaceId }: { workspaceId: string }) {
                         value={editedConfig.contact.phone || ''}
                         onChange={(value) => handleContactChange('phone', value)}
                         className="inline"
-                        placeholder="Add phone number"
+                        placeholder={t('phonePlaceholder')}
                       />
                     </>
                   )}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -42,6 +43,7 @@ export default function DashboardLayout({
 }
 
 function DashboardBreadcrumb() {
+  const t = useTranslations('common');
   return (
     <Breadcrumb className="hidden md:flex">
       <BreadcrumbList>
@@ -53,7 +55,7 @@ function DashboardBreadcrumb() {
         <BreadcrumbSeparator /> */}
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="#">Sessions</Link>
+            <Link href="#">{t('sessions')}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbChevronSeparator />

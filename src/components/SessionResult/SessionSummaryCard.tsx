@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -20,12 +21,14 @@ export default function SessionSummaryCard({
   id: string;
   onRemove?: (sessionId: string) => void;
 }) {
+  const t = useTranslations('common');
+  const tCard = useTranslations('sessionSummaryCard');
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent the Link from navigating
     e.stopPropagation(); // Stop event propagation
 
     if (onRemove) {
-      if (confirm(`Remove "${hostData.topic}" from this workspace?`)) {
+      if (confirm(tCard('removeConfirm', { topic: hostData.topic }))) {
         onRemove(id);
       }
     }
@@ -62,7 +65,7 @@ export default function SessionSummaryCard({
             </CardTitle>
             {hostData.goal && (
               <div>
-                <dt className="text-sm text-gray-500">Objective</dt>
+                <dt className="text-sm text-gray-500">{t('objective')}</dt>
                 <p className="text-sm mt-2 line-clamp-2">{hostData.goal}</p>
               </div>
             )}
@@ -70,11 +73,11 @@ export default function SessionSummaryCard({
           <CardContent>
             <dl className="grid grid-cols-3 gap-4">
               <div>
-                <dt className="text-sm text-gray-500">Participants</dt>
+                <dt className="text-sm text-gray-500">{t('participants')}</dt>
                 <dd className="text-2xl font-semibold">{userData.length}</dd>
               </div>
               <div>
-                <dt className="text-sm text-gray-500">Started</dt>
+                <dt className="text-sm text-gray-500">{t('started')}</dt>
                 <dd className="text-sm">
                   {Date.now() - new Date(hostData.start_time).getTime() >
                   7 * 24 * 60 * 60 * 1000

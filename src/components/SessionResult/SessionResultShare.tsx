@@ -1,4 +1,6 @@
 'use client';
+
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,6 +26,7 @@ export default function SessionResultParticipants({
   completedSessions,
   isFinished
 }: SessionResultShareProps) {
+  const t = useTranslations('sessionShare');
   const [url, setUrl] = useState('');
   const [urlDomainOnly, setUrlDomainOnly] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,7 +42,7 @@ export default function SessionResultParticipants({
   const copyToClipboard = () => {
     navigator.clipboard.writeText(url).then(() => {
       toast({
-        title: 'URL copied to clipboard',
+        title: t('copied'),
       });
       setCopiedToClipboard(true);
     });
@@ -52,14 +55,14 @@ export default function SessionResultParticipants({
       <Card className="flex-grow bg-yellow-50 flex flex-col justify-between">
         <CardHeader className="pb-0">
           <div className="flex justify-between items-center">
-            <CardTitle className="text-md">Invite Participants</CardTitle>
+            <CardTitle className="text-md">{t('title')}</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
           <div className="flex-1 flex flex-col justify-end">
             <div className="invite">
               <h3 className="text-sm text-muted-foreground mb-1">
-                {isFinished ? 'This session is finished' : 'Your unique session link:'}
+                {isFinished ? t('finished') : t('linkLabel')}
               </h3>
               <p className="text-sm mb-2">
                 <a href={url} target="_blank">

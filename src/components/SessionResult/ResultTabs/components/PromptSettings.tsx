@@ -1,4 +1,6 @@
 'use client'
+
+import { useTranslations } from 'next-intl';
 import React, { useState, useEffect } from 'react';
 import {
   Dialog,
@@ -36,6 +38,8 @@ export function PromptSettings({
   onOpenChange,
   hideTrigger = false,
 }: PromptSettingsProps) {
+  const t = useTranslations('promptSettings');
+  const tCommon = useTranslations('common');
   const [internalOpen, setInternalOpen] = useState(false);
   const isOpen = open !== undefined ? open : internalOpen;
   const setIsOpen = onOpenChange || setInternalOpen;
@@ -132,7 +136,7 @@ export function PromptSettings({
                     value={facilitationPrompt}
                     onChange={(e) => setFacilitationPrompt(e.target.value)}
                     className="flex-1 text-base p-4 font-mono resize-none"
-                    placeholder="Enter your facilitation prompt..."
+                    placeholder={t('facilitationPlaceholder')}
                   />
                 </div>
               </TabsContent>
@@ -152,7 +156,7 @@ export function PromptSettings({
                     value={summaryPromptText}
                     onChange={(e) => setSummaryPromptText(e.target.value)}
                     className="flex-1 text-base p-4 font-mono resize-none"
-                    placeholder="Enter your summary prompt..."
+                    placeholder={t('summaryPlaceholder')}
                   />
                 </div>
               </TabsContent>
@@ -164,7 +168,7 @@ export function PromptSettings({
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={isSaving}>
-              {isSaving ? 'Saving...' : 'Save Changes'}
+              {isSaving ? tCommon('saving') : tCommon('saveChanges')}
             </Button>
           </div>
         </div>

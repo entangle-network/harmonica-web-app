@@ -50,7 +50,13 @@
     "unknownError": "Došlo k neznámé chybě",
     "name": "Jméno",
     "status": "Stav",
-    "anonymous": "Anonymní"
+    "anonymous": "Anonymní",
+    "objective": "Cíl",
+    "participants": "Účastníci",
+    "started": "Zahájeno",
+    "saving": "Ukládám...",
+    "toggleTheme": "Přepnout motiv",
+    "sessions": "Sezení"
   },
   "settings": {
     "title": "Nastavení",
@@ -713,5 +719,29 @@
     "deselectAll": "Zrušit výběr",
     "statusStarted": "Zahájeno",
     "statusFinished": "Dokončeno"
+  },
+  "sessionShare": {
+    "title": "Pozvat účastníky",
+    "finished": "Toto sezení už skončilo",
+    "linkLabel": "Váš jedinečný odkaz na sezení:",
+    "copied": "Odkaz zkopírován do schránky"
+  },
+  "promptSettings": {
+    "facilitationPlaceholder": "Zadejte facilitační prompt...",
+    "summaryPlaceholder": "Zadejte prompt pro shrnutí..."
+  },
+  "workspaceFooter": {
+    "setLogo": "Nastavit logo",
+    "logoUrlLabel": "Zadejte URL loga",
+    "dropLabel": "Nebo sem přetáhněte obrázek",
+    "dropHint": "Přetáhněte sem soubor, nebo klikněte pro výběr",
+    "institutionPlaceholder": "Zadejte název instituce...",
+    "twitterPlaceholder": "Přidat odkaz na Twitter",
+    "linkedinPlaceholder": "Přidat odkaz na LinkedIn",
+    "phonePlaceholder": "Přidat telefonní číslo",
+    "uploadFailed": "Obrázek se nepodařilo nahrát"
+  },
+  "sessionSummaryCard": {
+    "removeConfirm": "Odebrat sezení „{topic}“ z tohoto projektu?"
   }
 }
