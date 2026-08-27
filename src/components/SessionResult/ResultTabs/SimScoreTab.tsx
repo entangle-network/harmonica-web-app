@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { UserSession, HostSession } from '@/lib/schema';
 import {
   analyzeWithSimScore,
@@ -17,6 +18,7 @@ export function SimScoreTab({
   userData: UserSession[];
   resourceId: string;
 }) {
+  const t = useTranslations('simScore');
   const [generatingSimScore, setGenerating] = useState(false);
   const [simScoreResult, setSimScoreResult] = useState<string | null>(null);
   const {
@@ -121,8 +123,8 @@ ONLY include plain JSON in your reply, without any backticks, markdown formattin
               <Spinner />
               <span className="ml-2">
                 {generatingSimScore
-                  ? 'Generating SimScore analysis...'
-                  : 'Loading SimScore data...'}
+                  ? t('generating')
+                  : t('loading')}
               </span>
             </div>
           ) : simScoreResult ? (
@@ -130,10 +132,10 @@ ONLY include plain JSON in your reply, without any backticks, markdown formattin
               <HRMarkdown content={simScoreResult} />
             </div>
           ) : userData.length === 0 ? (
-            <>No responses available for SimScore analysis</>
+            <>{t('noResponses')}</>
           ) : (
             <div className="text-center p-8">
-              <p>No SimScore analysis available</p>
+              <p>{t('noAnalysis')}</p>
               <button
                 onClick={() => {
                   shouldGenerateRef.current = true;
@@ -141,7 +143,7 @@ ONLY include plain JSON in your reply, without any backticks, markdown formattin
                 }}
                 className="mt-4 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
               >
-                Generate SimScore Analysis
+                {t('generate')}
               </button>
             </div>
           )}

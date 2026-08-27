@@ -47,7 +47,10 @@
     "generating": "Generuji...",
     "generate": "Vygenerovat",
     "file": "Soubor",
-    "unknownError": "Došlo k neznámé chybě"
+    "unknownError": "Došlo k neznámé chybě",
+    "name": "Jméno",
+    "status": "Stav",
+    "anonymous": "Anonymní"
   },
   "settings": {
     "title": "Nastavení",
@@ -670,6 +673,44 @@
     "headerCreated": "Vytvořeno",
     "headerUpdated": "Aktualizováno",
     "headerIncludeInSummary": "Zahrnout do shrnutí",
+    "statusStarted": "Zahájeno",
+    "statusFinished": "Dokončeno"
+  },
+  "simScore": {
+    "generating": "Generuji analýzu SimScore...",
+    "loading": "Načítám data SimScore...",
+    "noResponses": "Pro analýzu SimScore nejsou k dispozici žádné odpovědi",
+    "noAnalysis": "Žádná analýza SimScore není k dispozici",
+    "generate": "Vygenerovat analýzu SimScore"
+  },
+  "sessionDetails": {
+    "title": "Údaje o sezení",
+    "subtitle": "Upravte základní informace o svém sezení.",
+    "nameLabel": "Název sezení",
+    "namePlaceholder": "Zadejte název sezení",
+    "goalLabel": "Cíl",
+    "goalPlaceholder": "Jaký je cíl vašeho sezení?",
+    "criticalLabel": "Klíčové informace",
+    "criticalPlaceholder": "Co je od účastníků klíčové zjistit?",
+    "contextLabel": "Kontext",
+    "contextPlaceholder": "Jaký kontext by se naší AI hodil znát?"
+  },
+  "editSession": {
+    "title": "Upravit sezení",
+    "subtitle": "Přizpůsobte návrh sezení, prompty a nastavení.",
+    "generatedSession": "Vaše vygenerované sezení",
+    "doneEditing": "Hotovo",
+    "editDesign": "Upravit návrh sezení",
+    "advanced": "Pokročilé: zobrazit surové prompty",
+    "facilitationPrompt": "Facilitační prompt",
+    "facilitationPlaceholder": "Zadejte facilitační prompt...",
+    "crossPollination": "Sdílení odpovědí mezi účastníky"
+  },
+  "export": {
+    "title": "Export výsledků",
+    "selectParticipants": "Vyberte účastníky k exportu",
+    "selectAll": "Vybrat vše",
+    "deselectAll": "Zrušit výběr",
     "statusStarted": "Zahájeno",
     "statusFinished": "Dokončeno"
   }

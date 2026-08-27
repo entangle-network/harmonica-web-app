@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { HostSession, Message, UserSession } from '@/lib/schema';
 import * as db from '@/lib/db';
 import { useState, useEffect } from 'react';
@@ -28,6 +29,8 @@ export default function ExportSection({
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
+  const t = useTranslations('export');
+  const tCommon = useTranslations('common');
   const { addResponse } = useCustomResponses(id);
   const [exportInProgress, setExportInProgress] = useState(false);
   const [isExportPopupVisible, setIsExportPopupVisible] = useState(false);
@@ -234,7 +237,7 @@ export default function ExportSection({
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
           <Card className="w-full max-w-xl">
             <CardHeader>
-              <CardTitle>Export Results</CardTitle>
+              <CardTitle>{t('title')}</CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
                 Export participant transcripts
               </p>
@@ -244,7 +247,7 @@ export default function ExportSection({
                 <div className="flex flex-col gap-4">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label className="text-sm font-medium">Select participants to export</Label>
+                      <Label className="text-sm font-medium">{t('selectParticipants')}</Label>
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-muted-foreground">
                           {selectedParticipants.size} selected
@@ -254,7 +257,7 @@ export default function ExportSection({
                           size="sm"
                           onClick={handleSelectAllClick}
                         >
-                          {selectedParticipants.size === userData.length ? 'Deselect all' : 'Select all'}
+                          {selectedParticipants.size === userData.length ? t('deselectAll') : t('selectAll')}
                         </Button>
                       </div>
                     </div>
@@ -270,8 +273,8 @@ export default function ExportSection({
                                 />
                               </div>
                             </TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead>{tCommon('name')}</TableHead>
+                            <TableHead>{tCommon('status')}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -286,7 +289,7 @@ export default function ExportSection({
                                   />
                                 </TableCell>
                                 <TableCell className="font-medium">
-                                  {participant.user_name || 'Anonymous'}
+                                  {participant.user_name || tCommon('anonymous')}
                                 </TableCell>
                                 <TableCell>
                                   <Badge
@@ -295,7 +298,7 @@ export default function ExportSection({
                                       participant.active ? 'capitalize' : 'capitalize bg-[#ECFCCB]'
                                     }
                                   >
-                                    {participant.active ? 'Started' : 'Finished'}
+                                    {participant.active ? t('statusStarted') : t('statusFinished')}
                                   </Badge>
                                 </TableCell>
                               </TableRow>

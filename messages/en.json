@@ -47,7 +47,10 @@
     "generating": "Generating...",
     "generate": "Generate",
     "file": "File",
-    "unknownError": "An unknown error occurred"
+    "unknownError": "An unknown error occurred",
+    "name": "Name",
+    "status": "Status",
+    "anonymous": "Anonymous"
   },
   "settings": {
     "title": "Settings",
@@ -670,6 +673,44 @@
     "headerCreated": "Created",
     "headerUpdated": "Updated",
     "headerIncludeInSummary": "Include in summary",
+    "statusStarted": "Started",
+    "statusFinished": "Finished"
+  },
+  "simScore": {
+    "generating": "Generating SimScore analysis...",
+    "loading": "Loading SimScore data...",
+    "noResponses": "No responses available for SimScore analysis",
+    "noAnalysis": "No SimScore analysis available",
+    "generate": "Generate SimScore Analysis"
+  },
+  "sessionDetails": {
+    "title": "Session Details",
+    "subtitle": "Update the basic information about your session.",
+    "nameLabel": "Session Name",
+    "namePlaceholder": "Enter session name",
+    "goalLabel": "Objective/Goal",
+    "goalPlaceholder": "What is the objective of your session?",
+    "criticalLabel": "Critical Info",
+    "criticalPlaceholder": "What is critical to gather from participants?",
+    "contextLabel": "Context",
+    "contextPlaceholder": "What context would be useful for our AI to know?"
+  },
+  "editSession": {
+    "title": "Edit Session",
+    "subtitle": "Customize your session design, prompts, and settings.",
+    "generatedSession": "Your Generated Session",
+    "doneEditing": "Done Editing",
+    "editDesign": "Edit Session Design",
+    "advanced": "Advanced: See Raw Prompts",
+    "facilitationPrompt": "Facilitation Prompt",
+    "facilitationPlaceholder": "Enter facilitation prompt...",
+    "crossPollination": "Cross Pollination"
+  },
+  "export": {
+    "title": "Export Results",
+    "selectParticipants": "Select participants to export",
+    "selectAll": "Select all",
+    "deselectAll": "Deselect all",
     "statusStarted": "Started",
     "statusFinished": "Finished"
   }

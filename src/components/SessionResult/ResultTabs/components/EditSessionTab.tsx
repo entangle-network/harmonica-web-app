@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useState, SetStateAction } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -46,6 +48,7 @@ export function EditSessionTab({
   editingField,
   setEditingField,
 }: EditSessionTabProps) {
+  const t = useTranslations('editSession');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState(false);
   const handlePromptSave = async () => {
@@ -77,21 +80,21 @@ export function EditSessionTab({
   return (
     <div className="space-y-8">
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">Edit Session</h3>
+        <h3 className="text-lg font-semibold">{t('title')}</h3>
         <p className="text-sm text-muted-foreground">
-          Customize your session design, prompts, and settings.
+          {t('subtitle')}
         </p>
       </div>
 
       {/* a. Your generated session */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Your Generated Session</h3>
+          <h3 className="text-lg font-semibold">{t('generatedSession')}</h3>
           <Button
             variant={editingField === "ReviewPrompt" ? "default" : "outline"}
             onClick={() => editingField === "ReviewPrompt" ? setEditingField("") : setEditingField("ReviewPrompt")}
           >
-            {editingField === "ReviewPrompt" ? "Done Editing" : "Edit Session Design"}
+            {editingField === "ReviewPrompt" ? t('doneEditing') : t('editDesign')}
           </Button>
         </div>
         <ReviewPrompt
@@ -117,14 +120,14 @@ export function EditSessionTab({
           ) : (
             <ChevronRight className="h-4 w-4" />
           )}
-          <span>Advanced: See Raw Prompts</span>
+          <span>{t('advanced')}</span>
         </button>
         
         {showAdvanced && (
           <div className="space-y-4 pl-6 border-l-2 border-gray-200">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium text-muted-foreground">Facilitation Prompt</Label>
+                <Label className="text-sm font-medium text-muted-foreground">{t('facilitationPrompt')}</Label>
                 {!editingPrompt && (
                   <Button
                     variant="ghost"
@@ -142,7 +145,7 @@ export function EditSessionTab({
                   <Textarea
                     value={promptValue.fullPrompt}
                     onChange={(e) => setCurrentVersionedPrompt({ ...promptValue, fullPrompt: e.target.value })}
-                    placeholder="Enter facilitation prompt..."
+                    placeholder={t('facilitationPlaceholder')}
                     className="font-mono text-sm font-medium text-base min-h-[200px]"
                   />
                   <div className="flex space-x-2">
@@ -174,7 +177,7 @@ export function EditSessionTab({
 
       {/* c. Cross Pollination */}
       <SessionField
-        label="Cross Pollination"
+        label={t('crossPollination')}
         value={sessionData.crossPollination}
         type="boolean"
         onEdit={() => handleEditField('crossPollination')}
