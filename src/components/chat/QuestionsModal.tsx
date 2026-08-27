@@ -67,7 +67,7 @@ export const QuestionsModal = ({
     const newErrors: Record<string, string> = {};
     questions.forEach((q) => {
       if (q.required && !answers[q.id]) {
-        newErrors[q.id] = `${q.label} is required`;
+        newErrors[q.id] = t('fieldRequired', { field: q.label });
       }
       if (
         q.type === QuestionType.EMAIL &&

@@ -1,5 +1,6 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import nodemailer from 'nodemailer';
 import { Invitation, Workspace } from './schema';
 import { getFromHostSession, getWorkspaceById } from './db';
@@ -109,34 +110,40 @@ export async function sendInvitation(invitation: Invitation): Promise<boolean> {
         throw new Error(`Unsupported resource type: ${invitation.resource_type}`);            
     }
     
+    // The resource type is part of the sentences, not a word slotted into them:
+    // languages with case endings decline it, so the copy uses ICU select on
+    // resource_type rather than interpolating a noun.
+    const t = await getTranslations('invitationEmail');
+    const vars = { type: invitation.resource_type, title, role: invitation.role };
+
     // These would be better as HTML templates stored separately
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px 8px 0 0;">
-          <img src="${appUrl}/harmonica.png" alt="Harmonica Logo" style="height: 40px;" />
+          <img src="${appUrl}/harmonica.png" alt="${t('logoAlt')}" style="height: 40px;" />
         </div>
         <div style="padding: 20px; border: 1px solid #e0e0e0; border-radius: 0 0 8px 8px;">
-          <h2>You've been invited to join a ${type}</h2>
-          <p>Hello,</p>
-          <p>You've been invited to join the <strong>${title}</strong> ${type} on Harmonica with <strong>${invitation.role}</strong> access.</p>
-          ${invitation.message ? `<p>Message from the inviter: "${invitation.message}"</p>` : ''}
-          <p>To access this ${type}, simply log in to Harmonica using this email address.</p>
+          <h2>${t('heading', vars)}</h2>
+          <p>${t('greeting')}</p>
+          <p>${t.markup('body', { ...vars, b: (chunks) => `<strong>${chunks}</strong>` })}</p>
+          ${invitation.message ? `<p>${t('fromInviter', { message: invitation.message })}</p>` : ''}
+          <p>${t('howTo', vars)}</p>
           <p style="margin: 25px 0;">
             <a href="${url}" style="background-color: #0070f3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">
-              View ${type}
+              ${t('cta', vars)}
             </a>
           </p>
-          <p style="color: #666; font-size: 0.9em;">If you don't have a Harmonica account yet, you'll need to sign up first using this same email address, and you'll automatically get access to the ${type}.</p>
+          <p style="color: #666; font-size: 0.9em;">${t('noAccount', vars)}</p>
         </div>
         <div style="text-align: center; color: #666; font-size: 0.8em; margin-top: 20px;">
-          <p>© ${new Date().getFullYear()} Harmonica. All rights reserved.</p>
+          <p>${t('copyright', { year: new Date().getFullYear() })}</p>
         </div>
       </div>
     `;
     
     return await sendEmail({
       to: invitation.email,
-      subject: `You've been invited to join the ${title} ${type} on Harmonica`,
+      subject: t('subject', vars),
       html
     });
   } catch (error) {

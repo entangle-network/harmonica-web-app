@@ -512,7 +512,8 @@
     "selectLanguagePlaceholder": "Select language",
     "getStarted": "Get started",
     "emailRequired": "Email is required",
-    "emailInvalid": "Please enter a valid email address"
+    "emailInvalid": "Please enter a valid email address",
+    "fieldRequired": "Please fill in the {field} field"
   },
   "rating": {
     "thanksTitle": "Awesome!",
@@ -757,5 +758,62 @@
     "exploreTemplates": "Explore Templates",
     "formQuestions": "Pre-survey Form Questions",
     "notSpecified": "Not specified"
+  },
+  "chatInput": {
+    "transcriptionFailed": "Transcription failed",
+    "microphoneDenied": "Microphone access denied, please allow access and try again.",
+    "aiSuggestion": "AI Suggestion",
+    "generating": "Generating..."
+  },
+  "serverErrors": {
+    "unauthorized": "Unauthorized",
+    "authRequired": "Authentication required",
+    "notAuthenticated": "Not authenticated",
+    "nameLength": "Name must be between 1 and 255 characters",
+    "nameUpdateFailed": "Failed to update name",
+    "passwordSocialLogin": "Password change is not available for social login accounts.",
+    "passwordResetFailed": "Failed to send password reset email",
+    "dataDeleted": "All user data has been deleted",
+    "dataDeleteFailed": "Failed to delete user data",
+    "dataDeleteBeforeAccountFailed": "Failed to delete user data before account deletion",
+    "accountDeleted": "User account has been deleted. You will be logged out shortly.",
+    "accountDeleteFailed": "Failed to delete user account",
+    "invalidRequest": "Invalid request data",
+    "invitationProcessFailed": "Failed to process invitation",
+    "resourceIdRequired": "resourceId and resourceType are required",
+    "invitationsFetchFailed": "Failed to fetch invitations",
+    "userEmailMissing": "User email or ID (sub) not available",
+    "invitationsProcessFailed": "Failed to process invitations"
+  },
+  "invitationEmail": {
+    "logoAlt": "Harmonica Logo",
+    "subject": "{type, select, WORKSPACE {You've been invited to join the {title} project on Harmonica} other {You've been invited to join the {title} session on Harmonica}}",
+    "heading": "{type, select, WORKSPACE {You've been invited to join a project} other {You've been invited to join a session}}",
+    "greeting": "Hello,",
+    "body": "{type, select, WORKSPACE {You've been invited to join the <b>{title}</b> project on Harmonica with <b>{role}</b> access.} other {You've been invited to join the <b>{title}</b> session on Harmonica with <b>{role}</b> access.}}",
+    "fromInviter": "Message from the inviter: “{message}”",
+    "howTo": "{type, select, WORKSPACE {To access this project, simply log in to Harmonica using this email address.} other {To access this session, simply log in to Harmonica using this email address.}}",
+    "cta": "{type, select, WORKSPACE {View project} other {View session}}",
+    "noAccount": "{type, select, WORKSPACE {If you don't have a Harmonica account yet, you'll need to sign up first using this same email address, and you'll automatically get access to the project.} other {If you don't have a Harmonica account yet, you'll need to sign up first using this same email address, and you'll automatically get access to the session.}}",
+    "copyright": "© {year} Harmonica. All rights reserved."
+  },
+  "metadata": {
+    "defaultDescription": "Create AI-facilitated conversations to gather insights from your team, users, or community. Design custom sessions and transform collective input into actionable strategies.",
+    "keywords": [
+      "Deliberation",
+      "Sensemaking",
+      "AI Facilitation",
+      "Form",
+      "Survey"
+    ],
+    "dashboard": "Dashboard",
+    "create": "Create",
+    "createDescription": "Manage your Harmonica conversations and settings",
+    "templates": "Templates",
+    "templatesDescription": "Choose from ready-made session templates to get started quickly",
+    "workspaceFallback": "Workspace",
+    "workspaceDescription": "Analyse multiple sessions with Harmonicas AI powered workspaces",
+    "chatDescription": "Join an AI-facilitated conversation to share your thoughts and help shape collective decisions. Contribute meaningfully to your group's goals through guided dialogue.",
+    "poweredBySuffix": " | powered by Harmonica"
   }
 }

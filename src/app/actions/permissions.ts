@@ -1,5 +1,7 @@
 'use server';
 
+import { serverMessage } from '@/lib/serverMessages';
+
 import { setPermission, removePermission, deleteInvitation } from '@/lib/db';
 import { getSession } from '@auth0/nextjs-auth0';
 import { Invitation, User } from '@/lib/schema';
@@ -20,7 +22,7 @@ export async function updateResourcePermission(
     if (!session?.user?.sub) {
       return { 
         success: false, 
-        error: 'Authentication required' 
+        error: await serverMessage('authRequired') 
       };
     }
 
@@ -51,7 +53,7 @@ export async function removeResourcePermission(
     if (!session?.user?.sub) {
       return { 
         success: false, 
-        error: 'Authentication required' 
+        error: await serverMessage('authRequired') 
       };
     }
 
@@ -136,7 +138,7 @@ export async function cancelInvitation(
     if (!session?.user?.sub) {
       return { 
         success: false, 
-        error: 'Authentication required' 
+        error: await serverMessage('authRequired') 
       };
     }
 

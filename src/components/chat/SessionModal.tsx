@@ -91,7 +91,7 @@ export const SessionModal = ({
     const newErrors: Record<string, string> = {};
     hostData?.questions?.forEach((q) => {
       if (q.required && !answers[q.id]) {
-        newErrors[q.id] = `${q.label} is required`;
+        newErrors[q.id] = tForm('fieldRequired', { field: q.label });
       }
       if (
         q.type === QuestionType.EMAIL &&

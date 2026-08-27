@@ -1,5 +1,7 @@
 'use server';
 
+import { serverMessage } from '@/lib/serverMessages';
+
 import { z } from 'zod';
 import { createInvitation, getInvitationsByResource } from '@/lib/db';
 import { sendInvitation } from '@/lib/emailService';
@@ -44,7 +46,7 @@ export async function createAndSendInvitations(formData: FormData | Record<strin
     if (!validation.success) {
       return {
         success: false,
-        error: 'Invalid request data',
+        error: await serverMessage('invalidRequest'),
         details: validation.error.format(),
       };
     }
@@ -98,7 +100,7 @@ export async function createAndSendInvitations(formData: FormData | Record<strin
     console.error('Error processing invitation:', error);
     return {
       success: false,
-      error: 'Failed to process invitation',
+      error: await serverMessage('invitationProcessFailed'),
     };
   }
 }
@@ -115,7 +117,7 @@ export async function getResourceInvitations(resourceId: string, resourceType: '
     if (!resourceId || !resourceType) {
       return {
         success: false,
-        error: 'resourceId and resourceType are required',
+        error: await serverMessage('resourceIdRequired'),
       };
     }
     
@@ -129,7 +131,7 @@ export async function getResourceInvitations(resourceId: string, resourceType: '
     console.error('Error fetching invitations:', error);
     return {
       success: false,
-      error: 'Failed to fetch invitations',
+      error: await serverMessage('invitationsFetchFailed'),
     };
   }
 }

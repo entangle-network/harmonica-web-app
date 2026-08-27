@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, StartRecording, StopRecording } from '../icons';
@@ -43,6 +44,7 @@ export function ChatInput({
     isAskAi = false,
   } = chat;
 
+  const t = useTranslations('chatInput');
   const [recordingStatus, setRecordingStatus] = useState<'idle' | 'recording' | 'processing'>('idle');
   const [error, setError] = useState<string | null>(null);
   
@@ -89,7 +91,7 @@ export function ChatInput({
           });
           
           if (!response.ok) {
-            throw new Error('Transcription failed');
+            throw new Error(t('transcriptionFailed'));
           }
           
           const data = await response.json();
@@ -111,7 +113,7 @@ export function ChatInput({
             textareaRef.current.dispatchEvent(inputEvent);
           }
         } catch (err) {
-          setError(err instanceof Error ? err.message : 'Transcription failed');
+          setError(err instanceof Error ? err.message : t('transcriptionFailed'));
           console.error('Transcription error:', err);
         } finally {
           // Cleanup stream
@@ -126,7 +128,7 @@ export function ChatInput({
       mediaRecorder.start();
       setRecordingStatus('recording');
     } catch (err) {
-      setError('Microphone access denied, please allow access and try again.');
+      setError(t('microphoneDenied'));
       console.error('Recording error:', err);
       setRecordingStatus('idle');
     }
@@ -196,8 +198,8 @@ export function ChatInput({
               )}
               <span className="text-xs">
                 {isParticipantSuggestionLoading
-                  ? 'Generating...'
-                  : 'AI Suggestion'}
+                  ? t('generating')
+                  : t('aiSuggestion')}
               </span>
             </Button>
           )}

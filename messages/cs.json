@@ -512,7 +512,8 @@
     "selectLanguagePlaceholder": "Vyberte jazyk",
     "getStarted": "Začít",
     "emailRequired": "E-mail je povinný",
-    "emailInvalid": "Zadejte prosím platnou e-mailovou adresu"
+    "emailInvalid": "Zadejte prosím platnou e-mailovou adresu",
+    "fieldRequired": "Vyplňte prosím pole {field}"
   },
   "rating": {
     "thanksTitle": "Skvělé!",
@@ -757,5 +758,62 @@
     "exploreTemplates": "Procházet šablony",
     "formQuestions": "Otázky úvodního formuláře",
     "notSpecified": "Neuvedeno"
+  },
+  "chatInput": {
+    "transcriptionFailed": "Přepis se nezdařil",
+    "microphoneDenied": "Přístup k mikrofonu byl odepřen. Povolte ho prosím a zkuste to znovu.",
+    "aiSuggestion": "Návrh od AI",
+    "generating": "Generuji..."
+  },
+  "serverErrors": {
+    "unauthorized": "Nemáte oprávnění",
+    "authRequired": "Vyžaduje přihlášení",
+    "notAuthenticated": "Nejste přihlášeni",
+    "nameLength": "Jméno musí mít 1 až 255 znaků",
+    "nameUpdateFailed": "Jméno se nepodařilo změnit",
+    "passwordSocialLogin": "U účtů přihlašovaných přes sociální síť nelze heslo měnit.",
+    "passwordResetFailed": "E-mail pro obnovu hesla se nepodařilo odeslat",
+    "dataDeleted": "Všechna uživatelská data byla smazána",
+    "dataDeleteFailed": "Uživatelská data se nepodařilo smazat",
+    "dataDeleteBeforeAccountFailed": "Před smazáním účtu se nepodařilo smazat uživatelská data",
+    "accountDeleted": "Účet byl smazán. Za chvíli budete odhlášeni.",
+    "accountDeleteFailed": "Účet se nepodařilo smazat",
+    "invalidRequest": "Neplatná data požadavku",
+    "invitationProcessFailed": "Pozvánku se nepodařilo zpracovat",
+    "resourceIdRequired": "Chybí resourceId a resourceType",
+    "invitationsFetchFailed": "Pozvánky se nepodařilo načíst",
+    "userEmailMissing": "E-mail nebo ID uživatele není k dispozici",
+    "invitationsProcessFailed": "Pozvánky se nepodařilo zpracovat"
+  },
+  "invitationEmail": {
+    "logoAlt": "Logo Harmonica",
+    "subject": "{type, select, WORKSPACE {Byli jste pozváni do projektu {title} v Harmonice} other {Byli jste pozváni do sezení {title} v Harmonice}}",
+    "heading": "{type, select, WORKSPACE {Byli jste pozváni do projektu} other {Byli jste pozváni do sezení}}",
+    "greeting": "Dobrý den,",
+    "body": "{type, select, WORKSPACE {Byli jste pozváni do projektu <b>{title}</b> v Harmonice s úrovní přístupu <b>{role}</b>.} other {Byli jste pozváni do sezení <b>{title}</b> v Harmonice s úrovní přístupu <b>{role}</b>.}}",
+    "fromInviter": "Vzkaz od toho, kdo vás pozval: „{message}“",
+    "howTo": "{type, select, WORKSPACE {K projektu se dostanete tak, že se do Harmoniky přihlásíte pod touto e-mailovou adresou.} other {K sezení se dostanete tak, že se do Harmoniky přihlásíte pod touto e-mailovou adresou.}}",
+    "cta": "{type, select, WORKSPACE {Zobrazit projekt} other {Zobrazit sezení}}",
+    "noAccount": "{type, select, WORKSPACE {Pokud ještě účet v Harmonice nemáte, nejdřív se zaregistrujte pod touto e-mailovou adresou — přístup k projektu pak získáte automaticky.} other {Pokud ještě účet v Harmonice nemáte, nejdřív se zaregistrujte pod touto e-mailovou adresou — přístup k sezení pak získáte automaticky.}}",
+    "copyright": "© {year} Harmonica. Všechna práva vyhrazena."
+  },
+  "metadata": {
+    "defaultDescription": "Vytvářejte konverzace vedené AI, které vám pomohou získat poznatky od týmu, uživatelů nebo komunity. Navrhněte si vlastní sezení a proměňte společné podněty v konkrétní kroky.",
+    "keywords": [
+      "deliberace",
+      "sensemaking",
+      "facilitace s AI",
+      "dotazník",
+      "průzkum"
+    ],
+    "dashboard": "Přehled",
+    "create": "Vytvořit",
+    "createDescription": "Spravujte své konverzace a nastavení v Harmonice",
+    "templates": "Šablony",
+    "templatesDescription": "Vyberte si z připravených šablon sezení a začněte rychle",
+    "workspaceFallback": "Projekt",
+    "workspaceDescription": "Analyzujte více sezení najednou v projektech Harmoniky s podporou AI",
+    "chatDescription": "Zapojte se do konverzace vedené AI, podělte se o svůj pohled a pomozte utvářet společné rozhodnutí. Váš příspěvek pomůže skupině posunout se k cíli.",
+    "poweredBySuffix": " | běží na Harmonice"
   }
 }

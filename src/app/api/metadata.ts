@@ -1,102 +1,80 @@
 'use server';
 import { decryptId } from '@/lib/encryptionUtils';
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import * as db from '@/lib/db';
 
-type MetadataConfig = {
-  [route: string]: Metadata;
-};
-
-const defaultDescription = `Create AI-facilitated conversations to gather insights from your team, users, or community. Design custom sessions and transform collective input into actionable strategies.`;
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : process.env.NEXT_PUBLIC_BASE_URL || 'https://app.harmonica.chat';
 
-const defaultMetadata = {
-  applicationName: 'Harmonica',
-  keywords: [
-    'Deliberation',
-    'Sensemaking',
-    'AI Facilitation',
-    'Form',
-    'Survey',
-  ],
-  title: 'Harmonica - AI sensemaking',
-  description: `Create AI-facilitated conversations to gather insights from your team, users, or community. Design custom sessions and transform collective input into actionable strategies.`,
-};
+// Titles, descriptions and keywords are what a browser tab, a shared link
+// preview and a search engine show, so they follow the UI language like the
+// rest of the app. They cannot live in module-level constants any more:
+// getTranslations is async, so the copy is resolved per request instead.
+async function buildMetadata(
+  customTitle: string | { absolute: string },
+  description?: string,
+): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  const title =
+    typeof customTitle === 'string' ? `${customTitle} | Harmonica` : customTitle;
+  const resolved = description || t('defaultDescription');
 
-const defaultOpenGraph = {
-  title: defaultMetadata.title,
-  description: defaultMetadata.description || '',
-};
-
-const routeMetadata: MetadataConfig = {
-  '/': {
-    metadataBase: new URL(baseUrl),
-    ...getWithTitleAndDescription('Dashboard')
-  },
-  '/create': getWithTitleAndDescription(
-    'Create',
-    'Manage your Harmonica conversations and settings'
-  ),
-  '/templates': getWithTitleAndDescription(
-    'Templates',
-    'Choose from ready-made session templates to get started quickly'
-  ),
-};
-
-function getWithTitleAndDescription(
-  customTitle: string | {absolute: string},
-  description?: string
-): Metadata {
-  let title = customTitle;
-  if (typeof customTitle === 'string') {
-    title = `${customTitle} | Harmonica`
-  }
   return {
-    ...defaultMetadata,
+    applicationName: 'Harmonica',
+    keywords: t.raw('keywords') as string[],
     title,
-    description: description || defaultDescription,
+    description: resolved,
     openGraph: {
-      ...defaultOpenGraph,
       title,
-      description: description || defaultDescription,
+      description: resolved,
     },
   };
 }
 
 export async function getGeneratedMetadata(path: string) {
+  const t = await getTranslations('metadata');
+
   // Handle dynamic session & chat routes
   let sessionId;
   if (path.startsWith('/sessions/')) {
     const rawSessionId = path.split('/')[2];
     sessionId = decryptId(rawSessionId);
     const hostData = await db.getHostSessionById(sessionId);
-    return getWithTitleAndDescription(hostData.topic)
-  }
-  else if (path.startsWith('/workspace/')) {
+    return buildMetadata(hostData.topic);
+  } else if (path.startsWith('/workspace/')) {
     const wspaceId = path.split('/')[2];
     const wspaceData = await db.getWorkspaceById(wspaceId);
-    return getWithTitleAndDescription(wspaceData?.title || "Workspace", wspaceData?.description || "Analyse multiple sessions with Harmonicas AI powered workspaces")
-  }
-  else if (path.startsWith('/chat?s=')) {
+    return buildMetadata(
+      wspaceData?.title || t('workspaceFallback'),
+      wspaceData?.description || t('workspaceDescription'),
+    );
+  } else if (path.startsWith('/chat?s=')) {
     sessionId = path.split('?s=')[1];
     const hostData = await db.getHostSessionById(sessionId);
-    const description = `Join an AI-facilitated conversation to share your thoughts and help shape collective decisions. Contribute meaningfully to your group's goals through guided dialogue.`;
-    const absoluteTitle = `${hostData.topic}${hostData.topic.length < 15 ? ` | powered by Harmonica` : ''}`;
+    const description = t('chatDescription');
+    const absoluteTitle = `${hostData.topic}${
+      hostData.topic.length < 15 ? t('poweredBySuffix') : ''
+    }`;
     return {
-      ...defaultMetadata,
-      title: {
-        absolute: absoluteTitle,
-      },
-      description: description,
+      ...(await buildMetadata({ absolute: absoluteTitle }, description)),
       openGraph: {
-        ...defaultOpenGraph,
         title: hostData.topic,
-        description: description,
+        description,
       },
-    }
+    };
   }
 
-  return routeMetadata[path] || routeMetadata['/'];
+  switch (path) {
+    case '/create':
+      return buildMetadata(t('create'), t('createDescription'));
+    case '/templates':
+      return buildMetadata(t('templates'), t('templatesDescription'));
+    default:
+      return {
+        metadataBase: new URL(baseUrl),
+        ...(await buildMetadata(t('dashboard'))),
+      };
+  }
 }

@@ -1,5 +1,7 @@
 'use server';
 
+import { serverMessage } from '@/lib/serverMessages';
+
 import { getSession } from '@auth0/nextjs-auth0';
 import {
   getInvitationsByEmail,
@@ -25,7 +27,7 @@ export async function processUserInvitations(): Promise<{
 
       return {
         success: false,
-        error: 'Not authenticated',
+        error: await serverMessage('notAuthenticated'),
         processed: 0,
       };
     }
@@ -49,7 +51,7 @@ export async function processUserInvitations(): Promise<{
 
       return {
         success: false,
-        error: 'User email or ID (sub) not available',
+        error: await serverMessage('userEmailMissing'),
         processed: 0,
       };
     }
@@ -90,7 +92,7 @@ export async function processUserInvitations(): Promise<{
     console.error('Error processing invitations:', error);
     return {
       success: false,
-      error: 'Failed to process invitations',
+      error: await serverMessage('invitationsProcessFailed'),
       processed: 0,
     };
   }

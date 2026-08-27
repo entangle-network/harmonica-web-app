@@ -1,5 +1,7 @@
 'use server';
 
+import { serverMessage } from '@/lib/serverMessages';
+
 import { getSession } from '@auth0/nextjs-auth0'
 import { getDbInstance } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
@@ -116,12 +118,12 @@ export async function fetchUserData() {
 export async function updateUserName(name: string) {
   const session = await getSession();
   if (!session || !session.user?.sub) {
-    return { success: false, message: 'Unauthorized' };
+    return { success: false, message: await serverMessage('unauthorized') };
   }
 
   const trimmed = name.trim();
   if (!trimmed || trimmed.length > 255) {
-    return { success: false, message: 'Name must be between 1 and 255 characters' };
+    return { success: false, message: await serverMessage('nameLength') };
   }
 
   try {
@@ -136,19 +138,19 @@ export async function updateUserName(name: string) {
     return { success: true };
   } catch (error) {
     console.error('Error updating user name:', error);
-    return { success: false, message: 'Failed to update name' };
+    return { success: false, message: await serverMessage('nameUpdateFailed') };
   }
 }
 
 export async function requestPasswordReset() {
   const session = await getSession();
   if (!session || !session.user?.sub || !session.user?.email) {
-    return { success: false, message: 'Unauthorized' };
+    return { success: false, message: await serverMessage('unauthorized') };
   }
 
   // Auth0 social login users (Google, GitHub) can't change passwords
   if (!session.user.sub.startsWith('auth0|')) {
-    return { success: false, message: 'Password change is not available for social login accounts.' };
+    return { success: false, message: await serverMessage('passwordSocialLogin') };
   }
 
   try {
@@ -167,13 +169,13 @@ export async function requestPasswordReset() {
 
     if (!response.ok) {
       console.error('Auth0 password reset failed:', await response.text());
-      return { success: false, message: 'Failed to send password reset email' };
+      return { success: false, message: await serverMessage('passwordResetFailed') };
     }
 
     return { success: true };
   } catch (error) {
     console.error('Error requesting password reset:', error);
-    return { success: false, message: 'Failed to send password reset email' };
+    return { success: false, message: await serverMessage('passwordResetFailed') };
   }
 }
 
@@ -181,7 +183,7 @@ export async function deleteUserData(existingUserData?: any) {
   const session = await getSession();
   
   if (!session || !session.user?.sub) {
-    return { success: false, message: 'Unauthorized' };
+    return { success: false, message: await serverMessage('unauthorized') };
   }
   
   try {
@@ -299,7 +301,7 @@ export async function deleteUserData(existingUserData?: any) {
     
     return { 
       success: true, 
-      message: 'All user data has been deleted',
+      message: await serverMessage('dataDeleted'),
       deletedCounts: {
         messages: userData.messages.length,
         sessions: userData.sessions.length,
@@ -311,7 +313,7 @@ export async function deleteUserData(existingUserData?: any) {
     };
   } catch (error) {
     console.error('Error deleting user data:', error);
-    return { success: false, message: 'Failed to delete user data' };
+    return { success: false, message: await serverMessage('dataDeleteFailed') };
   }
 }
 
@@ -319,7 +321,7 @@ export async function deleteUserAccount(existingUserData?: any) {
   const session = await getSession();
   
   if (!session || !session.user?.sub) {
-    return { success: false, message: 'Unauthorized' };
+    return { success: false, message: await serverMessage('unauthorized') };
   }
   
   try {
@@ -331,7 +333,7 @@ export async function deleteUserAccount(existingUserData?: any) {
     const dataDeleteResult = await deleteUserData(existingUserData);
     
     if (!dataDeleteResult.success) {
-      return { success: false, message: 'Failed to delete user data before account deletion' };
+      return { success: false, message: await serverMessage('dataDeleteBeforeAccountFailed') };
     }
     
     // Then delete the user account itself
@@ -371,10 +373,10 @@ export async function deleteUserAccount(existingUserData?: any) {
     
     return { 
       success: true, 
-      message: 'User account has been deleted. You will be logged out shortly.' 
+      message: await serverMessage('accountDeleted') 
     };
   } catch (error) {
     console.error('Error deleting user account:', error);
-    return { success: false, message: 'Failed to delete user account' };
+    return { success: false, message: await serverMessage('accountDeleteFailed') };
   }
 }
