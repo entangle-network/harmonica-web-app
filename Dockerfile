@@ -42,11 +42,11 @@ ARG SERVER_ACTIONS_ALLOWED_ORIGINS
 ENV SERVER_ACTIONS_ALLOWED_ORIGINS=$SERVER_ACTIONS_ALLOWED_ORIGINS
 
 # AGPL-3.0 §13 requires offering the source of the *running* version, so the
-# in-app link points at the commit this image was built from. Coolify passes
-# SOURCE_COMMIT automatically; without it the link falls back to the branch.
+# in-app link points at the commit this image was built from — a branch link
+# would drift as soon as anything else is pushed. SOURCE_COMMIT lets a build
+# platform supply it; otherwise it is read from the checkout below.
 ARG SOURCE_COMMIT
 ARG NEXT_PUBLIC_SOURCE_URL
-ENV NEXT_PUBLIC_SOURCE_COMMIT=$SOURCE_COMMIT
 ENV NEXT_PUBLIC_SOURCE_URL=$NEXT_PUBLIC_SOURCE_URL
 
 # Build-time-only placeholders. `next build` evaluates module scope of every
@@ -61,7 +61,14 @@ ENV POSTGRES_URL=postgresql://build:build@localhost:5432/build \
     SUMMARY_ASSISTANT= \
     NEXT_TELEMETRY_DISABLED=1
 
-RUN npm run build
+# The commit comes from the build platform when it provides one, and from the
+# checkout itself otherwise, so the link is correct however the image is built.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/* \
+    && export NEXT_PUBLIC_SOURCE_COMMIT="${SOURCE_COMMIT:-$(git rev-parse HEAD 2>/dev/null || echo '')}" \
+    && echo "building from commit: ${NEXT_PUBLIC_SOURCE_COMMIT:-unknown}" \
+    && npm run build
 
 # Compile the migrator and each migration to standalone CJS so the runtime image
 # can migrate itself without carrying tsx and the full node_modules tree.

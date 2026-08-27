@@ -1,6 +1,8 @@
 node_modules
 .next
-.git
+# .git is deliberately NOT ignored: the builder derives the commit the image was
+# built from, which the AGPL §13 source link points at. It never reaches the
+# runtime image, which copies only the standalone output.
 .github
 .vercel
 npm-debug.log*
