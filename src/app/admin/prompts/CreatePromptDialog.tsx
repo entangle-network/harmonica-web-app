@@ -23,6 +23,7 @@ import { createPrompt } from './api';
 import { useToast } from 'hooks/use-toast';
 import { fetchPromptTypes } from '../prompt-types/api';
 import { Maximize2, Minimize2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   open: boolean;
@@ -36,6 +37,7 @@ interface PromptType {
 }
 
 export function CreatePromptDialog({ open, onOpenChange, onSuccess }: Props) {
+  const t = useTranslations('admin');
   const [promptTypes, setPromptTypes] = useState<PromptType[]>([]);
   const [selectedType, setSelectedType] = useState('');
   const [instructions, setInstructions] = useState('');
@@ -52,8 +54,8 @@ export function CreatePromptDialog({ open, onOpenChange, onSuccess }: Props) {
       } catch (error) {
         console.error('Failed to load prompt types:', error);
         toast({
-          title: 'Error loading prompt types',
-          description: 'Please refresh the page',
+          title: t('toast.typesLoadFailed'),
+          description: t('toast.refreshPage'),
           variant: 'destructive',
         });
       }
@@ -72,7 +74,7 @@ export function CreatePromptDialog({ open, onOpenChange, onSuccess }: Props) {
         instructions,
         active,
       });
-      toast({ title: 'Prompt created successfully' });
+      toast({ title: t('toast.promptCreated') });
       onSuccess?.();
       onOpenChange(false);
       setSelectedType('');
@@ -81,9 +83,9 @@ export function CreatePromptDialog({ open, onOpenChange, onSuccess }: Props) {
     } catch (error) {
       console.error('Create error:', error);
       toast({
-        title: 'Error creating prompt',
+        title: t('toast.promptCreateFailed'),
         description:
-          error instanceof Error ? error.message : 'Please try again',
+          error instanceof Error ? error.message : t('toast.tryAgain'),
         variant: 'destructive',
       });
     } finally {
@@ -101,20 +103,20 @@ export function CreatePromptDialog({ open, onOpenChange, onSuccess }: Props) {
         }`}
       >
         <DialogHeader>
-          <DialogTitle>Create New Prompt</DialogTitle>
+          <DialogTitle>{t('createPrompt')}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className="space-y-4 py-4 flex-grow flex flex-col">
             <div className="space-y-2">
-              <Label htmlFor="type">Prompt Type</Label>
+              <Label htmlFor="type">{t('promptType')}</Label>
               <Select
                 value={selectedType}
                 onValueChange={setSelectedType}
                 required
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a prompt type" />
+                  <SelectValue placeholder={t('selectPromptType')} />
                 </SelectTrigger>
                 <SelectContent>
                   {promptTypes.map((type) => (
@@ -127,7 +129,7 @@ export function CreatePromptDialog({ open, onOpenChange, onSuccess }: Props) {
             </div>
 
             <div className="space-y-2 flex-grow flex flex-col relative">
-              <Label htmlFor="instructions">Instructions</Label>
+              <Label htmlFor="instructions">{t('instructions')}</Label>
               <Textarea
                 id="instructions"
                 value={instructions}
@@ -138,7 +140,7 @@ export function CreatePromptDialog({ open, onOpenChange, onSuccess }: Props) {
                     ? 'min-h-[calc(100vh-300px)]'
                     : 'min-h-[calc(100vh-500px)]'
                 }`}
-                placeholder="Enter the instructions for this prompt"
+                placeholder={t('instructionsPlaceholder')}
               />
               <Button
                 type="button"

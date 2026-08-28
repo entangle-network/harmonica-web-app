@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { deletePrompt } from './api';
 import { useToast } from 'hooks/use-toast';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   prompt: { id: string; type_name: string } | null;
@@ -24,6 +25,7 @@ export function DeletePromptDialog({
   onOpenChange,
   onSuccess,
 }: Props) {
+  const t = useTranslations('admin');
   const { toast } = useToast();
 
   const handleDelete = async () => {
@@ -31,13 +33,13 @@ export function DeletePromptDialog({
 
     try {
       await deletePrompt(prompt.id);
-      toast({ title: 'Prompt deleted successfully' });
+      toast({ title: t('toast.promptDeleted') });
       onSuccess?.();
       onOpenChange(false);
     } catch (error) {
       toast({
-        title: 'Error deleting prompt',
-        description: 'Please try again',
+        title: t('toast.promptDeleteFailed'),
+        description: t('toast.tryAgain'),
         variant: 'destructive',
       });
     }
@@ -47,7 +49,7 @@ export function DeletePromptDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>Delete Prompt</DialogTitle>
+          <DialogTitle>{t('deletePrompt')}</DialogTitle>
         </DialogHeader>
         <p>
           Are you sure you want to delete this prompt of type{' '}

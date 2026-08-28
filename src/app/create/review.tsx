@@ -193,8 +193,8 @@ export default function ReviewPrompt({
                       size="icon"
                       className="mr-2"
                       onClick={() => showFullPrompt(prompt.id)}
-                      aria-label="View full prompt"
-                      title="View full prompt"
+                      aria-label={t('viewFullPrompt')}
+                      title={t('viewFullPrompt')}
                     >
                       <Eye className="w-4 h-4" />
                     </Button>

@@ -498,7 +498,7 @@ export function useChat(options: UseChatOptions) {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate participant suggestion');
+        throw new Error(t('suggestionFailed'));
       }
 
       const data = await response.json();
@@ -527,8 +527,8 @@ export function useChat(options: UseChatOptions) {
     while (!threadIdRef.current) {
       if (waitedCycles > 720) {
         setErrorMessage({
-          title: 'The chat seems to be stuck.',
-          message: 'Please reload the page and try again.',
+          title: t('stuckTitle'),
+          message: t('stuckMessage'),
         });
         throw new Error('Creating the thread took too long.');
       }

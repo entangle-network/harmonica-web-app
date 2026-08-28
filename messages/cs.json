@@ -63,7 +63,15 @@
     "results": "Výsledky",
     "projects": "Projekty:",
     "sourceCode": "Zdrojový kód",
-    "edit": "Upravit"
+    "edit": "Upravit",
+    "removeSession": "Odebrat sezení",
+    "closeBanner": "Zavřít oznámení",
+    "doubleClickToEdit": "Upravte dvojklikem",
+    "startedOn": "Zahájeno",
+    "deleteProjectConfirm": "Opravdu chcete tento projekt smazat?",
+    "createSession": "Vytvořit sezení",
+    "createProject": "Vytvořit projekt",
+    "sessionName": "Název sezení"
   },
   "settings": {
     "title": "Nastavení",
@@ -521,7 +529,10 @@
     "veryDissatisfied": "Velmi nespokojen",
     "verySatisfied": "Velmi spokojen",
     "feedbackPlaceholder": "Řekněte nám víc o své zkušenosti...",
-    "submitFeedback": "Odeslat zpětnou vazbu"
+    "submitFeedback": "Odeslat zpětnou vazbu",
+    "dissatisfied": "Nespokojen",
+    "neutral": "Neutrální",
+    "satisfied": "Spokojen"
   },
   "resultTabs": {
     "summary": "Shrnutí",
@@ -666,7 +677,8 @@
     "version": "Verze {number}",
     "select": "Vybrat",
     "selected": "Vybráno",
-    "collectInfoHint": "V dalším kroku nastavíte, jaké údaje o účastnících sbírat (jméno, e-mail)"
+    "collectInfoHint": "V dalším kroku nastavíte, jaké údaje o účastnících sbírat (jméno, e-mail)",
+    "viewFullPrompt": "Zobrazit celý prompt"
   },
   "createSession": {
     "nameRequired": "Název sezení je povinný",
@@ -679,7 +691,14 @@
     "statusUnknown": "Neznámý stav aktualizace",
     "statusUpToDate": "Aktuální",
     "statusPending": "Brzy se automaticky obnoví",
-    "statusOutdated": "Shrnutí není aktuální"
+    "statusOutdated": "Shrnutí není aktuální",
+    "sessionRecap": "Rekapitulace sezení",
+    "projectSummary": "Shrnutí projektu",
+    "sessionSummary": "Shrnutí sezení",
+    "promptUpdated": "Prompt pro shrnutí upraven",
+    "promptUpdatedDesc": "Prompt byl uložen. Shrnutí se právě generuje znovu...",
+    "promptUpdateFailed": "Prompt pro shrnutí se nepodařilo změnit",
+    "promptUpdateFailedDesc": "Při úpravě promptu došlo k chybě."
   },
   "participants": {
     "title": "Odpovědi",
@@ -767,7 +786,10 @@
     "microphoneDenied": "Přístup k mikrofonu byl odepřen. Povolte ho prosím a zkuste to znovu.",
     "aiSuggestion": "Návrh od AI",
     "generating": "Generuji...",
-    "placeholder": "Napište sem svou zprávu..."
+    "placeholder": "Napište sem svou zprávu...",
+    "stuckTitle": "Chat se zasekl.",
+    "stuckMessage": "Načtěte prosím stránku znovu a zkuste to ještě jednou.",
+    "suggestionFailed": "Návrh se nepodařilo vygenerovat"
   },
   "serverErrors": {
     "unauthorized": "Nemáte oprávnění",
@@ -875,5 +897,85 @@
   "createFlow": {
     "launch": "Spustit",
     "noPrompt": "Není k dispozici žádný prompt. Nejdřív nějaký vytvořte."
+  },
+  "errors": {
+    "accessDenied": "Přístup odepřen",
+    "somethingWrong": "Něco se pokazilo",
+    "noPermissionSession": "K zobrazení tohoto sezení nemáte oprávnění.",
+    "noPermissionWorkspace": "K zobrazení tohoto projektu nemáte oprávnění.",
+    "loadSessionFailed": "Při načítání sezení došlo k chybě.",
+    "loadWorkspaceFailed": "Při načítání projektu došlo k chybě.",
+    "goHome": "Zpět na úvod",
+    "sessionNotLoaded": "Sezení se nepodařilo načíst.",
+    "workspaceNotLoaded": "Projekt se nepodařilo načíst.",
+    "loadingSessionError": "Chyba při načítání sezení",
+    "loadingWorkspaceError": "Chyba při načítání projektu",
+    "workspaceLoadTitle": "Projekt se nepodařilo načíst",
+    "workspaceLoadMessage": "Projekt se nepodařilo načíst.",
+    "sessionLoadTitle": "Sezení se nepodařilo načíst",
+    "sessionLoadMessage": "Sezení se nepodařilo načíst."
+  },
+  "admin": {
+    "promptTypes": "Typy promptů",
+    "prompts": "Prompty",
+    "settings": "Nastavení",
+    "checkingPermissions": "Ověřuji oprávnění...",
+    "name": "Název",
+    "description": "Popis",
+    "created": "Vytvořeno",
+    "updated": "Aktualizováno",
+    "type": "Typ",
+    "instructions": "Instrukce",
+    "status": "Stav",
+    "active": "Aktivní",
+    "inactive": "Neaktivní",
+    "topic": "Téma",
+    "createPromptType": "Nový typ promptu",
+    "editPromptType": "Upravit typ promptu",
+    "deletePromptType": "Smazat typ promptu",
+    "createPrompt": "Nový prompt",
+    "editPrompt": "Upravit prompt",
+    "deletePrompt": "Smazat prompt",
+    "promptType": "Typ promptu",
+    "selectPromptType": "Vyberte typ promptu",
+    "namePattern": "Jen velká písmena, číslice a podtržítka, začínat musí písmenem",
+    "instructionsPlaceholder": "Zadejte instrukce pro tento prompt",
+    "selectExperiment": "Vyberte experiment",
+    "toast": {
+      "typeCreated": "Typ promptu vytvořen",
+      "typeCreateFailed": "Typ promptu se nepodařilo vytvořit",
+      "typeUpdated": "Typ promptu upraven",
+      "typeUpdateFailed": "Typ promptu se nepodařilo upravit",
+      "typeDeleted": "Typ promptu smazán",
+      "typeDeleteFailed": "Typ promptu se nepodařilo smazat",
+      "nameConflict": "Název už možná existuje nebo je neplatný",
+      "promptCreated": "Prompt vytvořen",
+      "promptCreateFailed": "Prompt se nepodařilo vytvořit",
+      "promptUpdated": "Prompt upraven",
+      "promptUpdateFailed": "Prompt se nepodařilo upravit",
+      "promptDeleted": "Prompt smazán",
+      "promptDeleteFailed": "Prompt se nepodařilo smazat",
+      "typesLoadFailed": "Typy promptů se nepodařilo načíst",
+      "refreshPage": "Načtěte prosím stránku znovu",
+      "tryAgain": "Zkuste to prosím znovu",
+      "experimentsFailed": "Experimenty se nepodařilo načíst",
+      "experimentDetailFailed": "Detail experimentu se nepodařilo načíst"
+    },
+    "evals": {
+      "relevance": "Relevance",
+      "questionQuality": "Kvalita otázek",
+      "goalAlignment": "Soulad s cílem",
+      "conciseness": "Stručnost",
+      "nav": "Evaluace",
+      "tone": "Tón",
+      "testCase": "Testovací případ",
+      "noRecords": "Žádné záznamy testovacích případů."
+    },
+    "panelTitle": "Administrace"
+  },
+  "askAi": {
+    "placeholder": "Na co se chcete zeptat?",
+    "title": "Zeptejte se Moniky",
+    "entryMessage": "Dobrý den! Jsem váš analytik — pomohu vám sezení lépe porozumět.\n\nZkuste se zeptat třeba:\n  - Jaká odpověď se opakovala nejčastěji?\n  - Jaké byly nejzajímavější poznatky?\n  - Vytvoř zprávu ze sezení\n"
   }
 }

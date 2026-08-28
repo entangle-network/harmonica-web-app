@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Message } from '@/lib/schema';
 import { useSessionTheme } from '@/components/SessionTheme';
 import { themeImageUrl } from '@/lib/themeColors';
@@ -21,6 +22,7 @@ export function ChatMessage({
   showButtons = false,
   hideProfilePicture = false,
 }: ChatMessageProps) {
+  const t = useTranslations('chatIntro');
   const theme = useSessionTheme();
   const { isPublic } = usePermissions(sessionId ?? '');
   const isUser = message.role === 'user';
@@ -56,23 +58,13 @@ export function ChatMessage({
                         }
                       }}
                     >
-                      View Results
+                      {t('viewResults')}
                       <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
                   )}
-                  <hr className="my-6 border-gray-200" />
-                  <div className="mb-2 text-xl font-medium">
-                    Try Harmonica yourself
-                  </div>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      router.push('/create');
-                    }}
-                  >
-                    Create your own session
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </Button>
+                  {/* The "Try Harmonica yourself" call to action was removed: it
+                      advertises the upstream product to participants of someone
+                      else's session, which is not this deployment's purpose. */}
                 </div>
               )}
             </div>

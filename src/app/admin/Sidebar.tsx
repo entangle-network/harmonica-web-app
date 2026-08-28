@@ -10,38 +10,40 @@ import {
   Settings,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useTranslations } from 'next-intl';
 
 const navigation = [
   {
-    name: 'Prompt Types',
+    nameKey: 'promptTypes',
     href: '/admin/prompt-types',
     icon: Boxes, // Changed to Boxes to represent different types/categories
   },
   {
-    name: 'Prompts',
+    nameKey: 'prompts',
     href: '/admin/prompts',
     icon: FileText, // Changed to FileText to represent instructions/documents
   },
   {
-    name: 'Evals',
+    nameKey: 'evals.nav',
     href: '/admin/evals',
     icon: FlaskConical,
   },
   {
-    name: 'Settings',
+    nameKey: 'settings',
     href: '/admin/settings',
     icon: Settings,
   },
-];
+] as const;
 
 export function Sidebar() {
+  const t = useTranslations('admin');
   const pathname = usePathname();
 
   return (
     <div className="w-64 bg-white dark:bg-gray-800 border-r dark:border-gray-700 min-h-screen p-4 flex flex-col">
       <div className="mb-8">
         <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
-          Admin Panel
+          {t('panelTitle')}
         </h2>
       </div>
       <nav className="space-y-1 flex-grow">
@@ -49,7 +51,7 @@ export function Sidebar() {
           const isActive = pathname.startsWith(item.href);
           return (
             <Link
-              key={item.name}
+              key={item.href}
               href={item.href}
               className={cn(
                 'flex items-center px-4 py-2 text-sm rounded-md',
@@ -59,7 +61,7 @@ export function Sidebar() {
               )}
             >
               <item.icon className="mr-3 h-5 w-5" />
-              {item.name}
+              {t(item.nameKey)}
             </Link>
           );
         })}

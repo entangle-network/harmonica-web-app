@@ -16,6 +16,7 @@ import { DeletePromptDialog } from './DeletePromptDialog';
 import { fetchPrompts } from './api';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
+import { useTranslations } from 'next-intl';
 
 interface Prompt {
   id: string;
@@ -32,6 +33,7 @@ interface PromptListProps {
 }
 
 export function PromptList({ showOnlyActive }: PromptListProps) {
+  const t = useTranslations('admin');
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([]);
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null);
@@ -68,12 +70,12 @@ export function PromptList({ showOnlyActive }: PromptListProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Type</TableHead>
-            <TableHead>Instructions</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created</TableHead>
-            <TableHead>Updated</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
+            <TableHead>{t('type')}</TableHead>
+            <TableHead>{t('instructions')}</TableHead>
+            <TableHead>{t('status')}</TableHead>
+            <TableHead>{t('created')}</TableHead>
+            <TableHead>{t('updated')}</TableHead>
+            <TableHead className="w-[100px]">{t('actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

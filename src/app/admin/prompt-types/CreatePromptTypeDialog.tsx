@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createPromptType } from './api';
 import { useToast } from 'hooks/use-toast';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   open: boolean;
@@ -25,6 +26,7 @@ export function CreatePromptTypeDialog({
   onOpenChange,
   onSuccess,
 }: Props) {
+  const t = useTranslations('admin');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -35,15 +37,15 @@ export function CreatePromptTypeDialog({
     setIsLoading(true);
     try {
       await createPromptType({ name: name.toUpperCase(), description });
-      toast({ title: 'Prompt type created successfully' });
+      toast({ title: t('toast.typeCreated') });
       onSuccess?.();
       onOpenChange(false);
       setName('');
       setDescription('');
     } catch (error) {
       toast({
-        title: 'Error creating prompt type',
-        description: 'Name might already exist or be invalid',
+        title: t('toast.typeCreateFailed'),
+        description: t('toast.nameConflict'),
         variant: 'destructive',
       });
     } finally {
@@ -55,13 +57,13 @@ export function CreatePromptTypeDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Create New Prompt Type</DialogTitle>
+          <DialogTitle>{t('createPromptType')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">{t('name')}</label>
                 <span className="text-sm text-muted-foreground">
                   e.g., SUMMARY_PROMPT
                 </span>
@@ -73,7 +75,7 @@ export function CreatePromptTypeDialog({
                 placeholder="PROMPT_TYPE_NAME"
                 required
                 pattern="[A-Z][A-Z0-9_]*"
-                title="Must be uppercase letters, numbers, and underscores, starting with a letter"
+                title={t('namePattern')}
               />
               <p className="text-sm text-muted-foreground">
                 Use uppercase letters, numbers, and underscores only. Must be
@@ -82,7 +84,7 @@ export function CreatePromptTypeDialog({
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description">{t('description')}</label>
                 <span className="text-sm text-muted-foreground">
                   e.g., Used in the article summary feature
                 </span>

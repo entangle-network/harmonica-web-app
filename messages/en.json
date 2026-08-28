@@ -63,7 +63,15 @@
     "results": "Results",
     "projects": "Projects:",
     "sourceCode": "Source code",
-    "edit": "Edit"
+    "edit": "Edit",
+    "removeSession": "Remove session",
+    "closeBanner": "Close banner",
+    "doubleClickToEdit": "Double-click to edit",
+    "startedOn": "Started on",
+    "deleteProjectConfirm": "Are you sure you want to delete this project?",
+    "createSession": "Create Session",
+    "createProject": "Create Project",
+    "sessionName": "Session name"
   },
   "settings": {
     "title": "Settings",
@@ -521,7 +529,10 @@
     "veryDissatisfied": "Very dissatisfied",
     "verySatisfied": "Very satisfied",
     "feedbackPlaceholder": "Tell us more about your experience...",
-    "submitFeedback": "Submit Feedback"
+    "submitFeedback": "Submit Feedback",
+    "dissatisfied": "Dissatisfied",
+    "neutral": "Neutral",
+    "satisfied": "Satisfied"
   },
   "resultTabs": {
     "summary": "Summary",
@@ -666,7 +677,8 @@
     "version": "Version {number}",
     "select": "Select",
     "selected": "Selected",
-    "collectInfoHint": "Collect basic participant info like name and email in the next step"
+    "collectInfoHint": "Collect basic participant info like name and email in the next step",
+    "viewFullPrompt": "View full prompt"
   },
   "createSession": {
     "nameRequired": "Session name is required",
@@ -679,7 +691,14 @@
     "statusUnknown": "Unknown update status",
     "statusUpToDate": "Up to date",
     "statusPending": "Auto-refreshing soon",
-    "statusOutdated": "Summary out of date"
+    "statusOutdated": "Summary out of date",
+    "sessionRecap": "Session Recap",
+    "projectSummary": "Project Summary",
+    "sessionSummary": "Session Summary",
+    "promptUpdated": "Summary prompt updated",
+    "promptUpdatedDesc": "The summary prompt has been successfully updated. Regenerating summary...",
+    "promptUpdateFailed": "Failed to update summary prompt",
+    "promptUpdateFailedDesc": "An error occurred while updating the summary prompt."
   },
   "participants": {
     "title": "Responses",
@@ -767,7 +786,10 @@
     "microphoneDenied": "Microphone access denied, please allow access and try again.",
     "aiSuggestion": "AI Suggestion",
     "generating": "Generating...",
-    "placeholder": "Type your message here..."
+    "placeholder": "Type your message here...",
+    "stuckTitle": "The chat seems to be stuck.",
+    "stuckMessage": "Please reload the page and try again.",
+    "suggestionFailed": "Failed to generate participant suggestion"
   },
   "serverErrors": {
     "unauthorized": "Unauthorized",
@@ -875,5 +897,85 @@
   "createFlow": {
     "launch": "Launch",
     "noPrompt": "No prompt available. Please create a prompt first."
+  },
+  "errors": {
+    "accessDenied": "Access Denied",
+    "somethingWrong": "Something went wrong!",
+    "noPermissionSession": "You do not have permission to view this session.",
+    "noPermissionWorkspace": "You do not have permission to view this project.",
+    "loadSessionFailed": "We encountered an error while loading this session.",
+    "loadWorkspaceFailed": "We encountered an error while loading this project.",
+    "goHome": "Go Home",
+    "sessionNotLoaded": "Session could not be loaded.",
+    "workspaceNotLoaded": "The project could not be loaded.",
+    "loadingSessionError": "Error loading session",
+    "loadingWorkspaceError": "Error loading project",
+    "workspaceLoadTitle": "Error loading workspace",
+    "workspaceLoadMessage": "The workspace could not be loaded.",
+    "sessionLoadTitle": "Error loading session",
+    "sessionLoadMessage": "Session could not be loaded."
+  },
+  "admin": {
+    "promptTypes": "Prompt Types",
+    "prompts": "Prompts",
+    "settings": "Settings",
+    "checkingPermissions": "Checking permissions...",
+    "name": "Name",
+    "description": "Description",
+    "created": "Created",
+    "updated": "Updated",
+    "type": "Type",
+    "instructions": "Instructions",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "topic": "Topic",
+    "createPromptType": "Create New Prompt Type",
+    "editPromptType": "Edit Prompt Type",
+    "deletePromptType": "Delete Prompt Type",
+    "createPrompt": "Create New Prompt",
+    "editPrompt": "Edit Prompt",
+    "deletePrompt": "Delete Prompt",
+    "promptType": "Prompt Type",
+    "selectPromptType": "Select a prompt type",
+    "namePattern": "Must be uppercase letters, numbers, and underscores, starting with a letter",
+    "instructionsPlaceholder": "Enter the instructions for this prompt",
+    "selectExperiment": "Select experiment",
+    "toast": {
+      "typeCreated": "Prompt type created successfully",
+      "typeCreateFailed": "Error creating prompt type",
+      "typeUpdated": "Prompt type updated successfully",
+      "typeUpdateFailed": "Error updating prompt type",
+      "typeDeleted": "Prompt type deleted successfully",
+      "typeDeleteFailed": "Error deleting prompt type",
+      "nameConflict": "Name might already exist or be invalid",
+      "promptCreated": "Prompt created successfully",
+      "promptCreateFailed": "Error creating prompt",
+      "promptUpdated": "Prompt updated successfully",
+      "promptUpdateFailed": "Error updating prompt",
+      "promptDeleted": "Prompt deleted successfully",
+      "promptDeleteFailed": "Error deleting prompt",
+      "typesLoadFailed": "Error loading prompt types",
+      "refreshPage": "Please refresh the page",
+      "tryAgain": "Please try again",
+      "experimentsFailed": "Failed to load experiments",
+      "experimentDetailFailed": "Failed to load experiment detail"
+    },
+    "evals": {
+      "relevance": "Relevance",
+      "questionQuality": "Question Quality",
+      "goalAlignment": "Goal Alignment",
+      "conciseness": "Conciseness",
+      "nav": "Evals",
+      "tone": "Tone",
+      "testCase": "Test Case",
+      "noRecords": "No test case records found."
+    },
+    "panelTitle": "Admin Panel"
+  },
+  "askAi": {
+    "placeholder": "What would you like to know?",
+    "title": "Ask Monica",
+    "entryMessage": "Hi! Consider me your expert analyst, I can help you to better understand your session.\n\nTry asking me things like:\n  - What was the most common response?\n  - What were the most interesting insights?\n  - Generate a report on the session\n"
   }
 }

@@ -5,6 +5,7 @@ import SessionPage from './index';
 import { OpenAIMessage } from '@/lib/types';
 import { ResultTabsVisibilityConfig } from '@/lib/schema';
 import { Spinner } from '@/components/ui/spinner';
+import { getTranslations } from 'next-intl/server';
 interface SessionDataProviderProps {
   sessionId: string;
   workspaceId?: string;
@@ -26,6 +27,8 @@ async function SessionDataLoader({
   },
   ...props
 }: SessionDataProviderProps) {
+  const t = await getTranslations('errors');
+
   try {
     const data = await fetchSessionData(sessionId, workspaceId);
     
@@ -50,8 +53,8 @@ async function SessionDataLoader({
     // For other errors, use the inline error component
     return (
       <ErrorPage
-        title="Error loading session"
-        message={error instanceof Error ? error.message : 'Session could not be loaded.'}
+        title={t('sessionLoadTitle')}
+        message={error instanceof Error ? error.message : t('sessionLoadMessage')}
       />
     );
   }

@@ -8,14 +8,15 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/clientUtils';
 import type { ExperimentRecord } from './api';
+import { useTranslations } from 'next-intl';
 
 const SCORE_COLUMNS = [
-  { key: 'relevance', label: 'Relevance' },
-  { key: 'question_quality', label: 'Question Quality' },
-  { key: 'goal_alignment', label: 'Goal Alignment' },
-  { key: 'tone', label: 'Tone' },
-  { key: 'conciseness', label: 'Conciseness' },
-];
+  { key: 'relevance', labelKey: 'evals.relevance' },
+  { key: 'question_quality', labelKey: 'evals.questionQuality' },
+  { key: 'goal_alignment', labelKey: 'evals.goalAlignment' },
+  { key: 'tone', labelKey: 'evals.tone' },
+  { key: 'conciseness', labelKey: 'evals.conciseness' },
+] as const;
 
 function formatTestName(name: string): string {
   return name
@@ -37,10 +38,11 @@ interface TestCaseTableProps {
 }
 
 export function TestCaseTable({ records }: TestCaseTableProps) {
+  const t = useTranslations('admin');
   if (records.length === 0) {
     return (
       <p className="text-sm text-muted-foreground py-8 text-center">
-        No test case records found.
+        {t('evals.noRecords')}
       </p>
     );
   }
@@ -51,15 +53,15 @@ export function TestCaseTable({ records }: TestCaseTableProps) {
         <TableHeader>
           <TableRow className="bg-muted/30">
             <TableHead className="w-[140px] font-semibold">
-              Test Case
+              {t('evals.testCase')}
             </TableHead>
-            <TableHead className="font-semibold">Topic</TableHead>
+            <TableHead className="font-semibold">{t('topic')}</TableHead>
             {SCORE_COLUMNS.map((col) => (
               <TableHead
                 key={col.key}
                 className="text-center font-semibold w-[110px]"
               >
-                {col.label}
+                {t(col.labelKey)}
               </TableHead>
             ))}
           </TableRow>

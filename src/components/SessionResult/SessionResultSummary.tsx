@@ -1,4 +1,5 @@
 'use client'
+import { useTranslations } from 'next-intl';
 import { HostSession } from '@/lib/schema';
 import { useState, useEffect, useRef } from 'react';
 import { SummaryUpdateManager } from '../../summary/SummaryUpdateManager';
@@ -48,6 +49,7 @@ export default function SessionResultSummary({
   showSummary = true,
   showSessionRecap = true,
 }: SessionResultSummaryProps) {
+  const t = useTranslations('summaryCard');
   const [isUpdating, setIsUpdating] = useState(false);
   const [isExpandedPrompt, setIsExpandedPrompt] = useState(false);
   const [showPromptSettings, setShowPromptSettings] = useState(false);
@@ -124,8 +126,8 @@ export default function SessionResultSummary({
       // Track that we just saved this value to prevent syncing with stale hostData
       justSavedRef.current = newPrompt;
       toast({
-        title: 'Summary prompt updated',
-        description: 'The summary prompt has been successfully updated. Regenerating summary...',
+        title: t('promptUpdated'),
+        description: t('promptUpdatedDesc'),
       });
       // Refresh the page data
       router.refresh();
@@ -143,8 +145,8 @@ export default function SessionResultSummary({
     } catch (error) {
       console.error('Failed to update summary prompt:', error);
       toast({
-        title: 'Failed to update summary prompt',
-        description: 'An error occurred while updating the summary prompt.',
+        title: t('promptUpdateFailed'),
+        description: t('promptUpdateFailedDesc'),
         variant: 'destructive',
       });
       throw error; // Re-throw to let PromptSettings handle the error
@@ -163,7 +165,7 @@ export default function SessionResultSummary({
         <div className="mb-4 relative">
           <ExpandableWithExport
             resourceId={resourceId}
-            title="Session Recap"
+            title={t('sessionRecap')}
             content={hostData[0].prompt_summary}
             isExpanded={isExpandedPrompt}
             onExpandedChange={setIsExpandedPrompt}
@@ -176,7 +178,7 @@ export default function SessionResultSummary({
         <>
           <SummaryCard
             resourceId={resourceId}
-            title={isProject ? "Project Summary" : "Session Summary"}
+            title={isProject ? t('projectSummary') : t('sessionSummary')}
             content={summary}
             showRefreshButton={hasMinimumRole('editor')}
             onRefresh={manuallyTriggerSummaryUpdate}

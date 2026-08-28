@@ -1,9 +1,12 @@
 'use client';
+
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { X } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SmallDonateBanner() {
+  const t = useTranslations('common');
   const [showBanner, setShowBanner] = useState(Date.now() < new Date('2025-02-14').getTime());
   if (!showBanner) {
     return;
@@ -27,7 +30,7 @@ export default function SmallDonateBanner() {
         <button
           onClick={() => setShowBanner(false)}
           className="absolute right-4 p-1 hover:bg-amber-100/50 rounded-full"
-          aria-label="Close banner"
+          aria-label={t('closeBanner')}
         >
           <X className="h-4 w-4 text-black" />
         </button>

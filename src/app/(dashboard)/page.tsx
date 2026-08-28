@@ -277,18 +277,20 @@ export default async function Dashboard({
   );
 }
 
-function CreateSessionButton({ text = 'Create Session' }: { text?: string }) {
+async function CreateSessionButton({ text }: { text?: string }) {
+  const t = await getTranslations('common');
   return (
     <Link href="/create">
       <Button>
-        {text}
+        {text ?? t('createSession')}
         <ChevronRight />
       </Button>
     </Link>
   );
 }
 
-function CreateWorkspaceButton({ text = 'Create Project' }: { text?: string }) {
+async function CreateWorkspaceButton({ text }: { text?: string }) {
+  const t = await getTranslations('common');
   const workspaceId = `wsp_${Math.random().toString(36).substring(2, 14)}`;
   const link = `/workspace/${workspaceId}`;
   return (

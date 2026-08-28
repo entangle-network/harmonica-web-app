@@ -15,6 +15,7 @@ import { EditPromptTypeDialog } from './EditPromptTypeDialog';
 import { DeletePromptTypeDialog } from './DeletePromptTypeDialog';
 import { fetchPromptTypes } from './api';
 import { format } from 'date-fns';
+import { useTranslations } from 'next-intl';
 
 interface PromptType {
   id: string;
@@ -25,6 +26,7 @@ interface PromptType {
 }
 
 export function PromptTypeList() {
+  const t = useTranslations('admin');
   const [promptTypes, setPromptTypes] = useState<PromptType[]>([]);
   const [editingType, setEditingType] = useState<PromptType | null>(null);
   const [deletingType, setDeletingType] = useState<PromptType | null>(null);
@@ -52,11 +54,11 @@ export function PromptTypeList() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Created</TableHead>
-            <TableHead>Updated</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
+            <TableHead>{t('name')}</TableHead>
+            <TableHead>{t('description')}</TableHead>
+            <TableHead>{t('created')}</TableHead>
+            <TableHead>{t('updated')}</TableHead>
+            <TableHead className="w-[100px]">{t('actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

@@ -5,6 +5,7 @@ import ErrorPage from '@/components/Error';
 import { fetchWorkspaceData } from '@/lib/workspaceData';
 import { ExtendedWorkspaceData } from '@/lib/types';
 import { cache } from 'react';
+import { getTranslations } from 'next-intl/server';
 
 // Increase the maximum execution time for this function on vercel
 export const maxDuration = 300; // in seconds
@@ -28,6 +29,7 @@ export default async function Workspace({
 }: {
   params: { w_id: string };
 }) {
+  const t = await getTranslations('errors');
   
   try {
     const data: ExtendedWorkspaceData = await cachedFetchWorkspaceData(params.w_id);
@@ -52,8 +54,8 @@ export default async function Workspace({
     // For other errors, show the error page component
     return (
       <ErrorPage
-        title={'Error loading workspace'}
-        message={'The workspace could not be loaded.'}
+        title={t('workspaceLoadTitle')}
+        message={t('workspaceLoadMessage')}
       />
     );
   }

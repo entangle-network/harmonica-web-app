@@ -7,6 +7,7 @@ import { updateHostSession } from '@/lib/db';
 import { useSessionStore } from '@/stores/SessionStore';
 import { usePermissions } from '@/lib/permissions';
 import { SessionStatus } from '@/lib/clientUtils';
+import { useTranslations } from 'next-intl';
 
 interface SessionResultHeaderProps {
   sessionId: string;
@@ -19,6 +20,7 @@ export default function SessionResultHeader({
   topic, 
   status,  
 }: SessionResultHeaderProps) {
+  const tCommon = useTranslations('common');
   const [isEditing, setIsEditing] = useState(false);
   const [newTopic, setNewTopic] = useState(topic);
   const editableRef = useRef<HTMLHeadingElement>(null);
@@ -89,9 +91,9 @@ export default function SessionResultHeader({
           suppressContentEditableWarning={true}
           onKeyDown={handleKeyDown}
           onBlur={isEditing ? handleSave : undefined}
-          title={isEditable ? "Double-click to edit" : ""}
+          title={isEditable ? tCommon('doubleClickToEdit') : ''}
         >
-          {topic || 'Session name'}
+          {topic || tCommon('sessionName')}
         </h1>
         
         {isEditing && (

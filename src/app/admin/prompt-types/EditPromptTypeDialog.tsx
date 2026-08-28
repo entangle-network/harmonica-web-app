@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { updatePromptType } from './api';
 import { useToast } from 'hooks/use-toast';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   promptType: { id: string; name: string; description: string } | null;
@@ -27,6 +28,8 @@ export function EditPromptTypeDialog({
   onOpenChange,
   onSuccess,
 }: Props) {
+  const t = useTranslations('admin');
+  const tCommon = useTranslations('common');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -49,13 +52,13 @@ export function EditPromptTypeDialog({
         name: name.toUpperCase(),
         description,
       });
-      toast({ title: 'Prompt type updated successfully' });
+      toast({ title: t('toast.typeUpdated') });
       onSuccess?.();
       onOpenChange(false);
     } catch (error) {
       toast({
-        title: 'Error updating prompt type',
-        description: 'Name might already exist or be invalid',
+        title: t('toast.typeUpdateFailed'),
+        description: t('toast.nameConflict'),
         variant: 'destructive',
       });
     } finally {
@@ -67,13 +70,13 @@ export function EditPromptTypeDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Edit Prompt Type</DialogTitle>
+          <DialogTitle>{t('editPromptType')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">{t('name')}</label>
                 <span className="text-sm text-muted-foreground">
                   e.g., SUMMARY_PROMPT
                 </span>
@@ -85,7 +88,7 @@ export function EditPromptTypeDialog({
                 placeholder="PROMPT_TYPE_NAME"
                 required
                 pattern="[A-Z][A-Z0-9_]*"
-                title="Must be uppercase letters, numbers, and underscores, starting with a letter"
+                title={t('namePattern')}
               />
               <p className="text-sm text-muted-foreground">
                 Use uppercase letters, numbers, and underscores only. Must be
@@ -94,7 +97,7 @@ export function EditPromptTypeDialog({
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description">{t('description')}</label>
                 <span className="text-sm text-muted-foreground">
                   e.g., Used in the article summary feature
                 </span>
@@ -122,7 +125,7 @@ export function EditPromptTypeDialog({
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Saving...' : 'Save Changes'}
+              {isLoading ? tCommon('saving') : tCommon('saveChanges')}
             </Button>
           </DialogFooter>
         </form>

@@ -9,34 +9,35 @@ import { ParticipantsTableData } from './SessionParticipantsTable';
 import { Spinner } from '../icons';
 import { Switch } from '../ui/switch';
 import { MessageSquare, Star, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const EMOJI_RATINGS = [
   {
     emoji: '😫',
-    label: 'Very dissatisfied',
+    labelKey: 'veryDissatisfied',
     color: 'bg-red-50 text-red-700 border-red-200',
   },
   {
     emoji: '🙁',
-    label: 'Dissatisfied',
+    labelKey: 'dissatisfied',
     color: 'bg-orange-50 text-orange-700 border-orange-200',
   },
   {
     emoji: '😐',
-    label: 'Neutral',
+    labelKey: 'neutral',
     color: 'bg-yellow-50 text-yellow-700 border-yellow-200',
   },
   {
     emoji: '🙂',
-    label: 'Satisfied',
+    labelKey: 'satisfied',
     color: 'bg-lime-50 text-lime-700 border-lime-200',
   },
   {
     emoji: '😊',
-    label: 'Very satisfied',
+    labelKey: 'verySatisfied',
     color: 'bg-green-50 text-green-700 border-green-200',
   },
-];
+] as const;
 
 export default function ParicipantSessionRow({
   tableData,
@@ -45,6 +46,7 @@ export default function ParicipantSessionRow({
   tableData: ParticipantsTableData;
   onIncludeChange: (userId: string, included: boolean) => void;
 }) {
+  const tRating = useTranslations('rating');
   const userData = tableData.userData;
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -178,7 +180,7 @@ export default function ParicipantSessionRow({
                       </span>
                       <span className="font-medium">{rating.rating}/5</span>
                       <span className="text-sm">
-                        - {EMOJI_RATINGS[rating.rating - 1].label}
+                        - {tRating(EMOJI_RATINGS[rating.rating - 1].labelKey)}
                       </span>
                     </div>
                   </div>

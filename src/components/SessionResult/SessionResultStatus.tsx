@@ -38,7 +38,7 @@ export default function SessionResultStatus({
           </div>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col gap-4 justify-end items-start">
-            <p> Started on
+            <p> {t('startedOn')}
             <span className="font-medium"> {startTimeString}</span>
           </p>
         <div className='flex gap-2 items-center border rounded-2xl'>

@@ -6,8 +6,10 @@ import { Sidebar } from './Sidebar';
 import { AdminProviders } from './providers';
 import { usePermissions } from '@/lib/permissions';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { useTranslations } from 'next-intl';
 
 function AdminAuthCheck({ children }: { children: React.ReactNode }) {
+  const t = useTranslations('admin');
   const router = useRouter();
   const { loading, hasMinimumRole } = usePermissions('global');
 
@@ -20,7 +22,7 @@ function AdminAuthCheck({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <LoadingSpinner 
-        message="Checking permissions..." 
+        message={t('checkingPermissions')} 
         className="h-[calc(100vh-100px)] min-h-0"
       />
     );

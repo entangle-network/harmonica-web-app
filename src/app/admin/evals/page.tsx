@@ -18,6 +18,7 @@ import {
   type ExperimentListItem,
   type ExperimentDetail,
 } from './api';
+import { useTranslations } from 'next-intl';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -30,6 +31,7 @@ function formatDate(dateStr: string): string {
 }
 
 export default function EvalsPage() {
+  const t = useTranslations('admin');
   const [experiments, setExperiments] = useState<ExperimentListItem[]>([]);
   const [selectedExperiment, setSelectedExperiment] = useState<string>('');
   const [detail, setDetail] = useState<ExperimentDetail | null>(null);
@@ -47,7 +49,7 @@ export default function EvalsPage() {
         setSelectedExperiment(data[0].name);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to load experiments');
+      setError(err.message || t('toast.experimentsFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +62,7 @@ export default function EvalsPage() {
       const data = await fetchExperimentDetail(name);
       setDetail(data);
     } catch (err: any) {
-      setError(err.message || 'Failed to load experiment detail');
+      setError(err.message || t('toast.experimentDetailFailed'));
     } finally {
       setIsLoadingDetail(false);
     }
@@ -99,7 +101,7 @@ export default function EvalsPage() {
             onValueChange={setSelectedExperiment}
           >
             <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Select experiment" />
+              <SelectValue placeholder={t('selectExperiment')} />
             </SelectTrigger>
             <SelectContent>
               {experiments.map((exp) => (

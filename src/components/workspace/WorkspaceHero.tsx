@@ -142,7 +142,7 @@ export default function WorkspaceHero({
   const handleDelete = async () => {
     if (
       confirm(
-        `Are you sure you want to delete this project?`
+        tCommon('deleteProjectConfirm')
       )
     ) {
       await deleteWorkspace(workspaceId)

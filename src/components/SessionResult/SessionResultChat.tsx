@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { EmbeddedChat } from '@/components/chat/EmbeddedChat';
 import { UserSession } from '@/lib/schema';
 import { OpenAIMessage } from '@/lib/types';
+import { useTranslations } from 'next-intl';
 
 interface SessionResultChatProps {
   userData: UserSession[];
@@ -20,15 +21,10 @@ export default function SessionResultChat({
   entryMessage,
   sessionIds,
 }: SessionResultChatProps) {
+  const tAskAi = useTranslations('askAi');
   const defaultEntryMessage: OpenAIMessage = {
     role: 'assistant',
-    content: `Hi! Consider me your expert analyst, I can help you to better understand your session.
-
-Try asking me things like:
-  - What was the most common response?
-  - What were the most interesting insights?
-  - Generate a report on the session
-    `,
+    content: tAskAi('entryMessage'),
   };
 
   return (
@@ -36,7 +32,7 @@ Try asking me things like:
       <CardHeader className="border-b flex-shrink-0">
         <CardTitle className="text-md flex justify-normal items-center">
           <img src="/ask-ask-pfp.png" alt="" className="h-10 w-10 mr-2 rounded-full" />
-          Ask Monica
+          {tAskAi('title')}
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 p-0 flex flex-col min-h-0">
@@ -53,7 +49,7 @@ Try asking me things like:
                 : [userData[0].session_id]
             }
             entryMessage={entryMessage || defaultEntryMessage}
-            placeholderText="What would you like to know?"
+            placeholderText={tAskAi('placeholder')}
             customMessageEnhancement={customMessageEnhancement}
             isAskAi={true}
           />

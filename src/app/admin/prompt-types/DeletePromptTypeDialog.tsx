@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { deletePromptType } from './api';
 import { useToast } from 'hooks/use-toast';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   promptType: { id: string; name: string } | null;
@@ -24,18 +25,19 @@ export function DeletePromptTypeDialog({
   onOpenChange,
   onSuccess,
 }: Props) {
+  const t = useTranslations('admin');
   const { toast } = useToast();
 
   const handleDelete = async () => {
     if (!promptType) return;
     try {
       await deletePromptType(promptType.id);
-      toast({ title: 'Prompt type deleted successfully' });
+      toast({ title: t('toast.typeDeleted') });
       onSuccess?.();
       onOpenChange(false);
     } catch (error) {
       toast({
-        title: 'Error deleting prompt type',
+        title: t('toast.typeDeleteFailed'),
         variant: 'destructive',
       });
     }
@@ -45,7 +47,7 @@ export function DeletePromptTypeDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete Prompt Type</DialogTitle>
+          <DialogTitle>{t('deletePromptType')}</DialogTitle>
         </DialogHeader>
         <p>
           Are you sure you want to delete the prompt type "{promptType?.name}"?
