@@ -79,14 +79,14 @@ export default function SessionResultParticipants({
                   ) : (
                     <Clipboard className="h-4 w-4" />
                   )}
-                  Copy link
+                  {t('copyLink')}
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={toggleModal}
                 >
                   <QrCode className="h-4 w-4" />
-                  QR code
+                  {t('qrCode')}
                 </Button>
               </div>
               {isModalOpen && (

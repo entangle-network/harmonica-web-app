@@ -114,14 +114,14 @@ export default function SessionParticipantsTable({
               onClick={() => setIsGenerateModalOpen(true)}
             >
               <Sparkles className="w-4 h-4" />
-              Generate Responses
+              {t('generateResponses')}
             </Button>
           </div>
         </CardHeader>
         <CardContent>
           {userData.length === 0 ? (
             <div className="text-center text-gray-500">
-              No participants have joined this session yet
+              {t('noParticipants')}
             </div>
           ) : (
             <SortableTable

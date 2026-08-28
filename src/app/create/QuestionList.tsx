@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Pencil, Trash, GripVertical } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { QuestionInfo } from './types';
+import { useTranslations } from 'next-intl';
 
 interface QuestionListProps {
   questions: QuestionInfo[];
@@ -22,6 +23,7 @@ const SortableQuestion = ({
   openModal: (question?: QuestionInfo) => void;
   handleDelete: (index: number) => void;
 }) => {
+  const t = useTranslations('questionList');
   const {
     attributes,
     listeners,
@@ -61,7 +63,7 @@ const SortableQuestion = ({
             {question.required && <span className="text-black">*</span>}
           </p>
           <p className="text-sm text-muted-foreground mt-1">
-            Type: {question.type}
+            {t('typeLabel', { type: t(`types.${question.type}`) })}
           </p>
           {question.type === 'Options' &&
             question.options &&

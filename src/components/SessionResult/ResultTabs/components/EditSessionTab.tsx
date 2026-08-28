@@ -49,6 +49,7 @@ export function EditSessionTab({
   setEditingField,
 }: EditSessionTabProps) {
   const t = useTranslations('editSession');
+  const tCommon = useTranslations('common');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState(false);
   const handlePromptSave = async () => {
@@ -151,11 +152,11 @@ export function EditSessionTab({
                   <div className="flex space-x-2">
                     <Button size="sm" onClick={handlePromptSave}>
                       <Check className="h-3 w-3" />
-                      Save
+                      {tCommon('save')}
                     </Button>
                     <Button size="sm" variant="outline" onClick={handlePromptCancel}>
                       <X className="h-3 w-3" />
-                      Cancel
+                      {tCommon('cancel')}
                     </Button>
                   </div>
                 </div>

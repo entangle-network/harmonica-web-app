@@ -118,7 +118,7 @@ export function FormBuilder({
       <div className="space-y-2">
         <h3 className="text-lg font-semibold">{t('formQuestions')}</h3>
         <p className="text-sm text-muted-foreground">
-          Collect information from participants before they start the session.
+          {t('formIntro')}
         </p>
       </div>
 

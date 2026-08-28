@@ -29,6 +29,7 @@ export default function CreateSession({
 }) {
   const t = useTranslations('createSession');
   const tCreate = useTranslations('create');
+  const tMisc = useTranslations('misc');
   const [errors, setErrors] = useState<{
     sessionName?: string;
     goal?: string;
@@ -200,7 +201,7 @@ export default function CreateSession({
               htmlFor="crossPollination"
               className="text-sm text-muted-foreground"
             >
-              Allow participants to see and build upon each other's responses
+              {tMisc('crossPollinationLabel')}
             </Label>
           </div>
         </div>

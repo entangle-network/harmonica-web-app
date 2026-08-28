@@ -16,6 +16,7 @@ import { QuestionInfo } from './types';
 import QuestionList from './QuestionList';
 import EmptyQuestions from './EmptyQuestions';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 interface QuestionContainerProps {
   questions: QuestionInfo[];
@@ -30,6 +31,7 @@ export function QuestionContainer({
   handleDelete,
   onReorder,
 }: QuestionContainerProps) {
+  const t = useTranslations('questionList');
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -75,7 +77,7 @@ export function QuestionContainer({
             onClick={() => openModal()}
             className="mt-4"
           >
-            + Add Question
+            {t('addQuestion')}
           </Button>
         </>
       )}

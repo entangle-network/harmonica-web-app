@@ -73,7 +73,9 @@
     "createProject": "Create Project",
     "sessionName": "Session name",
     "help": "Help",
-    "aWhileAgo": "a while ago"
+    "aWhileAgo": "a while ago",
+    "update": "Update",
+    "addQuestion": "Add question"
   },
   "settings": {
     "title": "Settings",
@@ -545,7 +547,8 @@
     "savedInsightsDesc": "Insights saved from your Ask AI conversations.",
     "savedInsightsEmpty": "You can save insights by clicking the <icon></icon> button in the chat.",
     "simScore": "SimScore Ranking",
-    "simScoreDraft": "Statements from participants will be analyzed, semantically compared and ranked. You can control content visibility in the <path>Share > Content Display</path> section."
+    "simScoreDraft": "Statements from participants will be analyzed, semantically compared and ranked. You can control content visibility in the <path>Share > Content Display</path> section.",
+    "saveInsight": "Save insight"
   },
   "sessionRow": {
     "deleteTitle": "Are you sure?",
@@ -710,7 +713,9 @@
     "headerUpdated": "Updated",
     "headerIncludeInSummary": "Include in summary",
     "statusStarted": "Started",
-    "statusFinished": "Finished"
+    "statusFinished": "Finished",
+    "generateResponses": "Generate Responses",
+    "noParticipants": "No participants have joined this session yet"
   },
   "simScore": {
     "generating": "Generating SimScore analysis...",
@@ -754,7 +759,9 @@
     "title": "Invite Participants",
     "finished": "This session is finished",
     "linkLabel": "Your unique session link:",
-    "copied": "URL copied to clipboard"
+    "copied": "URL copied to clipboard",
+    "copyLink": "Copy link",
+    "qrCode": "QR code"
   },
   "promptSettings": {
     "facilitationPlaceholder": "Enter your facilitation prompt...",
@@ -781,7 +788,9 @@
     "errorTitle": "Oops, something went wrong!",
     "exploreTemplates": "Explore Templates",
     "formQuestions": "Pre-survey Form Questions",
-    "notSpecified": "Not specified"
+    "notSpecified": "Not specified",
+    "crossPollinationLabel": "Allow participants to see and build upon each other's responses",
+    "formIntro": "Collect information from participants before they start the session."
   },
   "chatInput": {
     "transcriptionFailed": "Transcription failed",
@@ -979,10 +988,21 @@
   "askAi": {
     "placeholder": "What would you like to know?",
     "title": "Ask Monica",
-    "entryMessage": "Hi! Consider me your expert analyst, I can help you to better understand your session.\n\nTry asking me things like:\n  - What was the most common response?\n  - What were the most interesting insights?\n  - Generate a report on the session\n"
+    "entryMessage": "Hi! I can help you to better understand your session.\n\nTry asking me things like:\n  - What was the most common response?\n  - What were the most interesting insights?\n  - Generate a report on the session\n"
   },
   "sessionStatus": {
     "startedCount": "{count} started",
     "completedCount": "{count} completed"
+  },
+  "questionList": {
+    "typeLabel": "Type: {type}",
+    "addQuestion": "+ Add Question",
+    "emptyTitle": "No participant questions",
+    "emptyBody": "You can leave this empty if you don't need any additional information from participants.",
+    "types": {
+      "Short field": "Short field",
+      "Email": "Email",
+      "Options": "Options"
+    }
   }
 }

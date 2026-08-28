@@ -73,7 +73,9 @@
     "createProject": "Vytvořit projekt",
     "sessionName": "Název sezení",
     "help": "Nápověda",
-    "aWhileAgo": "před časem"
+    "aWhileAgo": "před časem",
+    "update": "Uložit změny",
+    "addQuestion": "Přidat otázku"
   },
   "settings": {
     "title": "Nastavení",
@@ -545,7 +547,8 @@
     "savedInsightsDesc": "Poznatky uložené z vašich konverzací s AI.",
     "savedInsightsEmpty": "Poznatky uložíte tlačítkem <icon></icon> v chatu.",
     "simScore": "Žebříček SimScore",
-    "simScoreDraft": "Výroky účastníků se analyzují, sémanticky porovnají a seřadí. Viditelnost obsahu nastavíte v sekci <path>Sdílet > Zobrazení obsahu</path>."
+    "simScoreDraft": "Výroky účastníků se analyzují, sémanticky porovnají a seřadí. Viditelnost obsahu nastavíte v sekci <path>Sdílet > Zobrazení obsahu</path>.",
+    "saveInsight": "Uložit poznatek"
   },
   "sessionRow": {
     "deleteTitle": "Opravdu?",
@@ -710,7 +713,9 @@
     "headerUpdated": "Aktualizováno",
     "headerIncludeInSummary": "Zahrnout do shrnutí",
     "statusStarted": "Zahájeno",
-    "statusFinished": "Dokončeno"
+    "statusFinished": "Dokončeno",
+    "generateResponses": "Vygenerovat odpovědi",
+    "noParticipants": "K sezení se zatím nikdo nepřipojil"
   },
   "simScore": {
     "generating": "Generuji analýzu SimScore...",
@@ -754,7 +759,9 @@
     "title": "Pozvat účastníky",
     "finished": "Toto sezení už skončilo",
     "linkLabel": "Váš jedinečný odkaz na sezení:",
-    "copied": "Odkaz zkopírován do schránky"
+    "copied": "Odkaz zkopírován do schránky",
+    "copyLink": "Kopírovat odkaz",
+    "qrCode": "QR kód"
   },
   "promptSettings": {
     "facilitationPlaceholder": "Zadejte facilitační prompt...",
@@ -781,7 +788,9 @@
     "errorTitle": "Jejda, něco se pokazilo!",
     "exploreTemplates": "Procházet šablony",
     "formQuestions": "Otázky úvodního formuláře",
-    "notSpecified": "Neuvedeno"
+    "notSpecified": "Neuvedeno",
+    "crossPollinationLabel": "Umožnit účastníkům vidět odpovědi ostatních a navazovat na ně",
+    "formIntro": "Zjistěte si od účastníků informace ještě před začátkem sezení."
   },
   "chatInput": {
     "transcriptionFailed": "Přepis se nezdařil",
@@ -979,10 +988,21 @@
   "askAi": {
     "placeholder": "Na co se chcete zeptat?",
     "title": "Zeptejte se Moniky",
-    "entryMessage": "Dobrý den! Jsem váš analytik — pomohu vám sezení lépe porozumět.\n\nZkuste se zeptat třeba:\n  - Jaká odpověď se opakovala nejčastěji?\n  - Jaké byly nejzajímavější poznatky?\n  - Vytvoř zprávu ze sezení\n"
+    "entryMessage": "Dobrý den! Pomohu vám sezení lépe porozumět.\n\nZkuste se zeptat třeba:\n  - Jaká odpověď se opakovala nejčastěji?\n  - Jaké byly nejzajímavější poznatky?\n  - Vytvoř zprávu ze sezení\n"
   },
   "sessionStatus": {
     "startedCount": "zahájeno {count}",
     "completedCount": "dokončeno {count}"
+  },
+  "questionList": {
+    "typeLabel": "Typ: {type}",
+    "addQuestion": "+ Přidat otázku",
+    "emptyTitle": "Žádné otázky pro účastníky",
+    "emptyBody": "Pokud od účastníků nepotřebujete žádné další informace, můžete to nechat prázdné.",
+    "types": {
+      "Short field": "Krátká odpověď",
+      "Email": "E-mail",
+      "Options": "Výběr z možností"
+    }
   }
 }

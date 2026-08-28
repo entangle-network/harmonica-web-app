@@ -165,7 +165,7 @@ export function PromptSettings({
 
           <div className="flex justify-end gap-2 mt-2">
             <Button variant="outline" onClick={() => setIsOpen(false)}>
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button onClick={handleSave} disabled={isSaving}>
               {isSaving ? tCommon('saving') : tCommon('saveChanges')}

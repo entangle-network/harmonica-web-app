@@ -32,6 +32,7 @@ export function SessionField({
   placeholder,
 }: SessionFieldProps) {
   const t = useTranslations('misc');
+  const tCommon = useTranslations('common');
   const [editValue, setEditValue] = useState(value);
   const [showEditButton, setShowEditButton] = useState(false);
 
@@ -50,7 +51,7 @@ export function SessionField({
         <div className="flex items-center space-x-2">
           <Switch checked={value as boolean} disabled />
           <span className="text-sm text-muted-foreground">
-            Allow participants to see and build upon each other's responses
+            {t('crossPollinationLabel')}
           </span>
         </div>
       );
@@ -76,7 +77,7 @@ export function SessionField({
             onCheckedChange={(checked) => setEditValue(checked)}
           />
           <span className="text-sm text-muted-foreground">
-            Allow participants to see and build upon each other's responses
+            {t('crossPollinationLabel')}
           </span>
         </div>
       );
@@ -131,11 +132,11 @@ export function SessionField({
             <div className="flex space-x-2">
               <Button size="sm" onClick={handleSave}>
                 <Check className="h-3 w-3" />
-                Save
+                {tCommon('save')}
               </Button>
               <Button size="sm" variant="outline" onClick={handleCancel}>
                 <X className="h-3 w-3" />
-                Cancel
+                {tCommon('cancel')}
               </Button>
             </div>
           </div>
