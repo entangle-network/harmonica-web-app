@@ -163,7 +163,7 @@ export function CreatePromptDialog({ open, onOpenChange, onSuccess }: Props) {
                 checked={active}
                 onCheckedChange={setActive}
               />
-              <Label htmlFor="active">Active</Label>
+              <Label htmlFor="active">{t('activeLabel')}</Label>
             </div>
           </div>
 

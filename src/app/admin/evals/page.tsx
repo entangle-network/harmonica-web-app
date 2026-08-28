@@ -19,19 +19,17 @@ import {
   type ExperimentDetail,
 } from './api';
 import { useTranslations } from 'next-intl';
+import { useDateLocale } from '@/lib/dateLocale';
+import { format } from 'date-fns';
+import type { Locale } from 'date-fns';
 
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+function formatDate(dateStr: string, locale: Locale): string {
+  return format(new Date(dateStr), 'PPp', { locale });
 }
 
 export default function EvalsPage() {
   const t = useTranslations('admin');
+  const dateLocale = useDateLocale();
   const [experiments, setExperiments] = useState<ExperimentListItem[]>([]);
   const [selectedExperiment, setSelectedExperiment] = useState<string>('');
   const [detail, setDetail] = useState<ExperimentDetail | null>(null);
@@ -109,7 +107,7 @@ export default function EvalsPage() {
                   <span className="flex items-center gap-2">
                     <span className="truncate">{exp.name}</span>
                     <span className="text-xs text-muted-foreground shrink-0">
-                      {formatDate(exp.created)}
+                      {formatDate(exp.created, dateLocale)}
                     </span>
                   </span>
                 </SelectItem>

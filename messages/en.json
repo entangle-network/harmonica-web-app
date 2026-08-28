@@ -71,7 +71,9 @@
     "deleteProjectConfirm": "Are you sure you want to delete this project?",
     "createSession": "Create Session",
     "createProject": "Create Project",
-    "sessionName": "Session name"
+    "sessionName": "Session name",
+    "help": "Help",
+    "aWhileAgo": "a while ago"
   },
   "settings": {
     "title": "Settings",
@@ -971,11 +973,16 @@
       "testCase": "Test Case",
       "noRecords": "No test case records found."
     },
-    "panelTitle": "Admin Panel"
+    "panelTitle": "Admin Panel",
+    "activeLabel": "Active"
   },
   "askAi": {
     "placeholder": "What would you like to know?",
     "title": "Ask Monica",
     "entryMessage": "Hi! Consider me your expert analyst, I can help you to better understand your session.\n\nTry asking me things like:\n  - What was the most common response?\n  - What were the most interesting insights?\n  - Generate a report on the session\n"
+  },
+  "sessionStatus": {
+    "startedCount": "{count} started",
+    "completedCount": "{count} completed"
   }
 }

@@ -4,8 +4,10 @@ import Logo from '@/components/ui/logo';
 import User from '@/components/user';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function Navigation() {
+  const t = useTranslations('common');
 
   return (
     <nav className="p-4">
@@ -25,7 +27,7 @@ export default function Navigation() {
             rel="noopener noreferrer"
           >
             <Button variant="outline" size="sm">
-              Help
+              {t('help')}
             </Button>
           </Link>
           <User />

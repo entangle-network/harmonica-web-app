@@ -1,4 +1,6 @@
 import { useTranslations } from 'next-intl';
+import { format } from 'date-fns';
+import { useDateLocale } from '@/lib/dateLocale';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import SessionSummaryCard from '@/components/SessionResult/SessionSummaryCard';
 import { HostSession, UserSession } from '@/lib/schema';
@@ -41,6 +43,7 @@ export default function SessionInsightsGrid({
   onSessionsUpdate,
 }: SessionInsightsGridProps) {
   const t = useTranslations('insightsGrid');
+  const dateLocale = useDateLocale();
   const tCommon = useTranslations('common');
   const router = useRouter();
   const { toast } = useToast();
@@ -261,9 +264,9 @@ export default function SessionInsightsGrid({
                                 {session.topic}
                               </Label>
                               <p className="text-sm text-gray-500">
-                                {new Date(
-                                  session.start_time,
-                                ).toLocaleDateString()}
+                                {format(new Date(session.start_time), 'PP', {
+                                  locale: dateLocale,
+                                })}
                               </p>
                             </div>
                           </div>

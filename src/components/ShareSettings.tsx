@@ -1,6 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { format } from 'date-fns';
+import { useDateLocale } from '@/lib/dateLocale';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -77,6 +79,7 @@ export default function ShareSettings({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState('invite');
   const t = useTranslations('share');
+  const dateLocale = useDateLocale();
   const tCommon = useTranslations('common');
   const isWorkspace = resourceType === 'WORKSPACE';
   const [urlCopied, setUrlCopied] = useState(false);
@@ -807,9 +810,9 @@ export default function ShareSettings({
                                 {t('pending')}
                               </span>
                               <span className="text-xs text-gray-500 ml-2">
-                                {new Date(
-                                  invitation.created_at
-                                ).toLocaleDateString()}
+                                {format(new Date(invitation.created_at), 'PP', {
+                                  locale: dateLocale,
+                                })}
                               </span>
                             </div>
                           </div>

@@ -71,7 +71,9 @@
     "deleteProjectConfirm": "Opravdu chcete tento projekt smazat?",
     "createSession": "Vytvořit sezení",
     "createProject": "Vytvořit projekt",
-    "sessionName": "Název sezení"
+    "sessionName": "Název sezení",
+    "help": "Nápověda",
+    "aWhileAgo": "před časem"
   },
   "settings": {
     "title": "Nastavení",
@@ -971,11 +973,16 @@
       "testCase": "Testovací případ",
       "noRecords": "Žádné záznamy testovacích případů."
     },
-    "panelTitle": "Administrace"
+    "panelTitle": "Administrace",
+    "activeLabel": "Aktivní"
   },
   "askAi": {
     "placeholder": "Na co se chcete zeptat?",
     "title": "Zeptejte se Moniky",
     "entryMessage": "Dobrý den! Jsem váš analytik — pomohu vám sezení lépe porozumět.\n\nZkuste se zeptat třeba:\n  - Jaká odpověď se opakovala nejčastěji?\n  - Jaké byly nejzajímavější poznatky?\n  - Vytvoř zprávu ze sezení\n"
+  },
+  "sessionStatus": {
+    "startedCount": "zahájeno {count}",
+    "completedCount": "dokončeno {count}"
   }
 }

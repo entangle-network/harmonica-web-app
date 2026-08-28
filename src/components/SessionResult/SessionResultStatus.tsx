@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, User } from "lucide-react";
 import { format } from "date-fns";
 import { SessionStatus } from "@/lib/clientUtils";
+import { useDateLocale } from "@/lib/dateLocale";
 
 interface SessionResultStatusProps {
   status: SessionStatus;
@@ -19,8 +20,13 @@ export default function SessionResultStatus({
   completedSessions
 }: SessionResultStatusProps) {
   const t = useTranslations('common');
+  const tStatus = useTranslations('sessionsTable');
+  const tCount = useTranslations('sessionStatus');
+  const dateLocale = useDateLocale();
   // In the past, some sessions did not have a start time. Just set 'a while ago' for those.
-  const startTimeString = !startTime ? 'a while ago' : format(new Date(startTime), ' dd MMM yyyy');
+  const startTimeString = !startTime
+    ? t('aWhileAgo')
+    : format(new Date(startTime), 'PP', { locale: dateLocale });
   
   return (
     <div className="flex flex-grow gap-4">
@@ -32,7 +38,7 @@ export default function SessionResultStatus({
             status === SessionStatus.ACTIVE ? "bg-lime-100 text-lime-900"
               : status === SessionStatus.DRAFT ? "text-purple-900 bg-purple-100"
                 : "text-gray-500 bg-gray-100"}>
-              {status}
+              {tStatus(`status.${status}`)}
             </Badge>
 
           </div>
@@ -43,8 +49,8 @@ export default function SessionResultStatus({
           </p>
         <div className='flex gap-2 items-center border rounded-2xl'>
               <User className="w-4 h-4 ml-2 text-muted-foreground" />
-              <div className="flex gap-1 px-1 py-1"><span>{numSessions}</span> <span>started</span></div>
-              <div className="flex gap-1 bg-lime-50 px-3 py-1 border-l rounded-2xl"><span>{completedSessions}</span> <span>completed</span></div>
+              <div className="flex gap-1 px-1 py-1">{tCount('startedCount', { count: numSessions })}</div>
+              <div className="flex gap-1 bg-lime-50 px-3 py-1 border-l rounded-2xl">{tCount('completedCount', { count: completedSessions })}</div>
             </div>
         </CardContent>
       </Card>

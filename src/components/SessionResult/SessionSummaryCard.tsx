@@ -1,12 +1,21 @@
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { HostSession, UserSession } from '@/lib/schema';
-import { intlFormatDistance } from 'date-fns';
+import { format, intlFormatDistance } from 'date-fns';
+import { useDateLocale } from '@/lib/dateLocale';
 import { encryptId } from '@/lib/encryptionUtils';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
+
+// Stav se tu pocita velkymi pismeny kvuli podminkam nize, klice v katalogu
+// maji tvar z enumu SessionStatus.
+const STATUS_KEY = {
+  ACTIVE: 'Active',
+  DRAFT: 'Draft',
+  FINISHED: 'Finished',
+} as const;
 
 export default function SessionSummaryCard({
   hostData,
@@ -23,6 +32,9 @@ export default function SessionSummaryCard({
 }) {
   const t = useTranslations('common');
   const tCard = useTranslations('sessionSummaryCard');
+  const tStatus = useTranslations('sessionsTable');
+  const locale = useLocale();
+  const dateLocale = useDateLocale();
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent the Link from navigating
     e.stopPropagation(); // Stop event propagation
@@ -81,10 +93,13 @@ export default function SessionSummaryCard({
                 <dd className="text-sm">
                   {Date.now() - new Date(hostData.start_time).getTime() >
                   7 * 24 * 60 * 60 * 1000
-                    ? new Date(hostData.start_time).toLocaleDateString()
+                    ? format(new Date(hostData.start_time), 'PP', {
+                        locale: dateLocale,
+                      })
                     : intlFormatDistance(
                         new Date(hostData.start_time),
-                        new Date()
+                        new Date(),
+                        { locale }
                       )}
                 </dd>
               </div>
@@ -97,7 +112,7 @@ export default function SessionSummaryCard({
                       : '' // Finished, remain white
                   }`}
                 >
-                  {status}
+                  {tStatus(`status.${STATUS_KEY[status]}`)}
                 </Badge>
               </div>
             </dl>

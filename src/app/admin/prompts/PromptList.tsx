@@ -15,6 +15,7 @@ import { EditPromptDialog } from './EditPromptDialog';
 import { DeletePromptDialog } from './DeletePromptDialog';
 import { fetchPrompts } from './api';
 import { format } from 'date-fns';
+import { useDateLocale } from '@/lib/dateLocale';
 import { Badge } from '@/components/ui/badge';
 import { useTranslations } from 'next-intl';
 
@@ -34,6 +35,7 @@ interface PromptListProps {
 
 export function PromptList({ showOnlyActive }: PromptListProps) {
   const t = useTranslations('admin');
+  const dateLocale = useDateLocale();
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([]);
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null);
@@ -62,7 +64,7 @@ export function PromptList({ showOnlyActive }: PromptListProps) {
 
   const formatDate = (dateString: string) => {
     console.log('Formatting date:', dateString);
-    return format(new Date(dateString), 'MMM d, yyyy HH:mm');
+    return format(new Date(dateString), 'PPp', { locale: dateLocale });
   };
 
   return (
@@ -88,7 +90,7 @@ export function PromptList({ showOnlyActive }: PromptListProps) {
               </TableCell>
               <TableCell>
                 <Badge variant={prompt.active ? 'default' : 'secondary'}>
-                  {prompt.active ? 'Active' : 'Inactive'}
+                  {prompt.active ? t('active') : t('inactive')}
                 </Badge>
               </TableCell>
               <TableCell className="text-sm text-muted-foreground">

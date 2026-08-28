@@ -15,6 +15,7 @@ import { EditPromptTypeDialog } from './EditPromptTypeDialog';
 import { DeletePromptTypeDialog } from './DeletePromptTypeDialog';
 import { fetchPromptTypes } from './api';
 import { format } from 'date-fns';
+import { useDateLocale } from '@/lib/dateLocale';
 import { useTranslations } from 'next-intl';
 
 interface PromptType {
@@ -27,6 +28,7 @@ interface PromptType {
 
 export function PromptTypeList() {
   const t = useTranslations('admin');
+  const dateLocale = useDateLocale();
   const [promptTypes, setPromptTypes] = useState<PromptType[]>([]);
   const [editingType, setEditingType] = useState<PromptType | null>(null);
   const [deletingType, setDeletingType] = useState<PromptType | null>(null);
@@ -46,7 +48,7 @@ export function PromptTypeList() {
   }, []);
 
   const formatDate = (dateString: string) => {
-    return format(new Date(dateString), 'MMM d, yyyy HH:mm');
+    return format(new Date(dateString), 'PPp', { locale: dateLocale });
   };
 
   return (

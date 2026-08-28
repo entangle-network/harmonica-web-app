@@ -182,7 +182,7 @@ export function EditPromptDialog({
                 checked={active}
                 onCheckedChange={setActive}
               />
-              <Label htmlFor="active">Active</Label>
+              <Label htmlFor="active">{t('activeLabel')}</Label>
             </div>
           </div>
 
