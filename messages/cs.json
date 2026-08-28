@@ -608,7 +608,10 @@
       "promptFailedUnsaved": "Při úpravě promptu došlo k chybě. Změny nebyly uloženy.",
       "promptFailedDesc": "Při úpravě promptu došlo k chybě.",
       "refreshFailed": "Data projektu se nepodařilo obnovit"
-    }
+    },
+    "chatWelcome": "Vítejte v projektu {title}! Pomohu vám zorientovat se v poznatcích z propojených diskusí.\n\nZkuste se zeptat třeba:\n  - Jaká hlavní témata se v sezeních probírala?\n  - Co bylo sporné a na čem se účastníci shodli?",
+    "thisProject": "tomto projektu",
+    "newProjectTitle": "Nový projekt"
   },
   "sessionsTable": {
     "headerName": "Název",
@@ -703,7 +706,10 @@
     "promptUpdated": "Prompt pro shrnutí upraven",
     "promptUpdatedDesc": "Prompt byl uložen. Shrnutí se právě generuje znovu...",
     "promptUpdateFailed": "Prompt pro shrnutí se nepodařilo změnit",
-    "promptUpdateFailedDesc": "Při úpravě promptu došlo k chybě."
+    "promptUpdateFailedDesc": "Při úpravě promptu došlo k chybě.",
+    "nothingYet": "Zatím tu nic není ¯\\_(ツ)_/¯",
+    "draftProjectTitle": "Shrnutí projektu",
+    "draftProjectBody": "Tady uvidíte souhrnné informace ze sezení ve vašem projektu. Přidejte do projektu sezení a uvidíte poznatky napříč všemi diskusemi."
   },
   "participants": {
     "title": "Odpovědi",
@@ -765,7 +771,11 @@
   },
   "promptSettings": {
     "facilitationPlaceholder": "Zadejte facilitační prompt...",
-    "summaryPlaceholder": "Zadejte prompt pro shrnutí..."
+    "summaryPlaceholder": "Zadejte prompt pro shrnutí...",
+    "editPrompts": "Upravit prompty",
+    "dialogTitle": "Nastavení AI promptů",
+    "facilitationPrompt": "Facilitační prompt",
+    "summaryPrompt": "Prompt pro shrnutí"
   },
   "workspaceFooter": {
     "setLogo": "Nastavit logo",

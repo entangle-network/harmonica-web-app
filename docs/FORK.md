@@ -114,6 +114,11 @@ upstreamem se aplikují bez ručního zásahu.
 - **`POSTGRES_DRIVER=pg` je povinné.** Hostitel databáze je jméno kontejneru,
   takže původní detekce podle `localhost` v `createDbInstance` selže a kód by
   spadl zpět na `@vercel/postgres`, který přijímá jen pooled Neon/Vercel stringy.
+- **`APP_LOCALE` musí být i build-time proměnná** (v Coolify příznak *build variable*).
+  Staticky předgenerované stránky (`/create`, `/admin/*`, `/settings`, `/templates`)
+  vznikají při `next build` a jazyk se do nich zapeče. `.env` je v `.dockerignore`,
+  takže bez build argumentu se image postaví anglicky a za běhu to už nic nezmění —
+  projeví se to tak, že zbytek aplikace je česky a zrovna tyhle stránky ne.
 - **`AUTH0_BASE_URL` a `SERVER_ACTIONS_ALLOWED_ORIGINS` jsou build-time proměnné**
   (v Coolify příznak *build variable*). `next.config.js` se vyhodnocuje při buildu,
   takže změna domény vyžaduje nový build, ne jen restart.

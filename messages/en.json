@@ -608,7 +608,10 @@
       "promptFailedUnsaved": "An error occurred while updating the prompt. Changes were not saved.",
       "promptFailedDesc": "An error occurred while updating the prompt.",
       "refreshFailed": "Failed to refresh workspace data"
-    }
+    },
+    "chatWelcome": "Welcome to {title}! I'm here to help you understand the learnings across the linked discussions.\n\nHere are some questions you might want to ask:\n  - What were the main themes discussed during the sessions?\n  - What was controversial, and where did participants agree?",
+    "thisProject": "this project",
+    "newProjectTitle": "New Project"
   },
   "sessionsTable": {
     "headerName": "Name",
@@ -703,7 +706,10 @@
     "promptUpdated": "Summary prompt updated",
     "promptUpdatedDesc": "The summary prompt has been successfully updated. Regenerating summary...",
     "promptUpdateFailed": "Failed to update summary prompt",
-    "promptUpdateFailedDesc": "An error occurred while updating the summary prompt."
+    "promptUpdateFailedDesc": "An error occurred while updating the summary prompt.",
+    "nothingYet": "Nothing here yet ¯\\_(ツ)_/¯",
+    "draftProjectTitle": "Project Summary",
+    "draftProjectBody": "Here you will see summary information about your project sessions. Add sessions to your project to see insights across all discussions."
   },
   "participants": {
     "title": "Responses",
@@ -765,7 +771,11 @@
   },
   "promptSettings": {
     "facilitationPlaceholder": "Enter your facilitation prompt...",
-    "summaryPlaceholder": "Enter your summary prompt..."
+    "summaryPlaceholder": "Enter your summary prompt...",
+    "editPrompts": "Edit Prompts",
+    "dialogTitle": "AI Prompt Settings",
+    "facilitationPrompt": "Facilitation Prompt",
+    "summaryPrompt": "Summary Prompt"
   },
   "workspaceFooter": {
     "setLogo": "Set Logo",

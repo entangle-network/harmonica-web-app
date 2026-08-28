@@ -153,15 +153,11 @@ export default function WorkspaceContent({
   const chatEntryMessage = useMemo(
     () => ({
       role: 'assistant' as const,
-      content: `Welcome to ${
-        workspaceData?.title || 'this project'
-      }! I'm here to help you understand the learnings across the linked discussions.
-
-Here are some questions you might want to ask:
-  - What were the main themes discussed during the sessions?
-  - What was controversial, and where did participants agree?`,
+      content: t('chatWelcome', {
+        title: workspaceData?.title || t('thisProject'),
+      }),
     }),
-    [workspaceData?.title],
+    [workspaceData?.title, t],
   );
 
   if (loadingUserInfo) {

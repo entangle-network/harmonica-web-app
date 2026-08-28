@@ -41,6 +41,14 @@ ENV AUTH0_BASE_URL=$AUTH0_BASE_URL
 ARG SERVER_ACTIONS_ALLOWED_ORIGINS
 ENV SERVER_ACTIONS_ALLOWED_ORIGINS=$SERVER_ACTIONS_ALLOWED_ORIGINS
 
+# The locale has to be present at build time as well as at run time. Statically
+# prerendered routes (/create, /admin/*, /settings, /templates) are rendered
+# during `next build` and their text is baked into the image, so a build without
+# this variable ships English pages that no runtime setting can change. .env is
+# in .dockerignore, so the value has to come in as a build argument.
+ARG APP_LOCALE=cs
+ENV APP_LOCALE=$APP_LOCALE
+
 # AGPL-3.0 §13 requires offering the source of the *running* version, so the
 # in-app link points at the commit this image was built from — a branch link
 # would drift as soon as anything else is pushed. SOURCE_COMMIT lets a build

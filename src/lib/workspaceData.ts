@@ -3,6 +3,7 @@ import { ExtendedWorkspaceData } from '@/lib/types';
 import { getSession } from '@auth0/nextjs-auth0';
 import { NewWorkspace } from './schema';
 import { hasAccessToResource } from './serverUtils';
+import { getTranslations } from 'next-intl/server';
 
 export async function fetchWorkspaceData(workspaceId: string): Promise<ExtendedWorkspaceData> {
   try {
@@ -10,9 +11,10 @@ export async function fetchWorkspaceData(workspaceId: string): Promise<ExtendedW
     // First, check whether this workspace exists at all. If not, add a 'draft' mode with the current user as the owner:
     const workspaceExists = await db.hasWorkspace(workspaceId);
     if (!workspaceExists) {
+      const t = await getTranslations('workspaceContent');
       const draftWorkspace: NewWorkspace = {
         id: workspaceId,
-        title: "New Project",
+        title: t('newProjectTitle'),
         status: 'draft',
         gradientFrom: '#6B21A8',
         gradientTo: '#9333EA',

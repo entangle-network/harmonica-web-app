@@ -5,9 +5,14 @@ import { getRequestConfig } from 'next-intl/server';
 // moving the app into a src/app/[locale]/ route group, which would relocate every route
 // file in the project.
 //
-// APP_LOCALE is intentionally not a NEXT_PUBLIC_ variable: those are inlined at build
-// time, which would mean a rebuild for every locale change. This one is read on the
-// server at runtime, so changing it in the deployment environment is enough.
+// APP_LOCALE is intentionally not a NEXT_PUBLIC_ variable: those are inlined into the
+// client bundle at build time, which would put the locale in every JS chunk.
+//
+// It is read on the server, but it still has to be set for `next build` as well as at
+// run time: statically prerendered routes (/create, /admin/*, /settings, /templates)
+// are rendered during the build, so their text — and <html lang> — come from whatever
+// this said back then. Changing it in the deployment environment alone leaves those
+// pages in the build-time language. See the APP_LOCALE build argument in the Dockerfile.
 export const locales = ['en', 'cs'] as const;
 export const defaultLocale: Locale = 'en';
 

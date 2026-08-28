@@ -201,18 +201,17 @@ export default function SessionResultSummary({
         <Card className="border-2 border-dashed border-gray-300 h-full flex flex-col items-center justify-center p-6">
           <div className="text-center space-y-4 max-w-md">
             <h3 className="text-2xl font-semibold text-gray-700">
-              Project Summary
+              {t('draftProjectTitle')}
             </h3>
             <p className="text-gray-500">
-              Here you will see summary information about your project sessions. 
-              Add sessions to your project to see insights across all discussions.
+              {t('draftProjectBody')}
             </p>
           </div>
         </Card>
       ) : !showAnyContent && (
         <Card>
           <CardContent className="py-4">
-            Nothing here yet ¯\_(ツ)_/¯
+            {t('nothingYet')}
           </CardContent>
         </Card>
       )}

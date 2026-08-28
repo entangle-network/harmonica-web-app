@@ -87,14 +87,14 @@ export function PromptSettings({
         <DialogTrigger asChild>
           <Button variant="outline">
             <MessageSquare className="h-4 w-4 mr-2" />
-            Edit Prompts
+            {t('editPrompts')}
           </Button>
         </DialogTrigger>
       )}
       <DialogContent className="sm:max-w-[800px] h-[80vh] max-h-[800px] flex flex-col p-4">
         <DialogHeader className="pb-2">
           <DialogTitle className="text-xl font-semibold">
-            AI Prompt Settings
+            {t('dialogTitle')}
           </DialogTitle>
         </DialogHeader>
         <div className="flex-1 flex flex-col min-h-0">
@@ -110,12 +110,12 @@ export function PromptSettings({
                   className="flex items-center gap-2"
                 >
                   <MessageSquare className="h-4 w-4" />
-                  Facilitation Prompt
+                  {t('facilitationPrompt')}
                 </TabsTrigger>
               }
               <TabsTrigger value="summary" className="flex items-center gap-2">
                 <FileText className="h-4 w-4" />
-                Summary Prompt
+                {t('summaryPrompt')}
               </TabsTrigger>
             </TabsList>
 
@@ -129,7 +129,7 @@ export function PromptSettings({
                     htmlFor="facilitation-prompt"
                     className="text-base mb-1"
                   >
-                    Facilitation Prompt
+                    {t('facilitationPrompt')}
                   </Label>
                   <Textarea
                     id="facilitation-prompt"
@@ -148,7 +148,7 @@ export function PromptSettings({
                 <div className="flex-1 flex flex-col min-h-0">
                   {sessionFacilitationPrompt && // Wait what? It might be a bit counterintuitive to check the presence of facilitationPrompt, but the point here is that if we _don't_ have one, then we don't need to show a title, because the summary prompt is the only prompt and the 'tabs' are basically the title!
                     <Label htmlFor="summary-prompt" className="text-base mb-1">
-                      Summary Prompt
+                      {t('summaryPrompt')}
                     </Label>
                   }
                   <Textarea
