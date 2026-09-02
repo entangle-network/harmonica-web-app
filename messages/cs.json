@@ -903,7 +903,9 @@
     "introVideo": "Video nad uvítacím textem",
     "introVideoHint": "Vložte odkaz z YouTube nebo Vimea. Spustí se samo; pokud prohlížeč zvuk zablokuje — většina to dělá, dokud návštěvník na něco neklikne — poběží ztlumeně s tlačítkem na zapnutí zvuku. Prázdné = bez videa.",
     "videoUrlInvalid": "Tohle nevypadá jako odkaz z YouTube ani z Vimea",
-    "unmute": "Zapnout zvuk"
+    "unmute": "Zapnout zvuk",
+    "videoFullscreen": "Zobrazit video na celou plochu",
+    "videoFullscreenHint": "Video zabere celou kartu a pod ním bude jen jedno velké tlačítko Pokračovat. Obrázek, nadpis i uvítací box se skryjí, zůstane logo a odkazy v patičce."
   },
   "sessionNav": {
     "editSession": "Upravit sezení",

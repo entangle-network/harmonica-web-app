@@ -60,7 +60,13 @@ function loadYouTubeApi(): Promise<any> {
   });
 }
 
-export function IntroVideo({ url }: { url: string | null }) {
+export function IntroVideo({
+  url,
+  className,
+}: {
+  url: string | null;
+  className?: string;
+}) {
   const t = useTranslations('appearance');
   const containerRef = useRef<HTMLDivElement>(null);
   const [muted, setMuted] = useState(false);
@@ -92,8 +98,17 @@ export function IntroVideo({ url }: { url: string | null }) {
             playerVars: {
               autoplay: 1,
               playsinline: 1,
+              // Keep the player as quiet as an embed allows: no control bar,
+              // no annotations, no keyboard shortcuts, and related videos at
+              // the end limited to the host's own channel. YouTube still draws
+              // its title bar on hover and an end screen when the video
+              // finishes — an embed cannot suppress those.
+              controls: 0,
               rel: 0,
               modestbranding: 1,
+              iv_load_policy: 3,
+              disablekb: 1,
+              fs: 0,
             },
             events: {
               onReady: (event: any) => {
@@ -130,6 +145,10 @@ export function IntroVideo({ url }: { url: string | null }) {
           muted: false,
           responsive: true,
           dnt: true,
+          controls: false,
+          title: false,
+          byline: false,
+          portrait: false,
         });
 
         // Vimeo rejects the play() promise when autoplay is blocked, so the
@@ -170,7 +189,7 @@ export function IntroVideo({ url }: { url: string | null }) {
   if (failed) return null;
 
   return (
-    <div className="mb-8">
+    <div className={className ?? 'mb-8'}>
       <div className="relative overflow-hidden rounded-lg border border-gray-200 shadow-md">
         <div className="aspect-video [&>iframe]:h-full [&>iframe]:w-full">
           <div ref={containerRef} className="h-full w-full" />

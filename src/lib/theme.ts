@@ -26,6 +26,7 @@ type ThemeColumns = {
   theme_show_intro_heading?: boolean | null;
   theme_show_intro_text?: boolean | null;
   theme_intro_video_url?: string | null;
+  theme_video_fullscreen?: boolean | null;
 };
 
 /** Columns both tables carry, and which inherit session -> project. */
@@ -47,6 +48,7 @@ const SESSION_COLUMNS = [
   'theme_show_intro_heading',
   'theme_show_intro_text',
   'theme_intro_video_url',
+  'theme_video_fullscreen',
 ] as const;
 
 function pick(...levels: (ThemeColumns | undefined)[]): SessionTheme {
@@ -72,6 +74,8 @@ function pick(...levels: (ThemeColumns | undefined)[]): SessionTheme {
     showIntroHeading: flag('theme_show_intro_heading'),
     showIntroText: flag('theme_show_intro_text'),
     introVideoUrl: (levels[0]?.theme_intro_video_url ?? null) as string | null,
+    // Opt-in, so the default here is off rather than on.
+    videoFullscreen: levels[0]?.theme_video_fullscreen === true,
   };
 }
 

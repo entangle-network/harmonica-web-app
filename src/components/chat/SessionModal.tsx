@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import { SourceLink } from '@/components/SourceLink';
 import { useSessionTheme } from '@/components/SessionTheme';
 import { ParticipantFooterBrand } from '@/components/theme/ParticipantFooterBrand';
-import { themeImageUrl } from '@/lib/themeColors';
+import { parseVideoEmbed, themeImageUrl } from '@/lib/themeColors';
 import { IntroVideo } from '@/components/theme/IntroVideo';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -57,6 +57,20 @@ export const SessionModal = ({
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  /**
+   * Video-first invitation: the video fills the width and the only thing under
+   * it is the button. Requires a usable video — the flag alone would
+   * otherwise strip the card down to nothing. Off once the participant moves
+   * on to the questions, and off for the closed and finished states, which
+   * have their own message to deliver.
+   */
+  const heroVideo =
+    theme.videoFullscreen &&
+    !!parseVideoEmbed(theme.introVideoUrl) &&
+    !showForm &&
+    !sessionClosed &&
+    !userFinished;
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -166,13 +180,19 @@ export const SessionModal = ({
             </div>
           ) : (
             <div className="flex flex-col lg:flex-row lg:justify-between flex-1">
-              {/* Left side content - 60% width */}
-              <div className="w-full flex flex-col justify-start max-w-xl pb-16">
+              {/* Left side content - 60% width. The video-first variant drops
+                  the width cap so the player is not stuck in the narrow
+                  column, and centres what little is left. */}
+              <div
+                className={`w-full flex flex-col justify-start pb-16 ${
+                  heroVideo ? 'mx-auto max-w-4xl' : 'max-w-xl'
+                }`}
+              >
                 {/* Header content - outside the flex row */}
                 {/* Both parts can be switched off per session, so the wrapper
                     only exists when something is left to put in it — otherwise
                     its margins would leave a gap above the card. */}
-                {(theme.showIntroImage || theme.showIntroHeading) && (
+                {!heroVideo && (theme.showIntroImage || theme.showIntroHeading) && (
                   <div className="mb-8 mt-4">
                     {theme.showIntroImage && (
                       <img
@@ -195,16 +215,19 @@ export const SessionModal = ({
                   </div>
                 )}
 
-                <IntroVideo url={theme.introVideoUrl} />
+                <IntroVideo
+                  url={theme.introVideoUrl}
+                  className={heroVideo ? 'mb-10' : 'mb-8'}
+                />
 
-                {!showForm ? (
-                  /* Welcome Card */
-                  <div className="bg-gradient-to-b from-session-gradient to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
-                    <h3 className="text-2xl font-semibold mb-4">{hostData?.topic}</h3>
-                    {/* Switching the welcome text off drops the standing copy
-                        only. The loading and closed messages tell the
-                        participant what is going on and always show. */}
-                    {(theme.showIntroText || loadingUserInfo || sessionClosed) && (
+                {heroVideo ? null : !showForm ? (
+                  /* Welcome Card — the whole box goes, session name included,
+                     when the host switches the welcome text off. The loading
+                     and closed variants report state rather than decorate, so
+                     they always show. */
+                  (theme.showIntroText || loadingUserInfo || sessionClosed) && (
+                    <div className="bg-gradient-to-b from-session-gradient to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
+                      <h3 className="text-2xl font-semibold mb-4">{hostData?.topic}</h3>
                       <p className={`${sessionClosed ? 'sm:mb-8' : ''}`}>
                         {loadingUserInfo
                           ? t('bodyLoading')
@@ -212,8 +235,8 @@ export const SessionModal = ({
                           ? t('bodyClosed')
                           : theme.introText || t('bodyOpen')}
                       </p>
-                    )}
-                  </div>
+                    </div>
+                  )
                 ) : (
                   /* Form Card */
                   <div className="bg-gradient-to-b from-session-gradient to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
@@ -333,6 +356,19 @@ export const SessionModal = ({
                         </Button>
                       </Link>
                     </div>
+                ) : heroVideo ? (
+                  /* Nothing competes with the video, so the button carries the
+                     whole call to action: centred, full width on a phone, and
+                     without the step dots that only make sense beside a card. */
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={handleStart}
+                      size="lg"
+                      className="w-full sm:w-auto sm:min-w-[16rem] h-14 text-lg flex items-center justify-center gap-2"
+                    >
+                      {tCommon('continue')} <ChevronRight className="h-5 w-5" />
+                    </Button>
+                  </div>
                 ) : !showForm ? (
                     <>
                     <div className="flex items-center justify-end gap-4">

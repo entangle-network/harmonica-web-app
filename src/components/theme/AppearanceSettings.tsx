@@ -57,6 +57,7 @@ export function AppearanceSettings({
   const [showIntroHeading, setShowIntroHeading] = useState(true);
   const [showIntroText, setShowIntroText] = useState(true);
   const [introVideoUrl, setIntroVideoUrl] = useState('');
+  const [videoFullscreen, setVideoFullscreen] = useState(false);
 
   const isSession = target.kind === 'SESSION';
 
@@ -79,6 +80,7 @@ export function AppearanceSettings({
       setShowIntroHeading(own.showIntroHeading);
       setShowIntroText(own.showIntroText);
       setIntroVideoUrl(own.introVideoUrl ?? '');
+      setVideoFullscreen(own.videoFullscreen);
     });
   }, [target.kind, target.id]);
   const [isSaving, setIsSaving] = useState(false);
@@ -110,6 +112,7 @@ export function AppearanceSettings({
               showIntroHeading,
               showIntroText,
               introVideoUrl: video || null,
+              videoFullscreen: videoFullscreen && !!video,
             }
           : {}),
       });
@@ -320,6 +323,22 @@ export function AppearanceSettings({
             />
             <p className="text-xs text-muted-foreground">{t('introVideoHint')}</p>
           </div>
+
+          {/* Only meaningful with a video: on its own the flag would strip the
+              card down to a button. */}
+          {introVideoUrl.trim() && (
+            <div className="space-y-1">
+              {toggleField(
+                'theme-video-fullscreen',
+                t('videoFullscreen'),
+                videoFullscreen,
+                setVideoFullscreen,
+              )}
+              <p className="text-xs text-muted-foreground">
+                {t('videoFullscreenHint')}
+              </p>
+            </div>
+          )}
         </div>
       )}
 
