@@ -512,7 +512,9 @@
     "bodyOpen": "Vítejte v konverzačním dotazníku. Chcete říct, co si opravdu myslíte? Provedeme vás několika otázkami, které nám pomohou porozumět vašemu pohledu.",
     "formIntro": "Než začneme, potřebujeme pár údajů",
     "begin": "Začít",
-    "privacyLink": "Zásady ochrany osobních údajů"
+    "privacyLink": "Zásady ochrany osobních údajů",
+    "consentLabel": "Souhlasím se <link>zpracováním osobních údajů</link>",
+    "consentRequired": "Bez tohoto souhlasu nemůžeme pokračovat"
   },
   "questionsForm": {
     "title": "Něco o vás",
@@ -905,7 +907,9 @@
     "videoUrlInvalid": "Tohle nevypadá jako odkaz z YouTube ani z Vimea",
     "unmute": "Zapnout zvuk",
     "videoFullscreen": "Zobrazit video na celou plochu",
-    "videoFullscreenHint": "Video zabere celou kartu a pod ním bude jen jedno velké tlačítko Pokračovat. Obrázek, nadpis i uvítací box se skryjí, zůstane logo a odkazy v patičce."
+    "videoFullscreenHint": "Video zabere celou kartu a pod ním bude jen jedno velké tlačítko Pokračovat. Obrázek, nadpis i uvítací box se skryjí, zůstane logo a odkazy v patičce.",
+    "requireConsent": "Vyžadovat souhlas se zpracováním osobních údajů",
+    "requireConsentHint": "Přidá do formuláře pro účastníky povinné zaškrtávací políčko s odkazem na zásady nastavené níže. Bez zaškrtnutí nelze konverzaci začít."
   },
   "sessionNav": {
     "editSession": "Upravit sezení",

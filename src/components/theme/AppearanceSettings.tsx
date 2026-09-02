@@ -58,6 +58,7 @@ export function AppearanceSettings({
   const [showIntroText, setShowIntroText] = useState(true);
   const [introVideoUrl, setIntroVideoUrl] = useState('');
   const [videoFullscreen, setVideoFullscreen] = useState(false);
+  const [requireConsent, setRequireConsent] = useState(false);
 
   const isSession = target.kind === 'SESSION';
 
@@ -81,6 +82,7 @@ export function AppearanceSettings({
       setShowIntroText(own.showIntroText);
       setIntroVideoUrl(own.introVideoUrl ?? '');
       setVideoFullscreen(own.videoFullscreen);
+      setRequireConsent(own.requireConsent);
     });
   }, [target.kind, target.id]);
   const [isSaving, setIsSaving] = useState(false);
@@ -113,6 +115,7 @@ export function AppearanceSettings({
               showIntroText,
               introVideoUrl: video || null,
               videoFullscreen: videoFullscreen && !!video,
+              requireConsent,
             }
           : {}),
       });
@@ -322,6 +325,18 @@ export function AppearanceSettings({
               className="max-w-md"
             />
             <p className="text-xs text-muted-foreground">{t('introVideoHint')}</p>
+          </div>
+
+          <div className="space-y-1 border-t pt-4">
+            {toggleField(
+              'theme-require-consent',
+              t('requireConsent'),
+              requireConsent,
+              setRequireConsent,
+            )}
+            <p className="text-xs text-muted-foreground">
+              {t('requireConsentHint')}
+            </p>
           </div>
 
           {/* Only meaningful with a video: on its own the flag would strip the

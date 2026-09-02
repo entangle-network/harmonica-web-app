@@ -59,6 +59,7 @@ export async function saveThemeColors(
     showIntroText?: boolean;
     introVideoUrl?: string | null;
     videoFullscreen?: boolean;
+    requireConsent?: boolean;
   },
 ) {
   await assertMayEdit(target);
@@ -99,6 +100,9 @@ export async function saveThemeColors(
               : {}),
             ...(colors.videoFullscreen !== undefined
               ? { theme_video_fullscreen: colors.videoFullscreen }
+              : {}),
+            ...(colors.requireConsent !== undefined
+              ? { theme_require_consent: colors.requireConsent }
               : {}),
           }
         : {}),

@@ -19,6 +19,7 @@ import {
 import { QuestionInfo, QuestionType } from 'app/create/types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -57,6 +58,8 @@ export const SessionModal = ({
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [consentGiven, setConsentGiven] = useState(false);
+  const [consentError, setConsentError] = useState(false);
 
   /**
    * Video-first invitation: the video fills the width and the only thing under
@@ -99,7 +102,9 @@ export const SessionModal = ({
   };
 
   const handleStart = () => {
-    if (hostData?.questions) {
+    // Consent is collected on the form step, so a session that asks for it
+    // needs that step even when it has no questions of its own.
+    if (hostData?.questions || theme.requireConsent) {
       setShowForm(true);
     } else {
       onStart({});
@@ -107,6 +112,11 @@ export const SessionModal = ({
   };
 
   const handleQuestionsSubmit = (formAnswers?: Record<string, string>) => {
+    // Consent is checked before the fields so that ticking nothing at all still
+    // reports the missing consent rather than only the empty inputs.
+    const consentMissing = theme.requireConsent && !consentGiven;
+    setConsentError(consentMissing);
+
     // Validate and submit form answers (keep validation as is)
     const newErrors: Record<string, string> = {};
     hostData?.questions?.forEach((q) => {
@@ -122,7 +132,7 @@ export const SessionModal = ({
       }
     });
 
-    if (Object.keys(newErrors).length > 0) {
+    if (consentMissing || Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       // The error text renders behind `touched`, which only a blur sets. Without
       // this, submitting a pristine form sets errors nobody can see: the form
@@ -215,10 +225,14 @@ export const SessionModal = ({
                   </div>
                 )}
 
-                <IntroVideo
-                  url={theme.introVideoUrl}
-                  className={heroVideo ? 'mb-10' : 'mb-8'}
-                />
+                {/* First step only: on the form the video competes with the
+                    fields and pushes them below the fold. */}
+                {!showForm && (
+                  <IntroVideo
+                    url={theme.introVideoUrl}
+                    className={heroVideo ? 'mb-10' : 'mb-8'}
+                  />
+                )}
 
                 {heroVideo ? null : !showForm ? (
                   /* Welcome Card — the whole box goes, session name included,
@@ -325,6 +339,51 @@ export const SessionModal = ({
                           </SelectContent>
                         </Select>
                       </div>
+
+                      {theme.requireConsent && (
+                        <div className="space-y-1 pt-2">
+                          <div className="flex items-start gap-3">
+                            <Checkbox
+                              id="consent"
+                              checked={consentGiven}
+                              onCheckedChange={(checked) => {
+                                setConsentGiven(checked === true);
+                                if (checked === true) setConsentError(false);
+                              }}
+                              className="mt-0.5 bg-white"
+                            />
+                            <Label
+                              htmlFor="consent"
+                              className="text-gray-700 font-normal leading-snug"
+                            >
+                              {/* The policy is the host's own when they set
+                                  one — on a self-hosted instance the data
+                                  controller is whoever runs it. */}
+                              {t.rich('consentLabel', {
+                                link: (chunks) => (
+                                  <Link
+                                    href={
+                                      theme.privacyUrl ||
+                                      'https://harmonica.chat/privacy'
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="underline hover:text-foreground"
+                                  >
+                                    {chunks}
+                                  </Link>
+                                ),
+                              })}{' '}
+                              <span className="text-gray-400">*</span>
+                            </Label>
+                          </div>
+                          {consentError && (
+                            <p className="text-sm text-red-500">
+                              {t('consentRequired')}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </form>
                   </div>
                 )}

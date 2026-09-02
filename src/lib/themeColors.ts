@@ -21,6 +21,7 @@ export type SessionTheme = {
   showIntroText: boolean;
   introVideoUrl: string | null;
   videoFullscreen: boolean;
+  requireConsent: boolean;
 };
 
 export const EMPTY_THEME: SessionTheme = {
@@ -38,6 +39,7 @@ export const EMPTY_THEME: SessionTheme = {
   showIntroText: true,
   introVideoUrl: null,
   videoFullscreen: false,
+  requireConsent: false,
 };
 
 export type VideoEmbed = { provider: 'youtube' | 'vimeo'; id: string };
