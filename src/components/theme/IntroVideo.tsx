@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Volume2 } from 'lucide-react';
+import { Loader2, RotateCcw, Volume2 } from 'lucide-react';
 import { parseVideoEmbed } from '@/lib/themeColors';
 
 /**
@@ -71,7 +71,18 @@ export function IntroVideo({
   const containerRef = useRef<HTMLDivElement>(null);
   const [muted, setMuted] = useState(false);
   const [failed, setFailed] = useState(false);
+  // Cover the player until it is actually playing, and again once it has
+  // finished: those are the two states where the provider draws its own
+  // chrome — the title and channel strip before the first frame, the end
+  // screen with replay and suggestions afterwards. Neither can be turned off
+  // through embed parameters (`modestbranding` no longer does anything), so
+  // the only way to keep them off a participant's screen is not to let them
+  // be seen. Paused is deliberately not covered: hiding the video the moment
+  // someone pauses it would be worse than the strip they were trying to read.
+  const [started, setStarted] = useState(false);
+  const [ended, setEnded] = useState(false);
   const unmuteRef = useRef<(() => void) | null>(null);
+  const replayRef = useRef<(() => void) | null>(null);
 
   const embed = parseVideoEmbed(url);
 
@@ -100,9 +111,10 @@ export function IntroVideo({
               playsinline: 1,
               // Keep the player as quiet as an embed allows: no control bar,
               // no annotations, no keyboard shortcuts, and related videos at
-              // the end limited to the host's own channel. YouTube still draws
-              // its title bar on hover and an end screen when the video
-              // finishes — an embed cannot suppress those.
+              // the end limited to the host's own channel. The title strip
+              // before playback and the end screen after it are handled by the
+              // cover below; what remains is the strip YouTube draws on hover
+              // during playback, which an embed cannot suppress.
               controls: 0,
               rel: 0,
               modestbranding: 1,
@@ -125,11 +137,24 @@ export function IntroVideo({
                   }
                 }, GRACE_MS);
               },
+              onStateChange: (event: any) => {
+                if (cancelled) return;
+                if (event.data === 1) {
+                  setStarted(true);
+                  setEnded(false);
+                } else if (event.data === 0) {
+                  setEnded(true);
+                }
+              },
             },
           });
 
           unmuteRef.current = () => {
             player?.unMute?.();
+            player?.playVideo?.();
+          };
+          replayRef.current = () => {
+            player?.seekTo?.(0);
             player?.playVideo?.();
           };
           return;
@@ -160,8 +185,21 @@ export function IntroVideo({
           setMuted(true);
         });
 
+        player.on('playing', () => {
+          if (cancelled) return;
+          setStarted(true);
+          setEnded(false);
+        });
+        player.on('ended', () => {
+          if (!cancelled) setEnded(true);
+        });
+
         unmuteRef.current = () => {
           player?.setMuted(false);
+          player?.play();
+        };
+        replayRef.current = () => {
+          player?.setCurrentTime(0);
           player?.play();
         };
       } catch {
@@ -174,6 +212,7 @@ export function IntroVideo({
     return () => {
       cancelled = true;
       unmuteRef.current = null;
+      replayRef.current = null;
       try {
         player?.destroy?.();
       } catch {
@@ -188,12 +227,34 @@ export function IntroVideo({
   // welcome text, so the whole block goes away instead.
   if (failed) return null;
 
+  const covered = !started || ended;
+
   return (
     <div className={className ?? 'mb-8'}>
       <div className="relative overflow-hidden rounded-lg border border-gray-200 shadow-md">
         <div className="aspect-video [&>iframe]:h-full [&>iframe]:w-full">
           <div ref={containerRef} className="h-full w-full" />
         </div>
+
+        {covered && (
+          <div className="absolute inset-0 flex items-center justify-center bg-neutral-900">
+            {ended ? (
+              <button
+                type="button"
+                onClick={() => {
+                  replayRef.current?.();
+                  setEnded(false);
+                }}
+                className="inline-flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur hover:bg-white/20"
+              >
+                <RotateCcw className="h-4 w-4" />
+                {t('replay')}
+              </button>
+            ) : (
+              <Loader2 className="h-6 w-6 animate-spin text-white/60" />
+            )}
+          </div>
+        )}
       </div>
       {muted && (
         <button

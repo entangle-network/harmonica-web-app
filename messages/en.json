@@ -909,7 +909,8 @@
     "videoFullscreen": "Show the video full width",
     "videoFullscreenHint": "The video takes the whole card with one large Continue button under it. The image, the heading and the welcome box are hidden, and only the logo and the footer links remain.",
     "requireConsent": "Require consent to data processing",
-    "requireConsentHint": "Adds a required checkbox to the participant form, linking to the privacy policy set below. Nobody can start the conversation without ticking it."
+    "requireConsentHint": "Adds a required checkbox to the participant form, linking to the privacy policy set below. Nobody can start the conversation without ticking it.",
+    "replay": "Play again"
   },
   "sessionNav": {
     "editSession": "Edit Session",

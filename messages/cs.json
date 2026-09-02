@@ -909,7 +909,8 @@
     "videoFullscreen": "Zobrazit video na celou plochu",
     "videoFullscreenHint": "Video zabere celou kartu a pod ním bude jen jedno velké tlačítko Pokračovat. Obrázek, nadpis i uvítací box se skryjí, zůstane logo a odkazy v patičce.",
     "requireConsent": "Vyžadovat souhlas se zpracováním osobních údajů",
-    "requireConsentHint": "Přidá do formuláře pro účastníky povinné zaškrtávací políčko s odkazem na zásady nastavené níže. Bez zaškrtnutí nelze konverzaci začít."
+    "requireConsentHint": "Přidá do formuláře pro účastníky povinné zaškrtávací políčko s odkazem na zásady nastavené níže. Bez zaškrtnutí nelze konverzaci začít.",
+    "replay": "Přehrát znovu"
   },
   "sessionNav": {
     "editSession": "Upravit sezení",
