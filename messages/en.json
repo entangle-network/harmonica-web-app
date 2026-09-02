@@ -905,12 +905,12 @@
     "introVideo": "Video above the welcome text",
     "introVideoHint": "Paste a YouTube or Vimeo link. It starts on its own; if the browser blocks the sound — most do until the visitor clicks something — it plays muted with a button to turn the sound on. Leave empty for no video.",
     "videoUrlInvalid": "That does not look like a YouTube or Vimeo link",
-    "unmute": "Turn on sound",
     "videoFullscreen": "Show the video full width",
     "videoFullscreenHint": "The video takes the whole card with one large Continue button under it. The image, the heading and the welcome box are hidden, and only the logo and the footer links remain.",
     "requireConsent": "Require consent to data processing",
     "requireConsentHint": "Adds a required checkbox to the participant form, linking to the privacy policy set below. Nobody can start the conversation without ticking it.",
-    "replay": "Play again"
+    "replay": "Play again",
+    "playWithSound": "Play with sound"
   },
   "sessionNav": {
     "editSession": "Edit Session",
