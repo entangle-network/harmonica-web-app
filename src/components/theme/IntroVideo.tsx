@@ -152,6 +152,12 @@ export function IntroVideo({
             event.target.playVideo();
           },
           onStateChange: onYtState,
+          // Deleted, private, or not allowed to be embedded. Without this the
+          // block would sit there as a black box with a play button that does
+          // nothing.
+          onError: () => {
+            if (!cancelledRef.current) setFailed(true);
+          },
         },
       });
     },
@@ -192,7 +198,7 @@ export function IntroVideo({
 
         const Vimeo = (window as any).Vimeo;
         const player = new Vimeo.Player(slot, {
-          id: videoId,
+          id: Number(videoId),
           autoplay: true,
           muted: false,
           responsive: true,
@@ -203,6 +209,13 @@ export function IntroVideo({
           portrait: false,
         });
         playerRef.current = player;
+
+        // A deleted or private video only shows up here, once the player has
+        // tried to load it. Without this the block would sit there as a black
+        // box with a play button that does nothing.
+        player.ready().catch(() => {
+          if (!cancelledRef.current) setFailed(true);
+        });
 
         // Vimeo rejects the play() promise when autoplay is blocked, so this
         // needs no timer.
