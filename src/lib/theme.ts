@@ -21,22 +21,57 @@ type ThemeColumns = {
   theme_logo_url?: string | null;
   theme_privacy_url?: string | null;
   theme_intro_text?: string | null;
+  // Session-only, see migration 044.
+  theme_show_intro_image?: boolean | null;
+  theme_show_intro_heading?: boolean | null;
+  theme_show_intro_text?: boolean | null;
+  theme_intro_video_url?: string | null;
 };
+
+/** Columns both tables carry, and which inherit session -> project. */
+const SHARED_COLUMNS = [
+  'theme_primary',
+  'theme_gradient_from',
+  'theme_surface',
+  'theme_intro_image_id',
+  'theme_avatar_id',
+  'theme_logo_id',
+  'theme_logo_url',
+  'theme_privacy_url',
+  'theme_intro_text',
+] as const;
+
+/** Invitation card layout — only ever set on a session. */
+const SESSION_COLUMNS = [
+  'theme_show_intro_image',
+  'theme_show_intro_heading',
+  'theme_show_intro_text',
+  'theme_intro_video_url',
+] as const;
 
 function pick(...levels: (ThemeColumns | undefined)[]): SessionTheme {
   const first = (key: keyof ThemeColumns) =>
     levels.find((level) => level?.[key])?.[key] ?? null;
 
+  // `first` selects on truthiness, which is right for "" and wrong for `false`:
+  // a switch turned off would look unset and inherit back to on. The flags are
+  // therefore read from the session level directly, with null meaning shown.
+  const flag = (key: keyof ThemeColumns) => levels[0]?.[key] !== false;
+
   return {
-    primary: first('theme_primary'),
-    gradientFrom: first('theme_gradient_from'),
-    surface: first('theme_surface'),
-    introImageId: first('theme_intro_image_id'),
-    avatarId: first('theme_avatar_id'),
-    logoId: first('theme_logo_id'),
-    logoUrl: first('theme_logo_url'),
-    privacyUrl: first('theme_privacy_url'),
-    introText: first('theme_intro_text'),
+    primary: first('theme_primary') as string | null,
+    gradientFrom: first('theme_gradient_from') as string | null,
+    surface: first('theme_surface') as string | null,
+    introImageId: first('theme_intro_image_id') as string | null,
+    avatarId: first('theme_avatar_id') as string | null,
+    logoId: first('theme_logo_id') as string | null,
+    logoUrl: first('theme_logo_url') as string | null,
+    privacyUrl: first('theme_privacy_url') as string | null,
+    introText: first('theme_intro_text') as string | null,
+    showIntroImage: flag('theme_show_intro_image'),
+    showIntroHeading: flag('theme_show_intro_heading'),
+    showIntroText: flag('theme_show_intro_text'),
+    introVideoUrl: (levels[0]?.theme_intro_video_url ?? null) as string | null,
   };
 }
 
@@ -49,17 +84,7 @@ export async function getSessionTheme(
     const session = await db
       .selectFrom('host_db')
       .where('id', '=', sessionId)
-      .select([
-        'theme_primary',
-        'theme_gradient_from',
-        'theme_surface',
-        'theme_intro_image_id',
-        'theme_avatar_id',
-        'theme_logo_id',
-        'theme_logo_url',
-        'theme_privacy_url',
-        'theme_intro_text',
-      ])
+      .select([...SHARED_COLUMNS, ...SESSION_COLUMNS] as any)
       .executeTakeFirst();
 
     // A session can belong to several projects. Rather than leaving the look to
@@ -74,20 +99,13 @@ export async function getSessionTheme(
       )
       .where('workspace_sessions.session_id', '=', sessionId)
       .orderBy('workspaces.created_at', 'asc')
-      .select([
-        'workspaces.theme_primary',
-        'workspaces.theme_gradient_from',
-        'workspaces.theme_surface',
-        'workspaces.theme_intro_image_id',
-        'workspaces.theme_avatar_id',
-        'workspaces.theme_logo_id',
-        'workspaces.theme_logo_url',
-        'workspaces.theme_privacy_url',
-        'workspaces.theme_intro_text',
-      ])
+      .select(SHARED_COLUMNS.map((c) => `workspaces.${c}`) as any)
       .executeTakeFirst();
 
-    return pick(session ?? undefined, workspace ?? undefined);
+    return pick(
+      (session ?? undefined) as ThemeColumns | undefined,
+      (workspace ?? undefined) as ThemeColumns | undefined,
+    );
   } catch (error) {
     // Appearance is decoration: a failure here must not stop a participant from
     // joining, so fall back to the default look.
@@ -104,20 +122,10 @@ export async function getWorkspaceTheme(
     const workspace = await db
       .selectFrom('workspaces')
       .where('id', '=', workspaceId)
-      .select([
-        'theme_primary',
-        'theme_gradient_from',
-        'theme_surface',
-        'theme_intro_image_id',
-        'theme_avatar_id',
-        'theme_logo_id',
-        'theme_logo_url',
-        'theme_privacy_url',
-        'theme_intro_text',
-      ])
+      .select(SHARED_COLUMNS as any)
       .executeTakeFirst();
 
-    return pick(workspace ?? undefined);
+    return pick((workspace ?? undefined) as ThemeColumns | undefined);
   } catch (error) {
     console.error('[i] Failed to resolve workspace theme:', error);
     return EMPTY_THEME;
@@ -137,23 +145,18 @@ export async function getOwnTheme(
 ): Promise<SessionTheme> {
   try {
     const db = await getDbInstance();
+    const columns =
+      kind === 'WORKSPACE'
+        ? [...SHARED_COLUMNS]
+        : [...SHARED_COLUMNS, ...SESSION_COLUMNS];
+
     const row = await db
       .selectFrom(kind === 'WORKSPACE' ? 'workspaces' : 'host_db')
       .where('id', '=', id)
-      .select([
-        'theme_primary',
-        'theme_gradient_from',
-        'theme_surface',
-        'theme_intro_image_id',
-        'theme_avatar_id',
-        'theme_logo_id',
-        'theme_logo_url',
-        'theme_privacy_url',
-        'theme_intro_text',
-      ])
+      .select(columns as any)
       .executeTakeFirst();
 
-    return pick(row ?? undefined);
+    return pick((row ?? undefined) as ThemeColumns | undefined);
   } catch (error) {
     console.error('[i] Failed to read theme:', error);
     return EMPTY_THEME;

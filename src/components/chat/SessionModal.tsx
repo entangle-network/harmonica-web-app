@@ -3,6 +3,7 @@ import { SourceLink } from '@/components/SourceLink';
 import { useSessionTheme } from '@/components/SessionTheme';
 import { ParticipantFooterBrand } from '@/components/theme/ParticipantFooterBrand';
 import { themeImageUrl } from '@/lib/themeColors';
+import { IntroVideo } from '@/components/theme/IntroVideo';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { encryptId } from '@/lib/encryptionUtils';
@@ -168,32 +169,50 @@ export const SessionModal = ({
               {/* Left side content - 60% width */}
               <div className="w-full flex flex-col justify-start max-w-xl pb-16">
                 {/* Header content - outside the flex row */}
-                <div className="mb-8 mt-4">
-                  <img
-                    src={themeImageUrl(theme.introImageId) ?? '/invitation.svg'}
-                    alt={t('invitationAlt')}
-                    className={themeImageUrl(theme.introImageId) ? 'h-16 w-16 mb-4 rounded-lg object-cover' : 'w-16 mb-4'}
-                  />
-                  <h2 className="font-semibold text-muted-foreground mb-4 sm:mb-6">
-                    {loadingUserInfo
-                      ? tCommon('loading')
-                      : sessionClosed
-                      ? t('headingClosed')
-                      : t('headingOpen')}
-                  </h2>
-                </div>
-                
+                {/* Both parts can be switched off per session, so the wrapper
+                    only exists when something is left to put in it — otherwise
+                    its margins would leave a gap above the card. */}
+                {(theme.showIntroImage || theme.showIntroHeading) && (
+                  <div className="mb-8 mt-4">
+                    {theme.showIntroImage && (
+                      <img
+                        src={themeImageUrl(theme.introImageId) ?? '/invitation.svg'}
+                        alt={t('invitationAlt')}
+                        className={themeImageUrl(theme.introImageId) ? 'h-16 w-16 mb-4 rounded-lg object-cover' : 'w-16 mb-4'}
+                      />
+                    )}
+                    {/* The closed and loading variants report state rather than
+                        decorate, so they stay even when the heading is off. */}
+                    {(theme.showIntroHeading || loadingUserInfo || sessionClosed) && (
+                      <h2 className="font-semibold text-muted-foreground mb-4 sm:mb-6">
+                        {loadingUserInfo
+                          ? tCommon('loading')
+                          : sessionClosed
+                          ? t('headingClosed')
+                          : t('headingOpen')}
+                      </h2>
+                    )}
+                  </div>
+                )}
+
+                <IntroVideo url={theme.introVideoUrl} />
+
                 {!showForm ? (
                   /* Welcome Card */
                   <div className="bg-gradient-to-b from-session-gradient to-white border border-gray-200 rounded-lg p-10 shadow-md mb-8">
                     <h3 className="text-2xl font-semibold mb-4">{hostData?.topic}</h3>
-                    <p className={`${sessionClosed ? 'sm:mb-8' : ''}`}>
-                      {loadingUserInfo
-                        ? t('bodyLoading')
-                        : sessionClosed
-                        ? t('bodyClosed')
-                        : theme.introText || t('bodyOpen')}
-                    </p>
+                    {/* Switching the welcome text off drops the standing copy
+                        only. The loading and closed messages tell the
+                        participant what is going on and always show. */}
+                    {(theme.showIntroText || loadingUserInfo || sessionClosed) && (
+                      <p className={`${sessionClosed ? 'sm:mb-8' : ''}`}>
+                        {loadingUserInfo
+                          ? t('bodyLoading')
+                          : sessionClosed
+                          ? t('bodyClosed')
+                          : theme.introText || t('bodyOpen')}
+                      </p>
+                    )}
                   </div>
                 ) : (
                   /* Form Card */

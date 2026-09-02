@@ -54,6 +54,10 @@ export async function saveThemeColors(
     logoUrl?: string | null;
     privacyUrl?: string | null;
     introText?: string | null;
+    showIntroImage?: boolean;
+    showIntroHeading?: boolean;
+    showIntroText?: boolean;
+    introVideoUrl?: string | null;
   },
 ) {
   await assertMayEdit(target);
@@ -75,6 +79,24 @@ export async function saveThemeColors(
         : {}),
       ...(colors.introText !== undefined
         ? { theme_intro_text: colors.introText }
+        : {}),
+      // Invitation card layout lives on the session only, so these are ignored
+      // for a project even if a caller passes them.
+      ...(target.kind === 'SESSION'
+        ? {
+            ...(colors.showIntroImage !== undefined
+              ? { theme_show_intro_image: colors.showIntroImage }
+              : {}),
+            ...(colors.showIntroHeading !== undefined
+              ? { theme_show_intro_heading: colors.showIntroHeading }
+              : {}),
+            ...(colors.showIntroText !== undefined
+              ? { theme_show_intro_text: colors.showIntroText }
+              : {}),
+            ...(colors.introVideoUrl !== undefined
+              ? { theme_intro_video_url: colors.introVideoUrl }
+              : {}),
+          }
         : {}),
     } as any)
     .where('id', '=', target.id)

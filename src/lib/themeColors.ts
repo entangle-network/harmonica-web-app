@@ -15,6 +15,11 @@ export type SessionTheme = {
   logoUrl: string | null;
   privacyUrl: string | null;
   introText: string | null;
+  // Invitation card layout. Set per session only — see migration 044.
+  showIntroImage: boolean;
+  showIntroHeading: boolean;
+  showIntroText: boolean;
+  introVideoUrl: string | null;
 };
 
 export const EMPTY_THEME: SessionTheme = {
@@ -27,7 +32,56 @@ export const EMPTY_THEME: SessionTheme = {
   logoUrl: null,
   privacyUrl: null,
   introText: null,
+  showIntroImage: true,
+  showIntroHeading: true,
+  showIntroText: true,
+  introVideoUrl: null,
 };
+
+export type VideoEmbed = { provider: 'youtube' | 'vimeo'; id: string };
+
+/**
+ * Recognises the video URLs a host is likely to paste.
+ *
+ * Only the id is kept, and the player is built from it, so a pasted link
+ * carrying a playlist, a referrer or tracking parameters cannot drag them into
+ * the participant's page.
+ */
+export function parseVideoEmbed(
+  url: string | null | undefined,
+): VideoEmbed | null {
+  if (!url) return null;
+
+  let parsed: URL;
+  try {
+    parsed = new URL(url.trim());
+  } catch {
+    return null;
+  }
+
+  const host = parsed.hostname.replace(/^www\./, '');
+
+  if (host === 'youtu.be') {
+    const id = parsed.pathname.slice(1);
+    return /^[\w-]{6,}$/.test(id) ? { provider: 'youtube', id } : null;
+  }
+
+  if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
+    // watch?v=ID, plus the /embed/ID and /shorts/ID forms people copy from the
+    // address bar.
+    const fromQuery = parsed.searchParams.get('v');
+    const fromPath = /^\/(?:embed|shorts|v)\/([\w-]{6,})/.exec(parsed.pathname)?.[1];
+    const id = fromQuery || fromPath;
+    return id && /^[\w-]{6,}$/.test(id) ? { provider: 'youtube', id } : null;
+  }
+
+  if (host === 'vimeo.com' || host === 'player.vimeo.com') {
+    const id = /(\d{6,})/.exec(parsed.pathname)?.[1];
+    return id ? { provider: 'vimeo', id } : null;
+  }
+
+  return null;
+}
 
 /**
  * shadcn's colour variables hold a bare HSL triplet ("0 0% 9%"), not a colour

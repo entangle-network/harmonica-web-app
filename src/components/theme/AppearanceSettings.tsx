@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Loader2, Upload, X } from 'lucide-react';
 import { useToast } from 'hooks/use-toast';
 import {
@@ -13,7 +14,7 @@ import {
   uploadThemeImage,
   clearThemeImage,
 } from 'actions/theme';
-import { EMPTY_THEME, themeImageUrl } from '@/lib/themeColors';
+import { EMPTY_THEME, parseVideoEmbed, themeImageUrl } from '@/lib/themeColors';
 import { getOwnTheme } from '@/lib/theme';
 
 type Target = { kind: 'SESSION' | 'WORKSPACE'; id: string };
@@ -51,6 +52,13 @@ export function AppearanceSettings({
   const [logoUrl, setLogoUrl] = useState('');
   const [privacyUrl, setPrivacyUrl] = useState('');
   const [introText, setIntroText] = useState('');
+  // Invitation card layout — session only, see migration 044.
+  const [showIntroImage, setShowIntroImage] = useState(true);
+  const [showIntroHeading, setShowIntroHeading] = useState(true);
+  const [showIntroText, setShowIntroText] = useState(true);
+  const [introVideoUrl, setIntroVideoUrl] = useState('');
+
+  const isSession = target.kind === 'SESSION';
 
   useEffect(() => {
     getOwnTheme(target.kind, target.id).then((own) => {
@@ -67,6 +75,10 @@ export function AppearanceSettings({
       setLogoUrl(own.logoUrl ?? '');
       setPrivacyUrl(own.privacyUrl ?? '');
       setIntroText(own.introText ?? '');
+      setShowIntroImage(own.showIntroImage);
+      setShowIntroHeading(own.showIntroHeading);
+      setShowIntroText(own.showIntroText);
+      setIntroVideoUrl(own.introVideoUrl ?? '');
     });
   }, [target.kind, target.id]);
   const [isSaving, setIsSaving] = useState(false);
@@ -77,6 +89,12 @@ export function AppearanceSettings({
   const logoInput = useRef<HTMLInputElement>(null);
 
   const handleSave = async () => {
+    const video = introVideoUrl.trim();
+    if (isSession && video && !parseVideoEmbed(video)) {
+      toast({ title: t('videoUrlInvalid'), variant: 'destructive' });
+      return;
+    }
+
     setIsSaving(true);
     try {
       await saveThemeColors(target, {
@@ -86,6 +104,14 @@ export function AppearanceSettings({
         logoUrl: logoUrl.trim() || null,
         privacyUrl: privacyUrl.trim() || null,
         introText: introText.trim() || null,
+        ...(isSession
+          ? {
+              showIntroImage,
+              showIntroHeading,
+              showIntroText,
+              introVideoUrl: video || null,
+            }
+          : {}),
       });
       toast({ title: t('saved') });
     } catch (error) {
@@ -134,6 +160,20 @@ export function AppearanceSettings({
       });
     }
   };
+
+  const toggleField = (
+    id: string,
+    label: string,
+    value: boolean,
+    onChange: (next: boolean) => void,
+  ) => (
+    <div className="flex items-center justify-between gap-4">
+      <Label htmlFor={id} className="font-normal">
+        {label}
+      </Label>
+      <Switch id={id} checked={value} onCheckedChange={onChange} />
+    </div>
+  );
 
   const colorField = (
     key: 'primary' | 'gradientFrom' | 'surface',
@@ -238,6 +278,50 @@ export function AppearanceSettings({
           <p className="text-xs text-muted-foreground">{inheritedNote}</p>
         )}
       </div>
+
+      {/* How much of the invitation card to show. Only offered for a session:
+          a project has a look to inherit, but how much intro a particular
+          conversation needs is specific to that conversation. */}
+      {isSession && (
+        <div className="space-y-4 rounded-lg border p-4">
+          <div className="space-y-1">
+            <h4 className="text-sm font-medium">{t('introCard')}</h4>
+            <p className="text-xs text-muted-foreground">{t('introCardHint')}</p>
+          </div>
+
+          {toggleField(
+            'theme-show-intro-image',
+            t('showIntroImage'),
+            showIntroImage,
+            setShowIntroImage,
+          )}
+          {toggleField(
+            'theme-show-intro-heading',
+            t('showIntroHeading'),
+            showIntroHeading,
+            setShowIntroHeading,
+          )}
+          {toggleField(
+            'theme-show-intro-text',
+            t('showIntroText'),
+            showIntroText,
+            setShowIntroText,
+          )}
+
+          <div className="space-y-2 border-t pt-4">
+            <Label htmlFor="theme-intro-video">{t('introVideo')}</Label>
+            <Input
+              id="theme-intro-video"
+              type="url"
+              value={introVideoUrl}
+              placeholder="https://www.youtube.com/watch?v=..."
+              onChange={(e) => setIntroVideoUrl(e.target.value)}
+              className="max-w-md"
+            />
+            <p className="text-xs text-muted-foreground">{t('introVideoHint')}</p>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-2">
         <Label htmlFor="theme-intro-text">{t('introText')}</Label>

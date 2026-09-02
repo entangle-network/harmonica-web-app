@@ -894,7 +894,16 @@
     "privacyUrl": "Privacy policy link",
     "privacyUrlHint": "Shown to participants on the invitation card. Leave empty to use the default.",
     "introText": "Welcome paragraph",
-    "introTextHint": "Shown to participants under the session title. Leave empty for the default wording."
+    "introTextHint": "Shown to participants under the session title. Leave empty for the default wording.",
+    "introCard": "Invitation card",
+    "introCardHint": "What participants see before the conversation starts. Set for this session only.",
+    "showIntroImage": "Show the image at the top",
+    "showIntroHeading": "Show the “Share your perspective” heading",
+    "showIntroText": "Show the welcome text",
+    "introVideo": "Video above the welcome text",
+    "introVideoHint": "Paste a YouTube or Vimeo link. It starts on its own; if the browser blocks the sound — most do until the visitor clicks something — it plays muted with a button to turn the sound on. Leave empty for no video.",
+    "videoUrlInvalid": "That does not look like a YouTube or Vimeo link",
+    "unmute": "Turn on sound"
   },
   "sessionNav": {
     "editSession": "Edit Session",

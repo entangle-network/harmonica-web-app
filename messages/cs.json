@@ -894,7 +894,16 @@
     "privacyUrl": "Odkaz na zásady ochrany osobních údajů",
     "privacyUrlHint": "Zobrazí se účastníkům na úvodní kartě. Prázdné použije výchozí odkaz.",
     "introText": "Uvítací text",
-    "introTextHint": "Zobrazí se účastníkům pod názvem sezení. Prázdné použije výchozí znění."
+    "introTextHint": "Zobrazí se účastníkům pod názvem sezení. Prázdné použije výchozí znění.",
+    "introCard": "Úvodní karta",
+    "introCardHint": "Co účastník vidí před začátkem konverzace. Nastavuje se jen pro toto sezení.",
+    "showIntroImage": "Zobrazit obrázek nahoře",
+    "showIntroHeading": "Zobrazit nadpis „Podělte se o váš pohled“",
+    "showIntroText": "Zobrazit uvítací text",
+    "introVideo": "Video nad uvítacím textem",
+    "introVideoHint": "Vložte odkaz z YouTube nebo Vimea. Spustí se samo; pokud prohlížeč zvuk zablokuje — většina to dělá, dokud návštěvník na něco neklikne — poběží ztlumeně s tlačítkem na zapnutí zvuku. Prázdné = bez videa.",
+    "videoUrlInvalid": "Tohle nevypadá jako odkaz z YouTube ani z Vimea",
+    "unmute": "Zapnout zvuk"
   },
   "sessionNav": {
     "editSession": "Upravit sezení",
