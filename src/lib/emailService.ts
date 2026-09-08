@@ -5,6 +5,7 @@ import nodemailer from 'nodemailer';
 import { Invitation, Workspace } from './schema';
 import { getFromHostSession, getWorkspaceById } from './db';
 import { encryptId } from './encryptionUtils';
+import { sendViaBrevoApi } from './brevoEmail';
 
 // Configure email transport - this should use environment variables in production
 let transporter: nodemailer.Transporter;
@@ -70,16 +71,31 @@ interface SendEmailOptions {
 
 export async function sendEmail({ to, subject, html, text }: SendEmailOptions): Promise<boolean> {
   try {
-    const transport = getTransporter();
     const fromEmail = process.env.EMAIL_FROM || 'noreply@harmonica.chat';
     const fromName = process.env.EMAIL_FROM_NAME || 'Harmonica';
-    
+    const plain = text || html.replace(/<[^>]*>/g, '');
+
+    // Brevo přes HTTPS, když je nastavený klíč: nepotřebuje odchozí SMTP port,
+    // který poskytovatelé serverů běžně blokují, a při chybě řekne proč.
+    if (process.env.BREVO_API_KEY) {
+      return await sendViaBrevoApi({
+        to,
+        subject,
+        html,
+        text: plain,
+        fromEmail,
+        fromName,
+      });
+    }
+
+    const transport = getTransporter();
+
     await transport.sendMail({
       from: `"${fromName}" <${fromEmail}>`,
       to,
       subject,
       html,
-      text: text || html.replace(/<[^>]*>/g, ''),
+      text: plain,
     });
     
     console.log(`Email sent to ${to}`);
