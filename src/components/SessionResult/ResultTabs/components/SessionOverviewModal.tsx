@@ -18,8 +18,14 @@ import { SessionDetailsActionBar } from './SessionDetailsActionBar';
 import { EditSessionTab } from './EditSessionTab';
 import { AppearanceSettings } from '@/components/theme/AppearanceSettings';
 import { SidebarNavigation } from './SidebarNavigation';
+import { useTranslations } from 'next-intl';
 
-type TabType = 'session-details' | 'edit-session' | 'pre-survey' | 'appearance';
+type TabType =
+  | 'session-details'
+  | 'edit-session'
+  | 'pre-survey'
+  | 'final-survey'
+  | 'appearance';
 
 interface SessionOverviewModalProps {
   isOpen: boolean;
@@ -35,9 +41,11 @@ interface SessionOverviewModalProps {
     facilitationPrompt?: string;
   };
   questions?: QuestionInfo[];
+  finalQuestions?: QuestionInfo[];
   onUpdateSession: (updates: any) => Promise<void>;
   onUpdatePrompt?: (prompt: VersionedPrompt) => Promise<void>;
   onUpdateQuestions?: (questions: QuestionInfo[]) => Promise<void>;
+  onUpdateFinalQuestions?: (questions: QuestionInfo[]) => Promise<void>;
   onEditSession?: () => void;
 }
 
@@ -47,14 +55,19 @@ export function SessionOverviewModal({
   sessionId,
   sessionData,
   questions: initialQuestions = [],
+  finalQuestions: initialFinalQuestions = [],
   onUpdateSession,
   onUpdatePrompt,
   onUpdateQuestions,
+  onUpdateFinalQuestions,
   onEditSession,
 }: SessionOverviewModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>('edit-session');
   const [editingField, setEditingField] = useState<string | null>(null);
   const [localQuestions, setLocalQuestions] = useState<QuestionInfo[]>(initialQuestions);
+  const [localFinalQuestions, setLocalFinalQuestions] =
+    useState<QuestionInfo[]>(initialFinalQuestions);
+  const tFinal = useTranslations('finalSurvey');
   const initialVersionedPrompt = { id: 0, summary: sessionData.promptSummary, fullPrompt: sessionData.facilitationPrompt || '' };
   const [promptValue, setCurrentVersionedPrompt] = useState<VersionedPrompt>(initialVersionedPrompt);
   const [allFacilitationPrompts, setAllFacilitationPrompts] = useState([initialVersionedPrompt])
@@ -151,10 +164,21 @@ export function SessionOverviewModal({
     }
   }
 
+  const handleFinalQuestionsUpdate = async (questions: QuestionInfo[]) => {
+    setLocalFinalQuestions(questions);
+    if (onUpdateFinalQuestions) {
+      await onUpdateFinalQuestions(questions);
+    }
+  };
+
   // Update local questions when initialQuestions change
   useEffect(() => {
     setLocalQuestions(initialQuestions);
   }, [initialQuestions]);
+
+  useEffect(() => {
+    setLocalFinalQuestions(initialFinalQuestions);
+  }, [initialFinalQuestions]);
 
   const handleCancelPrompt = () => {
     setCurrentVersionedPrompt(initialVersionedPrompt);
@@ -283,6 +307,16 @@ export function SessionOverviewModal({
           <FormBuilder
             questions={localQuestions}
             onQuestionsUpdate={handleQuestionsUpdate}
+          />
+        );
+
+      case 'final-survey':
+        return (
+          <FormBuilder
+            questions={localFinalQuestions}
+            onQuestionsUpdate={handleFinalQuestionsUpdate}
+            intro={tFinal('intro')}
+            title={tFinal('title')}
           />
         );
 

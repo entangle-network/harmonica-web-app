@@ -926,7 +926,8 @@
     "editSession": "Edit Session",
     "sessionDetails": "Session Details",
     "preSurvey": "Pre-survey Form",
-    "appearance": "Appearance"
+    "appearance": "Appearance",
+    "finalSurvey": "Closing questionnaire"
   },
   "createLoading": {
     "messages": [
@@ -1040,5 +1041,15 @@
       "Email": "Email",
       "Options": "Options"
     }
+  },
+  "finalSurvey": {
+    "title": "Closing questionnaire",
+    "intro": "Shown after the participant finishes the conversation. Good place for details that would slow people down at the start.",
+    "heading": "A few last questions",
+    "body": "Thank you for the conversation. These answers help us see who took part — none of them is required.",
+    "selectOption": "Choose an option",
+    "fieldRequired": "Please fill this in",
+    "submit": "Send",
+    "skip": "Skip"
   }
 }

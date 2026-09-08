@@ -73,6 +73,20 @@ Please type your name or "anonymous" if you prefer
     loadData();
   }, []);
 
+  // Zaverecny dotaznik: stejny tvar jako uvodni, sloupec je json a starsi
+  // radky mohou drzet retezec.
+  const finalQuestions = (() => {
+    const raw = (hostData as { final_questions?: unknown } | null)?.final_questions;
+    if (!raw) return [];
+    try {
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      return Array.isArray(parsed) ? (parsed as QuestionInfo[]) : [];
+    } catch (error) {
+      console.error('Error parsing final questions:', error);
+      return [];
+    }
+  })();
+
   const finishSession = () => {
     setIsLoading(true);
     setShowModal(true);
@@ -209,6 +223,7 @@ Please type your name or "anonymous" if you prefer
           message={message}
           assistantId={assistantId ?? undefined}
           userContext={userContext}
+          finalQuestions={finalQuestions}
           questions={hostData?.questions}
         />
       )}

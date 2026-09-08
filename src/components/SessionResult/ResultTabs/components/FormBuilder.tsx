@@ -11,11 +11,16 @@ import { Button } from '@/components/ui/button';
 interface FormBuilderProps {
   questions: QuestionInfo[];
   onQuestionsUpdate: (questions: QuestionInfo[]) => void;
+  /** Stejny stavitel slouzi uvodnimu i zaverecnemu dotazniku; lisi se jen popiskem. */
+  title?: string;
+  intro?: string;
 }
 
 export function FormBuilder({
   questions: initialQuestions,
   onQuestionsUpdate,
+  title,
+  intro,
 }: FormBuilderProps) {
   const t = useTranslations('misc');
   const [questions, setQuestions] = useState<QuestionInfo[]>(initialQuestions);
@@ -116,9 +121,9 @@ export function FormBuilder({
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">{t('formQuestions')}</h3>
+        <h3 className="text-lg font-semibold">{title ?? t('formQuestions')}</h3>
         <p className="text-sm text-muted-foreground">
-          {t('formIntro')}
+          {intro ?? t('formIntro')}
         </p>
       </div>
 

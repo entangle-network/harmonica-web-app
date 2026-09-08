@@ -61,6 +61,7 @@ export default function SessionResultsOverview({
   crossPollination,
   sessionData,
   questions,
+  finalQuestions,
 }: {
   id: string;
   status: SessionStatus;
@@ -81,6 +82,7 @@ export default function SessionResultsOverview({
     facilitationPrompt: string;
   };
   questions?: QuestionInfo[];
+  finalQuestions?: QuestionInfo[];
 }) {
   const { hasMinimumRole, loading } = usePermissions(id);
   return (
@@ -97,6 +99,7 @@ export default function SessionResultsOverview({
           crossPollination={crossPollination}
           sessionData={sessionData}
           questions={questions}
+          finalQuestions={finalQuestions}
         />
       ) : null}
       {loading ? (

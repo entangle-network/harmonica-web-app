@@ -1,10 +1,15 @@
 'use client';
 
-import { FileText, Settings, FormInput, Palette } from 'lucide-react';
+import { FileText, Settings, FormInput, Palette, ClipboardCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/clientUtils';
 
-type TabType = 'session-details' | 'edit-session' | 'pre-survey' | 'appearance';
+type TabType =
+  | 'session-details'
+  | 'edit-session'
+  | 'pre-survey'
+  | 'final-survey'
+  | 'appearance';
 
 interface SidebarNavigationProps {
   activeTab: TabType;
@@ -84,6 +89,29 @@ export function SidebarNavigation({
           </div>
           <div className="text-sm leading-none text-foreground flex items-center">
             {t('preSurvey')}
+          </div>
+        </div>
+      </button>
+
+      <button
+        onClick={() => onTabChange('final-survey')}
+        role="tab"
+        aria-selected={activeTab === 'final-survey'}
+        className={`select-none transition-[background] duration-200 ease-in cursor-pointer flex items-center justify-between px-2 py-0 rounded-md mt-[2px] mb-0 h-7 relative ${
+          activeTab === 'final-survey'
+            ? 'bg-muted text-foreground'
+            : 'text-muted-foreground hover:bg-muted/50'
+        }`}
+      >
+        <div className="flex items-center font-medium leading-none">
+          <div className={cn(
+            "w-6 h-6 mr-2 flex-shrink-0 flex items-center justify-center",
+            activeTab === 'final-survey' ? "text-foreground" : "text-muted-foreground"
+          )}>
+            <ClipboardCheck className="w-5 h-5" />
+          </div>
+          <div className="text-sm leading-none text-foreground flex items-center">
+            {t('finalSurvey')}
           </div>
         </div>
       </button>

@@ -8,7 +8,9 @@ import { FullscreenChat } from './FullscreenChat';
 import { OpenAIMessage } from '@/lib/types';
 import { RatingModal } from './RatingModal';
 import { useState, useEffect, useRef } from 'react';
-import { updateUserSession, increaseSessionsCount } from '@/lib/db';
+import { updateUserSession, increaseSessionsCount, insertChatMessage } from '@/lib/db';
+import { QuestionInfo } from 'app/create/types';
+import { FinalSurvey } from './FinalSurvey';
 import { usePermissions } from '@/lib/permissions';
 
 interface ChatInterfaceProps {
@@ -27,6 +29,7 @@ interface ChatInterfaceProps {
   assistantId?: string;
   userContext?: Record<string, string>;
   questions?: JSON;
+  finalQuestions?: QuestionInfo[];
 }
 
 export const ChatInterface = ({
@@ -40,6 +43,7 @@ export const ChatInterface = ({
   assistantId,
   userContext,
   questions,
+  finalQuestions = [],
 }: ChatInterfaceProps) => {
   const t = useTranslations('chat');
   const { hasMinimumRole }  = usePermissions(hostData.id || '');
@@ -47,6 +51,46 @@ export const ChatInterface = ({
   const [showRating, setShowRating] = useState(false);
   const [threadId, setThreadId] = useState<string>();
   const [isSessionFinished, setIsSessionFinished] = useState(false);
+  const [finalSurveyDone, setFinalSurveyDone] = useState(false);
+
+  // Ukázat jen když je co ptát a konverzace opravdu skončila.
+  const showFinalSurvey =
+    finalQuestions.length > 0 &&
+    !finalSurveyDone &&
+    Boolean(message?.is_final) &&
+    Boolean(threadId);
+
+  /**
+   * Odpovědi se ukládají jako zpráva do vlákna — stejně jako ty z úvodního
+   * formuláře. Díky tomu se dostanou do přepisu, souhrnů i exportu, aniž by
+   * je bylo potřeba vést zvlášť.
+   */
+  const handleFinalSurveySubmit = async (answers: Record<string, string>) => {
+    const summary = Object.entries(answers)
+      .filter(([, value]) => value?.trim())
+      .map(([id, value]) => {
+        const label = finalQuestions.find((q) => q.id === id)?.label ?? id;
+        return `${label}: ${value}`;
+      })
+      .join('; ');
+
+    if (summary && threadId) {
+      try {
+        await insertChatMessage({
+          thread_id: threadId,
+          role: 'user',
+          content: `Účastník na závěr doplnil:\n${summary}`,
+          created_at: new Date(),
+        });
+      } catch (error) {
+        // Konverzace je hotová a odpovědi jsou doplňkové: selhání zápisu
+        // nesmí účastníkovi zabránit v dokončení.
+        console.error('[e] Závěrečný dotazník se nepodařilo uložit:', error);
+      }
+    }
+
+    setFinalSurveyDone(true);
+  };
   const [isHowItWorksExpanded, setIsHowItWorksExpanded] = useState(false);
   const [isMobileHowItWorksOpen, setIsMobileHowItWorksOpen] = useState(false);
 
@@ -206,8 +250,25 @@ export const ChatInterface = ({
           )}
         </div>
 
+        {/* Závěrečný dotazník. Nahrazuje chat teprve po dokončené konverzaci —
+            účastník už si ji může jen odrolovat, ale nová zpráva by přišla
+            vniveč, protože sezení se za pár vteřin uzavírá. */}
+        {showFinalSurvey && (
+          <div className="flex w-full flex-1 items-start justify-center pt-12">
+            <FinalSurvey
+              questions={finalQuestions}
+              onSubmit={handleFinalSurveySubmit}
+              onSkip={() => setFinalSurveyDone(true)}
+            />
+          </div>
+        )}
+
         {/* Chat area */}
-        <div className="flex flex-col w-full max-w-3xl mx-auto flex-1 pt-12 min-h-0">
+        <div
+          className={`flex flex-col w-full max-w-3xl mx-auto flex-1 pt-12 min-h-0 ${
+            showFinalSurvey ? 'hidden' : ''
+          }`}
+        >
           <FullscreenChat
             sessionIds={[hostData?.id ?? '']}
             userSessionId={userSessionId}

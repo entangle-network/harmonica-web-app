@@ -33,6 +33,8 @@ export interface HostSessionsTable {
   summary_prompt?: string; // THIS is the prompt used to generate the summary! (if different from the default)
   session_md?: string;
   questions?: JSON;
+  /** Dotazník zobrazený po dokončení konverzace — viz migrace 047. */
+  final_questions?: JSON;
   visibility_settings?: ResultTabsVisibilityConfig;
   cross_pollination: Generated<boolean>; // Default to false
   distribution: string | null;

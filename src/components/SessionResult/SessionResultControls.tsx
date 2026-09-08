@@ -57,6 +57,7 @@ interface SessionResultControlsProps {
     facilitationPrompt?: string;
   };
   questions?: QuestionInfo[];
+  finalQuestions?: QuestionInfo[];
 }
 
 export default function SessionResultControls({
@@ -69,6 +70,7 @@ export default function SessionResultControls({
   sessionTopic = '',
   sessionData,
   questions = [],
+  finalQuestions = [],
 }: SessionResultControlsProps) {
   const t = useTranslations('sessionControls');
   const tCommon = useTranslations('common');
@@ -246,6 +248,42 @@ export default function SessionResultControls({
     }
   };
 
+  /** Ukladani ma stejny tvar pro oba dotazniky, lisi se jen cilovy sloupec. */
+  const saveQuestionsTo = async (
+    column: 'questions' | 'final_questions',
+    updatedQuestions: QuestionInfo[],
+  ) => {
+    const questionsJson = JSON.stringify(
+      updatedQuestions.map((q) => ({
+        id: q.id,
+        label: q.label,
+        type: q.type,
+        typeValue: q.typeValue,
+        required: q.required,
+        options: q.options,
+      })),
+    ) as unknown as JSON;
+    await db.updateHostSession(id, { [column]: questionsJson } as any);
+  };
+
+  const handleUpdateFinalQuestions = async (updatedQuestions: QuestionInfo[]) => {
+    try {
+      await saveQuestionsTo('final_questions', updatedQuestions);
+      toast({
+        title: t('toast.questionsUpdated'),
+        description: t('toast.questionsUpdatedDesc'),
+      });
+      router.refresh();
+    } catch (error) {
+      console.error('Failed to update final questions:', error);
+      toast({
+        title: t('toast.questionsUpdateFailed'),
+        description: t('toast.questionsUpdateFailedDesc'),
+        variant: 'destructive',
+      });
+    }
+  };
+
   const handleUpdateQuestions = async (updatedQuestions: QuestionInfo[]) => {
     try {
       // Convert questions array to JSON string format that the database expects
@@ -398,6 +436,8 @@ export default function SessionResultControls({
             onUpdateSession={handleSessionUpdate}
             onUpdatePrompt={handleUpdatePrompt}
             onUpdateQuestions={handleUpdateQuestions}
+            finalQuestions={finalQuestions}
+            onUpdateFinalQuestions={handleUpdateFinalQuestions}
             onEditSession={handleEditSession}
           />
         )}

@@ -926,7 +926,8 @@
     "editSession": "Upravit sezení",
     "sessionDetails": "Údaje o sezení",
     "preSurvey": "Úvodní formulář",
-    "appearance": "Vzhled"
+    "appearance": "Vzhled",
+    "finalSurvey": "Závěrečný dotazník"
   },
   "createLoading": {
     "messages": [
@@ -1040,5 +1041,15 @@
       "Email": "E-mail",
       "Options": "Výběr z možností"
     }
+  },
+  "finalSurvey": {
+    "title": "Závěrečný dotazník",
+    "intro": "Zobrazí se až po dokončené konverzaci. Hodí se na údaje, které by lidi na začátku zdržovaly.",
+    "heading": "Ještě pár otázek na závěr",
+    "body": "Děkujeme za rozhovor. Tyhle odpovědi nám pomohou zjistit, kdo se zapojil — žádná z nich není povinná.",
+    "selectOption": "Vyberte možnost",
+    "fieldRequired": "Vyplňte prosím toto pole",
+    "submit": "Odeslat",
+    "skip": "Přeskočit"
   }
 }

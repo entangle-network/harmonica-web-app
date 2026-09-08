@@ -29,19 +29,24 @@ export default function SessionPage({
         ? SessionStatus.DRAFT
         : SessionStatus.ACTIVE;
 
-  // Parse questions from hostData
-  let questions: QuestionInfo[] = [];
-  if (hostData.questions) {
+  // Parse questions from hostData. The column is json, but older rows hold a
+  // string, so both shapes have to be handled.
+  const parseQuestions = (raw: unknown, label: string): QuestionInfo[] => {
+    if (!raw) return [];
     try {
-      const parsed = typeof hostData.questions === 'string' 
-        ? JSON.parse(hostData.questions) 
-        : hostData.questions;
-      questions = Array.isArray(parsed) ? parsed : [];
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      return Array.isArray(parsed) ? parsed : [];
     } catch (error) {
-      console.error('Error parsing questions:', error);
-      questions = [];
+      console.error(`Error parsing ${label}:`, error);
+      return [];
     }
-  }
+  };
+
+  const questions = parseQuestions(hostData.questions, 'questions');
+  const finalQuestions = parseQuestions(
+    hostData.final_questions,
+    'final questions',
+  );
 
   return (
     <div className="p-4 md:p-8">
@@ -70,6 +75,7 @@ export default function SessionPage({
           facilitationPrompt: hostData.prompt || '',
         }}
         questions={questions}
+        finalQuestions={finalQuestions}
       />
       <SessionResultsSection
         hostData={hostData}
