@@ -383,7 +383,12 @@ export default function SessionResultControls({
           </DialogContent>
         </Dialog>
 
-        {sessionData && (
+        {/* Vykresluje se jen otevřený. Dřív byl v stromu pořád a jen skrytý,
+            takže si podržel stav z prvního načtení stránky: prompt i jeho
+            verze se berou přes useState, který se po namontování už nikdy
+            nesrovná s daty. Po uložení a novém otevření se tak zobrazil
+            původní text, přestože v databázi byl nový. */}
+        {sessionData && showSessionOverviewModal && (
           <SessionOverviewModal
             isOpen={showSessionOverviewModal}
             onClose={() => setShowSessionOverviewModal(false)}
