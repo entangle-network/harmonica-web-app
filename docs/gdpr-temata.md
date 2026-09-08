@@ -106,7 +106,7 @@ Kromě nás jde o tyto zpracovatele:
 | Zpracovatel | Co dělá | Kde |
 |---|---|---|
 | **Hetzner Online GmbH** | Server a databáze, kde jsou údaje uložené | Norimberk, Německo (EU) |
-| **OpenAI, L.L.C.** | Jazykový model, který vede konverzaci, tvoří souhrny a přepisuje hlas | USA |
+| **OpenAI Ireland Ltd.** | Jazykový model, který vede konverzaci, tvoří souhrny a přepisuje hlas | Irsko (EU), s předáním dál — viz kapitola 6 |
 
 Zadavateli sezení (obci, organizaci) předáváme **souhrnné výstupy**. Jednotlivé
 odpovědi se jménem a kontaktem mu nepředáváme, pokud jste k tomu výslovně
@@ -124,11 +124,17 @@ v režimu bez cookies (`youtube-nocookie.com`), Vimeo v režimu bez sledování.
 
 ## 6. Předání mimo Evropskou unii
 
-Jediné předání mimo EU je do **USA společnosti OpenAI**, která provozuje jazykový
-model vedoucí konverzaci. Bez tohoto předání by platforma nefungovala.
+Smlouvu o zpracování údajů máme podle [podmínek OpenAI](https://openai.com/cs-CZ/policies/data-processing-addendum/) uzavřenou
+s **OpenAI Ireland Ltd.**, irskou společností — pro zákazníky se sídlem
+v Evropském hospodářském prostoru to tak platí automaticky.
 
-Předání je zajištěno standardními smluvními doložkami schválenými Evropskou
-komisí, které jsou součástí smlouvy o zpracování údajů s OpenAI.
+Zpracování ale nekončí v Irsku. Část ho OpenAI předává svým dalším společnostem
+a dodavatelům mimo Evropský hospodářský prostor, především do USA. Podle uzavřené
+smlouvy tak činí na základě **standardních smluvních doložek** schválených Evropskou
+komisí, případně na základě rozhodnutí o odpovídající ochraně podle čl. 45 GDPR.
+
+Aktuální seznam dodavatelů, kteří se na zpracování podílejí, zveřejňuje OpenAI na
+[platform.openai.com/subprocessors](https://platform.openai.com/subprocessors).
 
 ---
 

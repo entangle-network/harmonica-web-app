@@ -253,9 +253,9 @@ export default function GdprPage() {
                 'Norimberk, Německo (EU)',
               ],
               [
-                <strong>OpenAI, L.L.C.</strong>,
+                <strong>OpenAI Ireland Ltd.</strong>,
                 'Jazykový model, který vede konverzaci, tvoří souhrny a přepisuje hlas',
-                'USA',
+                'Irsko (EU), s předáním dál — viz bod 6',
               ],
             ]}
           />
@@ -282,14 +282,39 @@ export default function GdprPage() {
 
         <Section number={6} title="Předání mimo Evropskou unii">
           <p>
-            Jediné předání mimo EU je do <strong>USA společnosti OpenAI</strong>,
-            která provozuje jazykový model vedoucí konverzaci. Bez tohoto předání
-            by platforma nefungovala.
+            Smlouvu o zpracování údajů máme podle{' '}
+            <a
+              href="https://openai.com/cs-CZ/policies/data-processing-addendum/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground"
+            >
+              podmínek OpenAI
+            </a>{' '}
+            uzavřenou s <strong>OpenAI Ireland Ltd.</strong>, irskou společností
+            — pro zákazníky se sídlem v Evropském hospodářském prostoru to tak
+            platí automaticky.
           </p>
           <p>
-            Předání je zajištěno standardními smluvními doložkami schválenými
-            Evropskou komisí, které jsou součástí smlouvy o zpracování údajů
-            s OpenAI.
+            Zpracování ale nekončí v Irsku. Část ho OpenAI předává svým dalším
+            společnostem a dodavatelům mimo Evropský hospodářský prostor,
+            především do USA. Podle uzavřené smlouvy tak činí na základě{' '}
+            <strong>standardních smluvních doložek</strong> schválených Evropskou
+            komisí, případně na základě rozhodnutí o odpovídající ochraně podle
+            čl. 45 GDPR.
+          </p>
+          <p>
+            Aktuální seznam dodavatelů, kteří se na zpracování podílejí,
+            zveřejňuje OpenAI na{' '}
+            <a
+              href="https://platform.openai.com/subprocessors"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground"
+            >
+              platform.openai.com/subprocessors
+            </a>
+            .
           </p>
         </Section>
 
