@@ -76,6 +76,7 @@ export default function SessionPage({
         }}
         questions={questions}
         finalQuestions={finalQuestions}
+        finalSurveyIntro={hostData.final_survey_intro ?? ''}
       />
       <SessionResultsSection
         hostData={hostData}

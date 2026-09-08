@@ -35,6 +35,8 @@ export interface HostSessionsTable {
   questions?: JSON;
   /** Dotazník zobrazený po dokončení konverzace — viz migrace 047. */
   final_questions?: JSON;
+  /** Vlastní úvod k tomu dotazníku — viz migrace 048. */
+  final_survey_intro?: string;
   visibility_settings?: ResultTabsVisibilityConfig;
   cross_pollination: Generated<boolean>; // Default to false
   distribution: string | null;

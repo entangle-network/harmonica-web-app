@@ -1050,6 +1050,16 @@
     "selectOption": "Choose an option",
     "fieldRequired": "Please fill this in",
     "submit": "Send",
-    "skip": "Skip"
+    "skip": "Skip",
+    "introLabel": "Introduction shown to the participant",
+    "introHint": "Explain why you are asking and what happens with the answers. Empty uses the default wording."
+  },
+  "questionImport": {
+    "title": "Paste questions in bulk",
+    "hint": "One question per line. Lines starting with a dash or asterisk below it are its options; a question without them becomes a short text field.\nNumbering and lines meant for the model (“Offer options:”, “Wait for an answer”) are ignored.",
+    "placeholder": "What is your gender?\n- Woman\n- Man\n- Other\n\nWhich part of town do you live in?",
+    "append": "Add to the form",
+    "replace": "Replace all questions",
+    "nothingFound": "No question found in the text."
   }
 }

@@ -19,6 +19,8 @@ import { EditSessionTab } from './EditSessionTab';
 import { AppearanceSettings } from '@/components/theme/AppearanceSettings';
 import { SidebarNavigation } from './SidebarNavigation';
 import { useTranslations } from 'next-intl';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 type TabType =
   | 'session-details'
@@ -42,10 +44,12 @@ interface SessionOverviewModalProps {
   };
   questions?: QuestionInfo[];
   finalQuestions?: QuestionInfo[];
+  finalSurveyIntro?: string;
   onUpdateSession: (updates: any) => Promise<void>;
   onUpdatePrompt?: (prompt: VersionedPrompt) => Promise<void>;
   onUpdateQuestions?: (questions: QuestionInfo[]) => Promise<void>;
   onUpdateFinalQuestions?: (questions: QuestionInfo[]) => Promise<void>;
+  onUpdateFinalSurveyIntro?: (intro: string) => Promise<void>;
   onEditSession?: () => void;
 }
 
@@ -56,10 +60,12 @@ export function SessionOverviewModal({
   sessionData,
   questions: initialQuestions = [],
   finalQuestions: initialFinalQuestions = [],
+  finalSurveyIntro = '',
   onUpdateSession,
   onUpdatePrompt,
   onUpdateQuestions,
   onUpdateFinalQuestions,
+  onUpdateFinalSurveyIntro,
   onEditSession,
 }: SessionOverviewModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>('edit-session');
@@ -68,6 +74,8 @@ export function SessionOverviewModal({
   const [localFinalQuestions, setLocalFinalQuestions] =
     useState<QuestionInfo[]>(initialFinalQuestions);
   const tFinal = useTranslations('finalSurvey');
+  const [introDraft, setIntroDraft] = useState(finalSurveyIntro);
+  useEffect(() => setIntroDraft(finalSurveyIntro), [finalSurveyIntro]);
   const initialVersionedPrompt = { id: 0, summary: sessionData.promptSummary, fullPrompt: sessionData.facilitationPrompt || '' };
   const [promptValue, setCurrentVersionedPrompt] = useState<VersionedPrompt>(initialVersionedPrompt);
   const [allFacilitationPrompts, setAllFacilitationPrompts] = useState([initialVersionedPrompt])
@@ -312,12 +320,35 @@ export function SessionOverviewModal({
 
       case 'final-survey':
         return (
-          <FormBuilder
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="final-survey-intro">{tFinal('introLabel')}</Label>
+              <Textarea
+                id="final-survey-intro"
+                value={introDraft}
+                rows={5}
+                placeholder={tFinal('body')}
+                onChange={(e) => setIntroDraft(e.target.value)}
+                onBlur={() => {
+                  // Uklada se az pri opusteni pole: prubezne ukladani by
+                  // poslalo pozadavek na kazde stisknuti klavesy.
+                  if (introDraft !== finalSurveyIntro) {
+                    onUpdateFinalSurveyIntro?.(introDraft);
+                  }
+                }}
+              />
+              <p className="text-xs text-muted-foreground">
+                {tFinal('introHint')}
+              </p>
+            </div>
+
+            <FormBuilder
             questions={localFinalQuestions}
             onQuestionsUpdate={handleFinalQuestionsUpdate}
-            intro={tFinal('intro')}
-            title={tFinal('title')}
-          />
+              intro={tFinal('intro')}
+              title={tFinal('title')}
+            />
+          </div>
         );
 
       case 'appearance':

@@ -28,10 +28,13 @@ import { QuestionInfo, QuestionType } from 'app/create/types';
  */
 export function FinalSurvey({
   questions,
+  intro,
   onSubmit,
   onSkip,
 }: {
   questions: QuestionInfo[];
+  /** Vysvetleni od poradatele; prazdne pouzije vychozi zneni. */
+  intro?: string;
   onSubmit: (answers: Record<string, string>) => Promise<void>;
   onSkip: () => void;
 }) {
@@ -76,7 +79,9 @@ export function FinalSurvey({
     <div className="mx-auto w-full max-w-2xl px-4 pb-8">
       <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
         <h3 className="text-xl font-semibold">{t('heading')}</h3>
-        <p className="mt-2 text-sm text-muted-foreground">{t('body')}</p>
+        <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
+          {intro?.trim() || t('body')}
+        </p>
 
         <form
           className="mt-6 space-y-5"

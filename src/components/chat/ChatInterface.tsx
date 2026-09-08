@@ -30,6 +30,7 @@ interface ChatInterfaceProps {
   userContext?: Record<string, string>;
   questions?: JSON;
   finalQuestions?: QuestionInfo[];
+  finalSurveyIntro?: string;
 }
 
 export const ChatInterface = ({
@@ -44,6 +45,7 @@ export const ChatInterface = ({
   userContext,
   questions,
   finalQuestions = [],
+  finalSurveyIntro = '',
 }: ChatInterfaceProps) => {
   const t = useTranslations('chat');
   const { hasMinimumRole }  = usePermissions(hostData.id || '');
@@ -257,6 +259,7 @@ export const ChatInterface = ({
           <div className="flex w-full flex-1 items-start justify-center pt-12">
             <FinalSurvey
               questions={finalQuestions}
+              intro={finalSurveyIntro}
               onSubmit={handleFinalSurveySubmit}
               onSkip={() => setFinalSurveyDone(true)}
             />

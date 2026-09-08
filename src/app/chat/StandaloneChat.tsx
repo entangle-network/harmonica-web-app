@@ -224,6 +224,10 @@ Please type your name or "anonymous" if you prefer
           assistantId={assistantId ?? undefined}
           userContext={userContext}
           finalQuestions={finalQuestions}
+          finalSurveyIntro={
+            (hostData as { final_survey_intro?: string } | null)
+              ?.final_survey_intro ?? ''
+          }
           questions={hostData?.questions}
         />
       )}

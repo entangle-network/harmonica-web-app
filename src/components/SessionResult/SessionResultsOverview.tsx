@@ -62,6 +62,7 @@ export default function SessionResultsOverview({
   sessionData,
   questions,
   finalQuestions,
+  finalSurveyIntro,
 }: {
   id: string;
   status: SessionStatus;
@@ -83,6 +84,7 @@ export default function SessionResultsOverview({
   };
   questions?: QuestionInfo[];
   finalQuestions?: QuestionInfo[];
+  finalSurveyIntro?: string;
 }) {
   const { hasMinimumRole, loading } = usePermissions(id);
   return (
@@ -100,6 +102,7 @@ export default function SessionResultsOverview({
           sessionData={sessionData}
           questions={questions}
           finalQuestions={finalQuestions}
+          finalSurveyIntro={finalSurveyIntro}
         />
       ) : null}
       {loading ? (

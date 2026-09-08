@@ -7,6 +7,9 @@ import { QuestionInfo, QuestionType } from 'app/create/types';
 import QuestionModal from 'app/create/QuestionModal';
 import { QuestionContainer } from 'app/create/QuestionContainer';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { ChevronDown } from 'lucide-react';
+import { parseQuestionBlock } from '@/lib/parseQuestionBlock';
 
 interface FormBuilderProps {
   questions: QuestionInfo[];
@@ -30,6 +33,28 @@ export function FormBuilder({
   );
   const prevInitialQuestionsRef = useRef<string>(JSON.stringify(initialQuestions));
   const isUserActionRef = useRef(false);
+
+  const tImport = useTranslations('questionImport');
+  const [showImport, setShowImport] = useState(false);
+  const [importText, setImportText] = useState('');
+  const [importError, setImportError] = useState<string | null>(null);
+
+  const handleImport = (replace = false) => {
+    const parsed = parseQuestionBlock(importText);
+    if (parsed.length === 0) {
+      setImportError(tImport('nothingFound'));
+      return;
+    }
+
+    const next = replace ? parsed : [...questions, ...parsed];
+    isUserActionRef.current = true;
+    setQuestions(next);
+    onQuestionsUpdate(next);
+
+    setImportText('');
+    setImportError(null);
+    setShowImport(false);
+  };
 
   // Update local state when initialQuestions change (only if different to avoid loops)
   useEffect(() => {
@@ -134,6 +159,51 @@ export function FormBuilder({
           handleDelete={handleDelete}
           onReorder={handleReorder}
         />
+      </div>
+
+      {/* Naklikat deset otázek s pěti možnostmi je práce na čtvrt hodiny,
+          přitom je pořadatel skoro vždycky má už napsané. */}
+      <div className="rounded-lg border">
+        <button
+          type="button"
+          onClick={() => setShowImport((v) => !v)}
+          className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-medium hover:bg-muted/50"
+        >
+          {tImport('title')}
+          <ChevronDown
+            className={`h-4 w-4 transition-transform ${showImport ? 'rotate-180' : ''}`}
+          />
+        </button>
+
+        {showImport && (
+          <div className="space-y-3 border-t p-4">
+            <p className="text-xs text-muted-foreground whitespace-pre-line">
+              {tImport('hint')}
+            </p>
+            <Textarea
+              value={importText}
+              onChange={(e) => setImportText(e.target.value)}
+              rows={10}
+              placeholder={tImport('placeholder')}
+              className="font-mono text-sm"
+            />
+            {importError && (
+              <p className="text-sm text-red-500">{importError}</p>
+            )}
+            <div className="flex items-center gap-2">
+              <Button type="button" onClick={() => handleImport()}>
+                {tImport('append')}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleImport(true)}
+              >
+                {tImport('replace')}
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       <QuestionModal

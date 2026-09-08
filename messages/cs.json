@@ -1050,6 +1050,16 @@
     "selectOption": "Vyberte možnost",
     "fieldRequired": "Vyplňte prosím toto pole",
     "submit": "Odeslat",
-    "skip": "Přeskočit"
+    "skip": "Přeskočit",
+    "introLabel": "Úvod, který uvidí účastník",
+    "introHint": "Vysvětlete, proč se ptáte a co se s odpověďmi stane. Prázdné použije výchozí znění."
+  },
+  "questionImport": {
+    "title": "Vložit otázky hromadně",
+    "hint": "Každá otázka na vlastním řádku. Řádky s pomlčkou nebo hvězdičkou pod ní jsou její možnosti; otázka bez nich bude krátká textová odpověď.\nČíslování a řádky určené modelu („Nabídni možnosti:“, „Počkej na odpověď“) se ignorují.",
+    "placeholder": "Jaké je vaše pohlaví?\n- Žena\n- Muž\n- Jiné\n\nVe které části města bydlíte?",
+    "append": "Přidat do formuláře",
+    "replace": "Nahradit všechny otázky",
+    "nothingFound": "V textu jsem našel žádnou otázku."
   }
 }

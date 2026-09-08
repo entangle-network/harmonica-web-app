@@ -58,6 +58,7 @@ interface SessionResultControlsProps {
   };
   questions?: QuestionInfo[];
   finalQuestions?: QuestionInfo[];
+  finalSurveyIntro?: string;
 }
 
 export default function SessionResultControls({
@@ -71,6 +72,7 @@ export default function SessionResultControls({
   sessionData,
   questions = [],
   finalQuestions = [],
+  finalSurveyIntro = '',
 }: SessionResultControlsProps) {
   const t = useTranslations('sessionControls');
   const tCommon = useTranslations('common');
@@ -266,6 +268,20 @@ export default function SessionResultControls({
     await db.updateHostSession(id, { [column]: questionsJson } as any);
   };
 
+  const handleUpdateFinalSurveyIntro = async (intro: string) => {
+    try {
+      await db.updateHostSession(id, { final_survey_intro: intro } as any);
+      router.refresh();
+    } catch (error) {
+      console.error('Failed to update final survey intro:', error);
+      toast({
+        title: t('toast.updateFailed'),
+        description: t('toast.updateFailedDesc'),
+        variant: 'destructive',
+      });
+    }
+  };
+
   const handleUpdateFinalQuestions = async (updatedQuestions: QuestionInfo[]) => {
     try {
       await saveQuestionsTo('final_questions', updatedQuestions);
@@ -438,6 +454,8 @@ export default function SessionResultControls({
             onUpdateQuestions={handleUpdateQuestions}
             finalQuestions={finalQuestions}
             onUpdateFinalQuestions={handleUpdateFinalQuestions}
+            finalSurveyIntro={finalSurveyIntro}
+            onUpdateFinalSurveyIntro={handleUpdateFinalSurveyIntro}
             onEditSession={handleEditSession}
           />
         )}
