@@ -58,6 +58,7 @@ export async function saveThemeColors(
     showIntroHeading?: boolean;
     showIntroText?: boolean;
     introVideoUrl?: string | null;
+    introVideoPoster?: string | null;
     videoFullscreen?: boolean;
     requireConsent?: boolean;
   },
@@ -97,6 +98,9 @@ export async function saveThemeColors(
               : {}),
             ...(colors.introVideoUrl !== undefined
               ? { theme_intro_video_url: colors.introVideoUrl }
+              : {}),
+            ...(colors.introVideoPoster !== undefined
+              ? { theme_intro_video_poster: colors.introVideoPoster }
               : {}),
             ...(colors.videoFullscreen !== undefined
               ? { theme_video_fullscreen: colors.videoFullscreen }

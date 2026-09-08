@@ -20,6 +20,7 @@ export type SessionTheme = {
   showIntroHeading: boolean;
   showIntroText: boolean;
   introVideoUrl: string | null;
+  introVideoPoster: string | null;
   videoFullscreen: boolean;
   requireConsent: boolean;
 };
@@ -38,6 +39,7 @@ export const EMPTY_THEME: SessionTheme = {
   showIntroHeading: true,
   showIntroText: true,
   introVideoUrl: null,
+  introVideoPoster: null,
   videoFullscreen: false,
   requireConsent: false,
 };
@@ -50,6 +52,32 @@ export type VideoEmbed = {
   provider: 'youtube' | 'vimeo' | 'file';
   id: string;
 };
+
+/**
+ * Náhledový obrázek videa: stejná pravidla jako u souboru s videem —
+ * cesta od kořene nebo http(s), aby se do atributu nedostalo javascript:
+ * ani data:.
+ */
+const IMAGE_FILE = /\.(jpe?g|png|webp|avif|gif)$/i;
+
+export function parseImageSrc(
+  url: string | null | undefined,
+): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+
+  if (trimmed.startsWith('/') && !trimmed.startsWith('//')) {
+    return IMAGE_FILE.test(trimmed.split('?')[0]) ? trimmed : null;
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    const jeWeb = parsed.protocol === 'https:' || parsed.protocol === 'http:';
+    return jeWeb && IMAGE_FILE.test(parsed.pathname) ? parsed.href : null;
+  } catch {
+    return null;
+  }
+}
 
 /** Přípony, které umí přehrát prohlížeč sám, bez cizího přehrávače. */
 const VIDEO_FILE = /\.(mp4|webm|ogv)$/i;

@@ -26,6 +26,7 @@ type ThemeColumns = {
   theme_show_intro_heading?: boolean | null;
   theme_show_intro_text?: boolean | null;
   theme_intro_video_url?: string | null;
+  theme_intro_video_poster?: string | null;
   theme_video_fullscreen?: boolean | null;
   theme_require_consent?: boolean | null;
 };
@@ -49,6 +50,7 @@ const SESSION_COLUMNS = [
   'theme_show_intro_heading',
   'theme_show_intro_text',
   'theme_intro_video_url',
+  'theme_intro_video_poster',
   'theme_video_fullscreen',
   'theme_require_consent',
 ] as const;
@@ -76,6 +78,8 @@ function pick(...levels: (ThemeColumns | undefined)[]): SessionTheme {
     showIntroHeading: flag('theme_show_intro_heading'),
     showIntroText: flag('theme_show_intro_text'),
     introVideoUrl: (levels[0]?.theme_intro_video_url ?? null) as string | null,
+    introVideoPoster: (levels[0]?.theme_intro_video_poster ??
+      null) as string | null,
     // Opt-in, so the default here is off rather than on.
     videoFullscreen: levels[0]?.theme_video_fullscreen === true,
     requireConsent: levels[0]?.theme_require_consent === true,

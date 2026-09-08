@@ -3,7 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Loader2, Play, RotateCcw } from 'lucide-react';
-import { parseVideoEmbed, type VideoEmbed } from '@/lib/themeColors';
+import {
+  parseImageSrc,
+  parseVideoEmbed,
+  type VideoEmbed,
+} from '@/lib/themeColors';
 
 /**
  * The host's video message at the top of the invitation card.
@@ -120,9 +124,11 @@ const YT_ENDED = 0;
 
 export function IntroVideo({
   url,
+  poster,
   className,
 }: {
   url: string | null;
+  poster?: string | null;
   className?: string;
 }) {
   const t = useTranslations('appearance');
@@ -153,6 +159,9 @@ export function IntroVideo({
   const embed = parseVideoEmbed(url);
   const provider = embed?.provider;
   const videoId = embed?.id;
+  // Přes kontrolu i tady, ne jen při ukládání: v databázi může být hodnota
+  // starší než ta kontrola.
+  const posterSrc = parseImageSrc(poster);
 
   /** A fresh element for the SDK to replace, inside the wrapper we keep. */
   const freshSlot = useCallback(() => {
@@ -378,6 +387,12 @@ export function IntroVideo({
   const covered =
     provider === 'file' ? blocked || ended : !started || ended;
 
+  // U cizích přehrávačů překryv schovává jejich popisky, takže musí být
+  // neprůhledný. U vlastního souboru s náhledovkou je to naopak: tmavý
+  // obdélník by zakryl přesně to, kvůli čemu náhledovka je.
+  const overlayBg =
+    provider === 'file' && posterSrc ? 'bg-neutral-900/40' : 'bg-neutral-900';
+
   return (
     <div className={className ?? 'mb-8'}>
       <div className="relative overflow-hidden rounded-lg border border-gray-200 shadow-md">
@@ -385,6 +400,7 @@ export function IntroVideo({
           <video
             ref={videoRef}
             src={videoId}
+            poster={posterSrc ?? undefined}
             className="aspect-video h-full w-full bg-neutral-900"
             playsInline
             preload="auto"
@@ -403,7 +419,9 @@ export function IntroVideo({
         )}
 
         {covered && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-neutral-900">
+          <div
+            className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${overlayBg}`}
+          >
             {ended ? (
               <button
                 type="button"

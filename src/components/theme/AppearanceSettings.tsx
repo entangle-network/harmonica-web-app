@@ -14,7 +14,12 @@ import {
   uploadThemeImage,
   clearThemeImage,
 } from 'actions/theme';
-import { EMPTY_THEME, parseVideoEmbed, themeImageUrl } from '@/lib/themeColors';
+import {
+  EMPTY_THEME,
+  parseImageSrc,
+  parseVideoEmbed,
+  themeImageUrl,
+} from '@/lib/themeColors';
 import { getOwnTheme } from '@/lib/theme';
 
 type Target = { kind: 'SESSION' | 'WORKSPACE'; id: string };
@@ -57,6 +62,7 @@ export function AppearanceSettings({
   const [showIntroHeading, setShowIntroHeading] = useState(true);
   const [showIntroText, setShowIntroText] = useState(true);
   const [introVideoUrl, setIntroVideoUrl] = useState('');
+  const [introVideoPoster, setIntroVideoPoster] = useState('');
   const [videoFullscreen, setVideoFullscreen] = useState(false);
   const [requireConsent, setRequireConsent] = useState(false);
 
@@ -81,6 +87,7 @@ export function AppearanceSettings({
       setShowIntroHeading(own.showIntroHeading);
       setShowIntroText(own.showIntroText);
       setIntroVideoUrl(own.introVideoUrl ?? '');
+      setIntroVideoPoster(own.introVideoPoster ?? '');
       setVideoFullscreen(own.videoFullscreen);
       setRequireConsent(own.requireConsent);
     });
@@ -99,6 +106,12 @@ export function AppearanceSettings({
       return;
     }
 
+    const poster = introVideoPoster.trim();
+    if (isSession && poster && !parseImageSrc(poster)) {
+      toast({ title: t('videoPosterInvalid'), variant: 'destructive' });
+      return;
+    }
+
     setIsSaving(true);
     try {
       await saveThemeColors(target, {
@@ -114,6 +127,8 @@ export function AppearanceSettings({
               showIntroHeading,
               showIntroText,
               introVideoUrl: video || null,
+              // Bez videa nemá náhledovka co doprovázet.
+              introVideoPoster: (video && poster) || null,
               videoFullscreen: videoFullscreen && !!video,
               requireConsent,
             }
@@ -328,6 +343,25 @@ export function AppearanceSettings({
             />
             <p className="text-xs text-muted-foreground">{t('introVideoHint')}</p>
           </div>
+
+          {/* Náhledovka dává smysl jen k vlastnímu souboru — YouTube i
+              Vimeo si kreslí svůj vlastní náhled. */}
+          {introVideoUrl.trim() && (
+            <div className="space-y-2">
+              <Label htmlFor="theme-video-poster">{t('videoPoster')}</Label>
+              <Input
+                id="theme-video-poster"
+                type="text"
+                value={introVideoPoster}
+                placeholder="/video/nahled.jpg"
+                onChange={(e) => setIntroVideoPoster(e.target.value)}
+                className="max-w-md"
+              />
+              <p className="text-xs text-muted-foreground">
+                {t('videoPosterHint')}
+              </p>
+            </div>
+          )}
 
           <div className="space-y-1 border-t pt-4">
             {toggleField(

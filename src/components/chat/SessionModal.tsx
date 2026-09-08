@@ -234,6 +234,7 @@ export const SessionModal = ({
                 {!showForm && (
                   <IntroVideo
                     url={theme.introVideoUrl}
+                    poster={theme.introVideoPoster}
                     className={heroVideo ? 'mb-10' : 'mb-8'}
                   />
                 )}
