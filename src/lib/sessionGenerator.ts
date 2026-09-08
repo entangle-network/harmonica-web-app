@@ -30,22 +30,34 @@ async function isSessionComplete(
 Topic: ${sessionData.topic}
 Goal: ${sessionData.goal}
 
-And this last generated question: "${lastQuestion}"
+And this last message from the facilitator: "${lastQuestion}"
 
-Determine if this appears to be a concluding question that would end the session. Consider:
-1. Does it ask for final thoughts or reflections?
-2. Does it summarize or wrap up the discussion?
-3. Does it contain closing language or farewell phrases?
-4. Does it request feedback about the session?
+Decide whether the facilitator is closing the session.
 
-Reply with ONLY "true" if the session should end, or "false" if it should continue.`;
+It IS closing only when the message recaps what the participant said and
+either says goodbye or asks the participant to confirm that the recap is
+right. Asking "did I understand you correctly, would you like to add or
+change anything?" after a recap is still closing.
+
+It is NOT closing when the facilitator asks a further question about the
+topic itself — for a concrete example, a location, a preference, a reason,
+or what should change. Such a question keeps the session going even when
+the message also thanks the participant, praises the answer, or sounds like
+a wrap-up. A message with no recap of what the participant said is never
+closing.
+
+Answer with one word: true or false.`;
 
   const response = await llm.chat({
     messages: [{ role: 'user', content: prompt }],
     distinctId,
   });
 
-  return response.toLowerCase().includes('true') || false;
+  // Jen první slovo odpovědi, ne výskyt kdekoli v textu. Původní
+  // `includes('true')` vyhodnotilo jako konec i větu "it is not true that
+  // this concludes the session", takže rozhovor skončil uprostřed.
+  const verdict = response.trim().toLowerCase().match(/[a-z]+/)?.[0];
+  return verdict === 'true';
 }
 
 export async function generateSession(config: SessionConfig) {
