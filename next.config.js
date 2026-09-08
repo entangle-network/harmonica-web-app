@@ -45,6 +45,24 @@ const nextConfig = {
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
         ],
       },
+      {
+        // Keep the whole deployment out of search results.
+        //
+        // This header, not robots.txt, is what actually does it. A crawler that
+        // is merely disallowed never fetches the page, so it never learns the
+        // page should not be listed — and Google will still show a bare URL for
+        // an address it found linked somewhere else. Letting it fetch and read
+        // "noindex" is the only way to be sure.
+        //
+        // Crawling therefore stays open, which also keeps link previews working
+        // when an organiser shares a session on Facebook or in a messenger:
+        // those previews come from /bots/chat, and their crawlers honour
+        // robots.txt too.
+        source: '/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
     ];
   },
   //prevent react from loading components twice

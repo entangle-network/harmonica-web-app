@@ -4,7 +4,11 @@ import { isbot } from 'isbot';
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const isAbot = isbot(req.headers.get('User-Agent'));
-  if (isAbot && !req.nextUrl.pathname.startsWith('/api')) {
+  // robots.txt has to survive this rewrite. Every crawler that would ever read
+  // it is itself a bot, so without the exception the file is answered with the
+  // preview page's HTML and no crawler ever sees the rules.
+  const isCrawlerFile = req.nextUrl.pathname === '/robots.txt';
+  if (isAbot && !isCrawlerFile && !req.nextUrl.pathname.startsWith('/api')) {
     const botUrl = new URL('/bots', req.nextUrl);
     const path = req.nextUrl.pathname;
 
@@ -22,7 +26,7 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   // people who only came to fill in a session to create an account. Organisers
   // sign in at /api/auth/login, which nothing links to. Matched exactly, so
   // every other route keeps its own rule.
-  if (req.nextUrl.pathname === '/') {
+  if (req.nextUrl.pathname === '/' || isCrawlerFile) {
     return NextResponse.next();
   }
 
