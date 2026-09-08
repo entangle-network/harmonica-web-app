@@ -204,6 +204,10 @@ export default function GdprPage() {
                 'Váš souhlas — čl. 6 odst. 1 písm. a) GDPR',
               ],
               [
+                'Zasílání pozvánek na akce projektu',
+                'Váš souhlas — čl. 6 odst. 1 písm. a) GDPR (samostatné, nepovinné zaškrtnutí)',
+              ],
+              [
                 'Provoz a zabezpečení platformy',
                 'Náš oprávněný zájem — čl. 6 odst. 1 písm. f) GDPR',
               ],
@@ -218,6 +222,11 @@ export default function GdprPage() {
           <p>
             Pokud souhlas nedáte, konverzaci nezahájíte. Jinou nevýhodu z toho mít
             nebudete.
+          </p>
+          <p>
+            Pozvánky na akce jsou <strong>samostatné zaškrtnutí a dobrovolné</strong>.
+            Jestli ho necháte prázdné, na účasti v konverzaci se to nijak
+            neprojeví — jen vám nebudeme psát o tom, co se chystá.
           </p>
         </Section>
 
@@ -234,6 +243,10 @@ export default function GdprPage() {
               [
                 'Souhrnné a anonymizované výstupy',
                 'Bez omezení — už neobsahují osobní údaje',
+              ],
+              [
+                'E-mail v seznamu odběratelů (pokud jste si řekli o pozvánky)',
+                'Dokud se neodhlásíte',
               ],
               ['Provozní logy serveru', <strong>12 měsíců</strong>],
             ]}
@@ -267,8 +280,23 @@ export default function GdprPage() {
             kontaktem mu nepředáváme, pokud jste k tomu výslovně nedali souhlas.
           </p>
           <p>
-            Údaje <strong>neprodáváme</strong> a nepředáváme je nikomu pro
-            marketingové účely.
+            Pokud si vyžádáte pozvánky na akce, uloží se váš e-mail spolu
+            s městem a tématy, která jste otevřeli, do našeho seznamu odběratelů
+            na webu projektu — abychom vybírali pozvánky, které se vás týkají.
+            Podrobně to popisují{' '}
+            <a
+              href="https://mestovdialogu.cz/gdpr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground"
+            >
+              zásady zpracování na mestovdialogu.cz
+            </a>
+            . Odhlásit se můžete kdykoli odkazem v patičce každého e-mailu.
+          </p>
+          <p>
+            Údaje <strong>neprodáváme</strong> a nepředáváme je nikomu pro{' '}
+            <strong>jeho vlastní</strong> marketingové účely.
           </p>
           <p>
             Pokud je na úvodní stránce sezení vložené video, načte se z YouTube

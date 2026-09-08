@@ -77,6 +77,7 @@ prohlížeče) v rozsahu nutném pro provoz a bezpečnost. Do těchto záznamů 
 | Vedení konverzace a její vyhodnocení | Váš souhlas — čl. 6 odst. 1 písm. a) GDPR |
 | Souhrnné výstupy ze sezení pro zadavatele | Váš souhlas — čl. 6 odst. 1 písm. a) GDPR |
 | Zaslání výstupů na váš e-mail | Váš souhlas — čl. 6 odst. 1 písm. a) GDPR |
+| Zasílání pozvánek na akce projektu | Váš souhlas — čl. 6 odst. 1 písm. a) GDPR (samostatné, nepovinné zaškrtnutí) |
 | Provoz a zabezpečení platformy | Náš oprávněný zájem — čl. 6 odst. 1 písm. f) GDPR |
 
 Souhlas dáváte zaškrtnutím políčka před začátkem konverzace. **Můžete ho kdykoli
@@ -84,6 +85,10 @@ odvolat** — napište na [info@mestovdialogu.cz](mailto:info@mestovdialogu.cz).
 Odvoláním souhlasu není dotčena zákonnost zpracování před jeho odvoláním.
 
 Pokud souhlas nedáte, konverzaci nezahájíte. Jinou nevýhodu z toho mít nebudete.
+
+Pozvánky na akce jsou **samostatné zaškrtnutí a dobrovolné**. Jestli ho necháte
+prázdné, na účasti v konverzaci se to nijak neprojeví — jen vám nebudeme psát
+o tom, co se chystá.
 
 ---
 
@@ -93,6 +98,7 @@ Pokud souhlas nedáte, konverzaci nezahájíte. Jinou nevýhodu z toho mít nebu
 |---|---|
 | Formulářové údaje a obsah konverzace | **3 roky** od konce sezení |
 | Souhrnné a anonymizované výstupy | Bez omezení — už neobsahují osobní údaje |
+| E-mail v seznamu odběratelů (pokud jste si řekli o pozvánky) | Dokud se neodhlásíte |
 | Provozní logy serveru | **12 měsíců** |
 
 Po uplynutí lhůty údaje smažeme. Souhrny, které z konverzací vznikly, si
@@ -113,7 +119,14 @@ Zadavateli sezení (obci, organizaci) předáváme **souhrnné výstupy**. Jedno
 odpovědi se jménem a kontaktem mu nepředáváme, pokud jste k tomu výslovně
 nedali souhlas.
 
-Údaje **neprodáváme** a nepředáváme je nikomu pro marketingové účely.
+Pokud si vyžádáte pozvánky na akce, uloží se váš e-mail spolu s městem a tématy,
+která jste otevřeli, do našeho seznamu odběratelů na webu projektu — abychom
+vybírali pozvánky, které se vás týkají. Podrobně to popisují
+[zásady zpracování na mestovdialogu.cz](https://mestovdialogu.cz/gdpr/).
+Odhlásit se můžete kdykoli odkazem v patičce každého e-mailu.
+
+Údaje **neprodáváme** a nepředáváme je nikomu pro **jeho vlastní** marketingové
+účely.
 
 Pokud je na úvodní stránce sezení vložené video, načte se z YouTube nebo Vimea
 a tito poskytovatelé se dozvědí, že jste stránku otevřeli. YouTube používáme
