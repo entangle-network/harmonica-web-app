@@ -192,8 +192,14 @@ export function SessionOverviewModal({
       fullPrompt: newFullPromptResponse.fullPrompt
     };
     setCurrentPromptVersion(allFacilitationPrompts.length)
-    setCurrentVersionedPrompt(newVersionedPrompt);  
+    setCurrentVersionedPrompt(newVersionedPrompt);
     addVersionedPrompt(newVersionedPrompt);
+
+    // Nová verze se musí uložit hned. Seznam verzí žije jen ve stavu tohoto
+    // okna a "Hotovo" pod ním pouze přepíná režim úprav — bez tohohle řádku
+    // vygenerovaná struktura zmizela při zavření okna, aniž by o tom kdokoli
+    // věděl. Sesterská cesta handleReplaceFullPrompt to tak dělá taky.
+    await handleSavePrompt(newVersionedPrompt);
   };
 
   const [sessionDetailsForm, setSessionDetailsForm] = useState({
