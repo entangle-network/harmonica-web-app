@@ -153,6 +153,16 @@ export function themeImageUrl(id: string | null | undefined) {
 }
 
 /**
+ * Where the privacy link points when no host has set one.
+ *
+ * Upstream sends people to harmonica.chat/privacy, which is wrong for a
+ * self-hosted instance: the data controller is whoever runs it, not the project
+ * whose code they run. This deployment carries its own notice, so that is the
+ * default; a host can still override it per session or per project.
+ */
+export const DEFAULT_PRIVACY_URL = '/gdpr';
+
+/**
  * Accent shades derived from the brand colour.
  *
  * The small tinted surfaces — numbered badges, the hover on the "How it works"

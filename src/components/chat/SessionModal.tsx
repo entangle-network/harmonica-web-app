@@ -2,7 +2,11 @@ import { useTranslations } from 'next-intl';
 import { SourceLink } from '@/components/SourceLink';
 import { useSessionTheme } from '@/components/SessionTheme';
 import { ParticipantFooterBrand } from '@/components/theme/ParticipantFooterBrand';
-import { parseVideoEmbed, themeImageUrl } from '@/lib/themeColors';
+import {
+  DEFAULT_PRIVACY_URL,
+  parseVideoEmbed,
+  themeImageUrl,
+} from '@/lib/themeColors';
 import { IntroVideo } from '@/components/theme/IntroVideo';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -363,8 +367,7 @@ export const SessionModal = ({
                                 link: (chunks) => (
                                   <Link
                                     href={
-                                      theme.privacyUrl ||
-                                      'https://harmonica.chat/privacy'
+                                      theme.privacyUrl || DEFAULT_PRIVACY_URL
                                     }
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -488,7 +491,7 @@ export const SessionModal = ({
                 instance the data controller is whoever runs it, not the project
                 whose code they run. */}
             <Link
-              href={theme.privacyUrl || 'https://harmonica.chat/privacy'}
+              href={theme.privacyUrl || DEFAULT_PRIVACY_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-muted-foreground underline hover:text-foreground transition-colors"
