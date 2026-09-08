@@ -723,7 +723,16 @@
     "statusStarted": "Started",
     "statusFinished": "Finished",
     "generateResponses": "Generate Responses",
-    "noParticipants": "No participants have joined this session yet"
+    "noParticipants": "No participants have joined this session yet",
+    "headerName": "Name",
+    "deleteResponse": "Delete response",
+    "deleteConfirm": "Delete the response from {name}? The whole conversation and its rating go with it. This cannot be undone.",
+    "anonymousParticipant": "this participant",
+    "conversationOf": "Conversation with {name}",
+    "toast": {
+      "responseDeleted": "Response deleted",
+      "responseDeleteFailed": "The response could not be deleted"
+    }
   },
   "simScore": {
     "generating": "Generating SimScore analysis...",
@@ -834,7 +843,8 @@
     "userEmailMissing": "User email or ID (sub) not available",
     "invitationsProcessFailed": "Failed to process invitations",
     "imageTypeUnsupported": "Unsupported image format",
-    "imageTooLarge": "Image is too large (max 2 MB)"
+    "imageTooLarge": "Image is too large (max 2 MB)",
+    "notFound": "Not found"
   },
   "invitationEmail": {
     "logoAlt": "Harmonica Logo",

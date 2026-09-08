@@ -723,7 +723,16 @@
     "statusStarted": "Zahájeno",
     "statusFinished": "Dokončeno",
     "generateResponses": "Vygenerovat odpovědi",
-    "noParticipants": "K sezení se zatím nikdo nepřipojil"
+    "noParticipants": "K sezení se zatím nikdo nepřipojil",
+    "headerName": "Jméno",
+    "deleteResponse": "Smazat odpověď",
+    "deleteConfirm": "Smazat odpověď od {name}? Zmizí celá konverzace i její hodnocení. Vrátit to nejde.",
+    "anonymousParticipant": "tohoto účastníka",
+    "conversationOf": "Konverzace s {name}",
+    "toast": {
+      "responseDeleted": "Odpověď smazána",
+      "responseDeleteFailed": "Odpověď se nepodařilo smazat"
+    }
   },
   "simScore": {
     "generating": "Generuji analýzu SimScore...",
@@ -834,7 +843,8 @@
     "userEmailMissing": "E-mail nebo ID uživatele není k dispozici",
     "invitationsProcessFailed": "Pozvánky se nepodařilo zpracovat",
     "imageTypeUnsupported": "Nepodporovaný formát obrázku",
-    "imageTooLarge": "Obrázek je příliš velký (max 2 MB)"
+    "imageTooLarge": "Obrázek je příliš velký (max 2 MB)",
+    "notFound": "Nenalezeno"
   },
   "invitationEmail": {
     "logoAlt": "Logo Harmonica",

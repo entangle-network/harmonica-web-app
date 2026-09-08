@@ -15,6 +15,9 @@ import GenerateResponsesModal from './GenerateResponsesModal';
 import ImportResponsesModal from './ImportResponsesModal';
 import { Download, Sparkles } from 'lucide-react';
 import ExportSection from '../Export/ExportSection';
+import { deleteParticipantResponse } from 'actions/participants';
+import { useToast } from 'hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 export type ParticipantsTableData = {
   userName: string;
@@ -37,6 +40,8 @@ export default function SessionParticipantsTable({
   onIncludeInSummaryChange: (userId: string, included: boolean) => void;
 }) {
   const t = useTranslations('participants');
+  const { toast } = useToast();
+  const router = useRouter();
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
@@ -47,7 +52,7 @@ export default function SessionParticipantsTable({
       : new Date(b).getTime() - new Date(a).getTime();
   };
   const tableHeaders: TableHeaderData[] = [
-    { label: 'Name', sortKey: 'userName', className: '' },
+    { label: t('headerName'), sortKey: 'userName', className: '' },
     {
       label: t('headerStatus'),
       sortKey: 'sessionStatus',
@@ -79,12 +84,29 @@ export default function SessionParticipantsTable({
     userData: data,
   }));
 
+  const handleDelete = async (userSessionId: string) => {
+    try {
+      await deleteParticipantResponse(sessionId, userSessionId);
+      toast({ title: t('toast.responseDeleted') });
+      // Odpovědi drží nadřazená stránka, takže po smazání se musí načíst znovu;
+      // jinak by řádek zůstal viset až do ruční obnovy.
+      router.refresh();
+    } catch (error) {
+      toast({
+        title: t('toast.responseDeleteFailed'),
+        description: error instanceof Error ? error.message : undefined,
+        variant: 'destructive',
+      });
+    }
+  };
+
   const getTableRow = (sortableData: ParticipantsTableData, index: number) => {
     return (
       <ParticipantSessionRow
         key={index}
         tableData={sortableData}
         onIncludeChange={onIncludeInSummaryChange}
+        onDelete={handleDelete}
       />
     );
   };

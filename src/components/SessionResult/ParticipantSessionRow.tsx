@@ -8,7 +8,7 @@ import { getAllChatMessagesInOrder, getThreadRating } from '@/lib/db';
 import { ParticipantsTableData } from './SessionParticipantsTable';
 import { Spinner } from '../icons';
 import { Switch } from '../ui/switch';
-import { MessageSquare, Star, X } from 'lucide-react';
+import { MessageSquare, Star, X, Trash2, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 const EMOJI_RATINGS = [
@@ -42,11 +42,29 @@ const EMOJI_RATINGS = [
 export default function ParicipantSessionRow({
   tableData,
   onIncludeChange,
+  onDelete,
 }: {
   tableData: ParticipantsTableData;
   onIncludeChange: (userId: string, included: boolean) => void;
+  /** Bez této funkce se tlačítko nezobrazí — mazat smí jen kdo smí sezení upravovat. */
+  onDelete?: (userSessionId: string) => Promise<void>;
 }) {
   const tRating = useTranslations('rating');
+  const tCommon = useTranslations('common');
+  const tParticipants = useTranslations('participants');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    const jmeno = tableData.userName || tParticipants('anonymousParticipant');
+    if (!confirm(tParticipants('deleteConfirm', { name: jmeno }))) return;
+
+    setIsDeleting(true);
+    try {
+      await onDelete!(tableData.userData.id);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   const userData = tableData.userData;
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -143,16 +161,38 @@ export default function ParicipantSessionRow({
           />
         </TableCell>
         <TableCell className="hidden md:table-cell">
-          <Button
-            variant="secondary"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleViewClick();
-            }}
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            View
-          </Button>
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              variant="secondary"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleViewClick();
+              }}
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              {tCommon('open')}
+            </Button>
+            {onDelete && (
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={isDeleting}
+                aria-label={tParticipants('deleteResponse')}
+                title={tParticipants('deleteResponse')}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
+              >
+                {isDeleting ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
+              </Button>
+            )}
+          </div>
         </TableCell>
       </TableRow>
 
@@ -168,7 +208,7 @@ export default function ParicipantSessionRow({
             <div className="flex items-center justify-between p-4 border-b">
               <div>
                 <h2 className="text-xl font-semibold text-gray-800">
-                  {tableData.userName}'s Conversation
+                  {tParticipants('conversationOf', { name: tableData.userName })}
                 </h2>
                 {rating && (
                   <div className="flex items-center gap-2 mt-2">
