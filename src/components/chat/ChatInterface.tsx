@@ -55,11 +55,23 @@ export const ChatInterface = ({
   const [isSessionFinished, setIsSessionFinished] = useState(false);
   const [finalSurveyDone, setFinalSurveyDone] = useState(false);
 
-  // Ukázat jen když je co ptát a konverzace opravdu skončila.
+  /**
+   * Konec konverzace se sem nedostane přes `message.is_final` — ta cesta vede
+   * z window.postMessage, které nikdo neposílá, takže je vždycky false.
+   * Skutečný signál dává useChat tím, že zavolá setShowRating.
+   *
+   * Zamykáme ho, protože `showRating` se vrátí na false, jakmile účastník
+   * hodnocení zavře; bez zámku by mu dotazník zmizel pod rukama.
+   */
+  const [conversationEnded, setConversationEnded] = useState(false);
+  useEffect(() => {
+    if (showRating) setConversationEnded(true);
+  }, [showRating]);
+
   const showFinalSurvey =
     finalQuestions.length > 0 &&
     !finalSurveyDone &&
-    Boolean(message?.is_final) &&
+    conversationEnded &&
     Boolean(threadId);
 
   /**
