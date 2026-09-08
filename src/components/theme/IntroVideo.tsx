@@ -46,8 +46,36 @@ function loadScript(src: string): Promise<void> {
     document.head.appendChild(script);
   });
 
+  // A failure must not be cached: keeping the rejected promise would turn one
+  // dropped request into a permanently broken player for the rest of the visit.
+  promise.catch(() => loading.delete(src));
+
   loading.set(src, promise);
   return promise;
+}
+
+/**
+ * How long to wait for a provider's player before giving up on the video.
+ *
+ * A network that blocks the provider does not always fail cleanly: the script
+ * tag can load while the player's own requests are dropped, and then nothing
+ * ever settles. Without a deadline the participant is left looking at a black
+ * rectangle with a spinner — and in the video-first layout that is the whole
+ * card. Ten seconds is longer than a slow mobile connection needs and short
+ * enough that nobody concludes the page is broken.
+ */
+const PLAYER_LOAD_TIMEOUT_MS = 10000;
+
+function withTimeout<T>(promise: Promise<T>, label: string): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(
+        () => reject(new Error(`${label} did not load in time`)),
+        PLAYER_LOAD_TIMEOUT_MS,
+      ),
+    ),
+  ]);
 }
 
 /** The YouTube API signals readiness through a global callback, not the load event. */
@@ -177,7 +205,7 @@ export function IntroVideo({
     const setup = async () => {
       try {
         if (provider === 'youtube') {
-          const YT = await loadYouTubeApi();
+          const YT = await withTimeout(loadYouTubeApi(), 'YouTube player');
           if (cancelledRef.current) return;
 
           playerRef.current = mountYouTube(YT, videoId, false);
@@ -190,7 +218,7 @@ export function IntroVideo({
           return;
         }
 
-        await loadScript(VIMEO_API);
+        await withTimeout(loadScript(VIMEO_API), 'Vimeo player');
         if (cancelledRef.current) return;
 
         const slot = freshSlot();
