@@ -65,7 +65,8 @@ Pokud pro odpověď použijete mikrofon, nahrávka se odešle k přepisu do text
 ### Technické údaje
 
 Server zaznamenává běžné provozní údaje (IP adresa, čas požadavku, typ
-prohlížeče) v rozsahu nutném pro provoz a bezpečnost.
+prohlížeče) v rozsahu nutném pro provoz a bezpečnost. Do těchto záznamů se
+**neukládá obsah konverzací** — jen to, že požadavek proběhl.
 
 ---
 

@@ -211,7 +211,7 @@ ${qdrantContent?.KNOWLEDGE ? `### Relevant Knowledge Content:\n${qdrantContent.K
       span,
     });
 
-    console.log('[i] Received response: ', response);
+    console.log('[i] Received response from model');
     return response;
     // }
   } catch (error) {

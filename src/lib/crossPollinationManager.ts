@@ -129,7 +129,7 @@ Based on this information, should I introduce cross-pollination now? Answer with
           });
 
           const responseText = response.trim().toUpperCase();
-          console.log('[i] Cross-pollination analysis response:', responseText);
+          console.log('[i] Cross-pollination analysis done');
 
           // Simple check for YES at the beginning of the response
           const shouldCrossPollinate = responseText.startsWith('YES');
@@ -270,7 +270,7 @@ Based on this information, should I introduce cross-pollination now? Answer with
           });
 
           const responseText = response.trim();
-          console.log('[i] Cross-pollination question generated:', responseText);
+          console.log('[i] Cross-pollination question generated');
 
           // Update the last cross-pollination timestamp
           this.setLastCrossPollination();

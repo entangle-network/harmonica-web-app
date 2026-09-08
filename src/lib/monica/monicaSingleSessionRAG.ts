@@ -378,7 +378,7 @@ Please analyze the above context to answer the question.`,
       sessionId: sessionIds[0],
     });
 
-    console.log('[i] Chat engine response:', response);
+    console.log('[i] Chat engine responded');
     return response;
     // }
   } catch (error) {

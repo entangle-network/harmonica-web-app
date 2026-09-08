@@ -181,7 +181,9 @@ export default function GdprPage() {
           <h3 className="text-lg font-semibold pt-2">Technické údaje</h3>
           <p>
             Server zaznamenává běžné provozní údaje (IP adresa, čas požadavku, typ
-            prohlížeče) v rozsahu nutném pro provoz a bezpečnost.
+            prohlížeče) v rozsahu nutném pro provoz a bezpečnost. Do těchto
+            záznamů se <strong>neukládá obsah konverzací</strong> — jen to, že
+            požadavek proběhl.
           </p>
         </Section>
 

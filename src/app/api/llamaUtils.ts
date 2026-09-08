@@ -57,7 +57,7 @@ export async function finishedResponse(
           span,
         });
 
-        console.log('[i] Completion response:', JSON.stringify(response));
+        console.log('[i] Completion returned');
         const message = response;
         return message;
       } catch (error) {
@@ -93,7 +93,7 @@ export async function finishedResponse(
               span,
             });
 
-            console.log('[i] Fallback to small model successful:', JSON.stringify(fallbackResponse));
+            console.log('[i] Fallback to small model successful');
             return fallbackResponse;
           } catch (fallbackError) {
             console.error('[x] Small model fallback also failed:', fallbackError);
@@ -117,7 +117,12 @@ export async function handleGenerateAnswer(
     'chat_facilitation',
     { sessionId: messageData.sessionId, threadId: messageData.threadId, distinctId },
     async ({ operation, span }) => {
-      console.log(`[i] Generating answer for message: `, messageData);
+      // Only the shape of the request, never its content: these logs are kept
+      // on the server for months and would otherwise hold every answer a
+      // participant typed, readable by anyone with access to the host.
+      console.log(
+        `[i] Generating answer for session ${messageData.sessionId}, thread ${messageData.threadId}`,
+      );
 
       const messages = messageData.threadId
         ? await getAllChatMessagesInOrder(messageData.threadId)
@@ -223,7 +228,9 @@ ${sessionData?.critical ? `- Key Points: ${sessionData.critical}` : ''}`;
         })),
       ];
 
-      console.log('[i] Formatted messages:', formattedMessages);
+      console.log(
+        `[i] Sending ${formattedMessages.length} messages to the model`,
+      );
 
       try {
         const message = await chatEngine.chat({
@@ -233,7 +240,7 @@ ${sessionData?.critical ? `- Key Points: ${sessionData.critical}` : ''}`;
           operation,
           span,
         });
-        console.log('[i] Response:', message);
+        console.log('[i] Model answered');
 
         let isFinal = false;
 
@@ -328,7 +335,7 @@ export async function handleResponse(
     });
   } else {
     const response = await finishedResponse(systemPrompt, userPrompt, distinctId);
-    console.log('response from finishedResponse:', response);
+    console.log('[i] finishedResponse returned');
     return NextResponse.json({ fullPrompt: response });
   }
 }
