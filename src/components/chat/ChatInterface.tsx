@@ -339,32 +339,40 @@ export const ChatInterface = ({
             isHost={hasMinimumRole('owner')}
             mainPanelRef={mainPanelRef}
             questions={questions as { id: string; label: string }[] | undefined}
+            /* Tlačítka jsou odpovědí na otázku z poslední zprávy, takže patří
+               za ni do toku konverzace. Pod vstupním polem visela bez
+               souvislosti s tím, na co se ptají. */
+            afterMessages={
+              (showConfirmBar || showFinishAgain) && (
+                /* Stejná stavba jako zpráva asistenta — mezera za avatarem
+                   (na mobilu schovaný) a ps-4 — aby tlačítka lícovala s textem,
+                   na který odpovídají. */
+                <div className="flex">
+                  <div className="h-10 w-10 flex-none hidden md:block" />
+                  <div className="ps-4 flex flex-wrap gap-2">
+                    {showConfirmBar && (
+                      <>
+                        <Button onClick={handleConfirmSummary}>
+                          {tEnd('confirm')}
+                        </Button>
+                        <Button variant="outline" onClick={handleAmendSummary}>
+                          {tEnd('amend')}
+                        </Button>
+                      </>
+                    )}
+
+                    {/* Po doplnění tlačítko nezmizí — jinak by účastník neměl
+                        jak rozhovor uzavřít a dotazník by ho nepotkal. */}
+                    {showFinishAgain && (
+                      <Button variant="outline" onClick={handleConfirmSummary}>
+                        {tEnd('finish')}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )
+            }
           />
-
-          {/* Odpověď na otázku z posledního shrnutí. Sedí pod konverzací, ne
-              přes ni, aby si účastník shrnutí přečetl dřív, než se rozhodne. */}
-          {showConfirmBar && (
-            <div className="mx-auto w-full max-w-3xl px-3 pb-4">
-              <div className="flex flex-col gap-2 rounded-lg border border-gray-200 bg-white p-3 shadow-sm sm:flex-row sm:justify-end">
-                <Button variant="outline" onClick={handleAmendSummary}>
-                  {tEnd('amend')}
-                </Button>
-                <Button onClick={handleConfirmSummary}>
-                  {tEnd('confirm')}
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Po doplnění se lišta neztratí úplně — jinak by účastník neměl jak
-              rozhovor uzavřít a dotazník by ho nikdy nepotkal. */}
-          {showFinishAgain && (
-            <div className="mx-auto w-full max-w-3xl px-3 pb-4 text-right">
-              <Button variant="outline" onClick={handleConfirmSummary}>
-                {tEnd('finish')}
-              </Button>
-            </div>
-          )}
         </div>
       </main>
     </div>

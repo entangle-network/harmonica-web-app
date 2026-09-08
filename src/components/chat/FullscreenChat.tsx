@@ -5,7 +5,10 @@ import { ChatMessages } from './ChatMessages';
 import { ChatInput } from './ChatInput';
 import ErrorPage from '../Error';
 
-export function FullscreenChat(props: UseChatOptions) {
+export function FullscreenChat({
+  afterMessages,
+  ...props
+}: UseChatOptions & { afterMessages?: React.ReactNode }) {
   const chat = useChat(props);
 
   if (chat.errorMessage) {
@@ -17,6 +20,7 @@ export function FullscreenChat(props: UseChatOptions) {
       <ChatMessages
         chat={chat}
         className="flex-1 flex flex-col gap-y-6 px-4 max-w-3xl mx-auto w-full overflow-y-auto"
+        afterMessages={afterMessages}
       />
 
       {/* Byl tu prostor pro tlačítko "Návrh od AI" vlevo dole. To je pryč,

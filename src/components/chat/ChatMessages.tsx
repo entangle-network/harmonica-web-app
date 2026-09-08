@@ -21,11 +21,14 @@ interface ChatMessagesProps {
     isAskAi?: boolean;
   };
   className?: string;
+  /** Vlozi se za posledni zpravu, uvnitr rolovaci oblasti. */
+  afterMessages?: React.ReactNode;
 }
 
 export function ChatMessages({
   chat,
   className = "flex-1 flex flex-col gap-y-6 px-4 max-w-3xl mx-auto w-full overflow-y-auto",
+  afterMessages,
 }: ChatMessagesProps) {
   const theme = useSessionTheme();
   const {
@@ -83,6 +86,7 @@ export function ChatMessages({
           </div>
         </div>
       )}
+      {afterMessages}
       <div ref={messagesEndRef} />
     </div>
   );
