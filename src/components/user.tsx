@@ -217,7 +217,9 @@ export default function User() {
       className="flex items-center gap-2"
       asChild
     >
-      <Link href="/">
+      {/* Was "/", which only worked while the root redirected to Auth0. The
+          root is a public landing now, so that link would just reload it. */}
+      <Link href="/api/auth/login">
         <LogIn className="h-4 w-4" />
         {t('common.signIn')}
       </Link>

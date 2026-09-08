@@ -18,6 +18,14 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
     return NextResponse.rewrite(botUrl);
   }
 
+  // The landing page is public: sending every visitor straight to Auth0 asks
+  // people who only came to fill in a session to create an account. Organisers
+  // sign in at /api/auth/login, which nothing links to. Matched exactly, so
+  // every other route keeps its own rule.
+  if (req.nextUrl.pathname === '/') {
+    return NextResponse.next();
+  }
+
   if (
     // Allow these without authentication:
     req.nextUrl.pathname.match(

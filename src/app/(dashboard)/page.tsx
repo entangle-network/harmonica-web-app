@@ -1,4 +1,6 @@
 import { getTranslations } from 'next-intl/server';
+import { PublicLanding } from './PublicLanding';
+import Navigation from '../navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChevronRight, PlusCircle, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,7 +23,19 @@ import CreateSessionInputClient from './CreateSessionInputClient';
 
 export const dynamic = 'force-dynamic'; // getHostSessions is using auth, which can only be done client side
 export const revalidate = 300; // Revalidate the data every 5 minutes (or on page reload)
-export const metadata = getGeneratedMetadata('/');
+// The root renders two different pages, so its title cannot be a constant:
+// a visitor without a session would get the dashboard's "Přehled" in the tab.
+export async function generateMetadata() {
+  const session = await getSession();
+  if (!session?.user?.sub) {
+    return {
+      title: 'Témata — Město v dialogu',
+      description:
+        'Platforma pro sběr názorů projektu Město v dialogu. Do konverzace se vchází odkazem od pořadatele.',
+    };
+  }
+  return getGeneratedMetadata('/');
+}
 
 const sessionCache = cache(async () => {
   try {
@@ -207,6 +221,14 @@ export default async function Dashboard({
 }: {
   searchParams?: { page?: string };
 }) {
+  // Decided on the server so the landing never flashes the app's navigation at
+  // a participant, and the organiser never sees the landing before their
+  // dashboard loads.
+  const session = await getSession();
+  if (!session?.user?.sub) {
+    return <PublicLanding />;
+  }
+
   const t = await getTranslations('dashboard');
   const { hostSessions, workspacesWithSessions, hasApiKeys } = await sessionCache();
   if (!hostSessions) {
@@ -215,6 +237,9 @@ export default async function Dashboard({
 
   return (
     <div className="bg-background min-h-screen">
+      {/* The layout skips its navigation at the root so the landing stays bare;
+          the dashboard puts it back for the organiser who is signed in. */}
+      <Navigation />
       <ConnectAIBanner hasApiKeys={hasApiKeys} />
       {Date.now() < new Date('2025-02-14').getTime() && <DonateBanner />}
       {/* Welcome Banner */}

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
 
 /**
@@ -416,11 +415,6 @@ export default function GdprPage() {
         </Section>
       </div>
 
-      <footer className="mt-12 border-t border-gray-200 pt-6">
-        <Link href="/" className="text-sm text-muted-foreground hover:underline">
-          ← Zpět
-        </Link>
-      </footer>
     </main>
   );
 }
