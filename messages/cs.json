@@ -1061,5 +1061,12 @@
     "append": "Přidat do formuláře",
     "replace": "Nahradit všechny otázky",
     "nothingFound": "V textu jsem našel žádnou otázku."
+  },
+  "chatEnd": {
+    "confirm": "Souhlasí",
+    "amend": "Chci doplnit",
+    "finish": "Ukončit rozhovor",
+    "thanksTitle": "Děkujeme",
+    "thanksBody": "Váš podnět je zaznamenaný. Stránku už můžete zavřít."
   }
 }

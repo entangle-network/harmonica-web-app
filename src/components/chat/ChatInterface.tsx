@@ -48,31 +48,64 @@ export const ChatInterface = ({
   finalSurveyIntro = '',
 }: ChatInterfaceProps) => {
   const t = useTranslations('chat');
+  const tEnd = useTranslations('chatEnd');
   const { hasMinimumRole }  = usePermissions(hostData.id || '');
   const mainPanelRef = useRef<HTMLElement>(null);
   const [showRating, setShowRating] = useState(false);
   const [threadId, setThreadId] = useState<string>();
   const [isSessionFinished, setIsSessionFinished] = useState(false);
-  const [finalSurveyDone, setFinalSurveyDone] = useState(false);
-
   /**
    * Konec konverzace se sem nedostane přes `message.is_final` — ta cesta vede
    * z window.postMessage, které nikdo neposílá, takže je vždycky false.
    * Skutečný signál dává useChat tím, že zavolá setShowRating.
    *
    * Zamykáme ho, protože `showRating` se vrátí na false, jakmile účastník
-   * hodnocení zavře; bez zámku by mu dotazník zmizel pod rukama.
+   * hodnocení zavře.
    */
   const [conversationEnded, setConversationEnded] = useState(false);
   useEffect(() => {
     if (showRating) setConversationEnded(true);
   }, [showRating]);
 
-  const showFinalSurvey =
-    finalQuestions.length > 0 &&
-    !finalSurveyDone &&
-    conversationEnded &&
-    Boolean(threadId);
+  /**
+   * Poslední zpráva shrne, co model pochopil, a ptá se, jestli to tak je.
+   * Dokud na to účastník neodpoví, nesmí mu nic zakrýt text — dotazník, který
+   * naskočí sám, ho o tu kontrolu připraví.
+   *
+   * confirm  — shrnutí je vidět, pod ním potvrzení nebo doplnění
+   * editing  — účastník doplňuje v chatu, dokončit může tlačítkem
+   * survey   — závěrečné otázky
+   * thanks   — rozloučení
+   */
+  type EndStep = 'confirm' | 'editing' | 'survey' | 'thanks';
+  const [endStep, setEndStep] = useState<EndStep>('confirm');
+
+  const hasFinalSurvey = finalQuestions.length > 0 && Boolean(threadId);
+  const atEnd = conversationEnded && Boolean(threadId);
+
+  const showConfirmBar = atEnd && endStep === 'confirm';
+  const showFinishAgain = atEnd && endStep === 'editing';
+  const showFinalSurvey = atEnd && endStep === 'survey';
+  const showThanks = atEnd && endStep === 'thanks';
+
+  /** Potvrzení shrnutí: buď se doptáme na demografii, nebo se rozloučíme. */
+  const handleConfirmSummary = () => {
+    setEndStep(hasFinalSurvey ? 'survey' : 'thanks');
+  };
+
+  /**
+   * Doplnění: schováme lištu a vrátíme účastníka do psaní. Kurzor přesouváme
+   * přes DOM — vstupní pole je o tři komponenty níž a protahovat kvůli jednomu
+   * fokusu ref přes celý řetězec by bylo horší než tenhle dotaz.
+   */
+  const handleAmendSummary = () => {
+    setEndStep('editing');
+    setTimeout(() => {
+      document
+        .querySelector<HTMLTextAreaElement>('textarea[name="messageText"]')
+        ?.focus();
+    }, 0);
+  };
 
   /**
    * Odpovědi se ukládají jako zpráva do vlákna — stejně jako ty z úvodního
@@ -103,7 +136,7 @@ export const ChatInterface = ({
       }
     }
 
-    setFinalSurveyDone(true);
+    setEndStep('thanks');
   };
   const [isHowItWorksExpanded, setIsHowItWorksExpanded] = useState(false);
   const [isMobileHowItWorksOpen, setIsMobileHowItWorksOpen] = useState(false);
@@ -264,24 +297,34 @@ export const ChatInterface = ({
           )}
         </div>
 
-        {/* Závěrečný dotazník. Nahrazuje chat teprve po dokončené konverzaci —
-            účastník už si ji může jen odrolovat, ale nová zpráva by přišla
-            vniveč, protože sezení se za pár vteřin uzavírá. */}
         {showFinalSurvey && (
           <div className="flex w-full flex-1 items-start justify-center pt-12">
             <FinalSurvey
               questions={finalQuestions}
               intro={finalSurveyIntro}
               onSubmit={handleFinalSurveySubmit}
-              onSkip={() => setFinalSurveyDone(true)}
+              onSkip={() => setEndStep('thanks')}
             />
+          </div>
+        )}
+
+        {showThanks && (
+          <div className="flex w-full flex-1 items-start justify-center pt-12">
+            <div className="mx-auto w-full max-w-2xl px-4 text-center">
+              <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+                <h3 className="text-xl font-semibold">{tEnd('thanksTitle')}</h3>
+                <p className="mt-2 text-muted-foreground">
+                  {tEnd('thanksBody')}
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
         {/* Chat area */}
         <div
           className={`flex flex-col w-full max-w-3xl mx-auto flex-1 pt-12 min-h-0 ${
-            showFinalSurvey ? 'hidden' : ''
+            showFinalSurvey || showThanks ? 'hidden' : ''
           }`}
         >
           <FullscreenChat
@@ -297,6 +340,31 @@ export const ChatInterface = ({
             mainPanelRef={mainPanelRef}
             questions={questions as { id: string; label: string }[] | undefined}
           />
+
+          {/* Odpověď na otázku z posledního shrnutí. Sedí pod konverzací, ne
+              přes ni, aby si účastník shrnutí přečetl dřív, než se rozhodne. */}
+          {showConfirmBar && (
+            <div className="mx-auto w-full max-w-3xl px-3 pb-4">
+              <div className="flex flex-col gap-2 rounded-lg border border-gray-200 bg-white p-3 shadow-sm sm:flex-row sm:justify-end">
+                <Button variant="outline" onClick={handleAmendSummary}>
+                  {tEnd('amend')}
+                </Button>
+                <Button onClick={handleConfirmSummary}>
+                  {tEnd('confirm')}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Po doplnění se lišta neztratí úplně — jinak by účastník neměl jak
+              rozhovor uzavřít a dotazník by ho nikdy nepotkal. */}
+          {showFinishAgain && (
+            <div className="mx-auto w-full max-w-3xl px-3 pb-4 text-right">
+              <Button variant="outline" onClick={handleConfirmSummary}>
+                {tEnd('finish')}
+              </Button>
+            </div>
+          )}
         </div>
       </main>
     </div>

@@ -1061,5 +1061,12 @@
     "append": "Add to the form",
     "replace": "Replace all questions",
     "nothingFound": "No question found in the text."
+  },
+  "chatEnd": {
+    "confirm": "That's right",
+    "amend": "I'd like to add something",
+    "finish": "Finish the conversation",
+    "thanksTitle": "Thank you",
+    "thanksBody": "Your input has been recorded. You can close the page now."
   }
 }
