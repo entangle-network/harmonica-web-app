@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, StartRecording, StopRecording } from '../icons';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface ChatInputProps {
   chat: {
@@ -191,27 +191,13 @@ export function ChatInput({
             className={`flex-grow pr-12 ${hasBottomLeftButtons ? 'pb-16' : 'pb-4'} text-base min-h-[44px] max-h-[144px] overflow-y-auto resize-none focus:ring-0 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-session-ring`}
             ref={textareaRef}
           />
-          {isHost && generateParticipantSuggestion && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={generateParticipantSuggestion}
-              disabled={isLoading || isParticipantSuggestionLoading}
-              className="absolute bottom-3 left-3 flex items-center gap-2"
-            >
-              {isParticipantSuggestionLoading ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Sparkles size={16} />
-              )}
-              <span className="text-xs">
-                {isParticipantSuggestionLoading
-                  ? t('generating')
-                  : t('aiSuggestion')}
-              </span>
-            </Button>
-          )}
+          {/* Tlačítko "Návrh od AI" je skryté. Vidí ho jen vlastník sezení a
+              slouží k testování, jenže jeho persona v participantAnswerGenerator
+              je napevno "creative UI/UX lead" z původního demo případu Harmonicy
+              — u sběru názorů občanů psalo repliky facilitátora místo odpovědí
+              účastníka. Na testování je tu Vygenerovat odpovědi v přehledu
+              výsledků. Generátor i props zůstaly, takže vrácení znamená jen
+              vykreslit tlačítko zpět — a předtím opravit tu personu. */}
           <Button
             type="button"
             variant="outline"

@@ -19,9 +19,11 @@ export function FullscreenChat(props: UseChatOptions) {
         className="flex-1 flex flex-col gap-y-6 px-4 max-w-3xl mx-auto w-full overflow-y-auto"
       />
 
+      {/* Byl tu prostor pro tlačítko "Návrh od AI" vlevo dole. To je pryč,
+          takže by po něm zůstalo prázdné místo pod textem. */}
       <ChatInput
         chat={chat}
-        hasBottomLeftButtons={true}
+        hasBottomLeftButtons={false}
         className="flex-shrink-0 pb-2 w-full border-t border-gray-200 px-3 bg-session-surface"
       />
     </div>
