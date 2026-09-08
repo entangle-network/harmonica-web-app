@@ -513,8 +513,10 @@
     "formIntro": "Before we start, let's get some key information",
     "begin": "Begin",
     "privacyLink": "Privacy policy",
-    "consentLabel": "I agree to the <link>processing of my personal data</link>",
-    "consentRequired": "Without this consent we cannot continue"
+    "consentLabel": "I agree to my answers in this session being processed as described in the <link>privacy policy</link>",
+    "consentRequired": "Without this consent we cannot continue",
+    "marketingConsentLabel": "I would like to receive invitations to events — ones related to what I write here, or happening where I live",
+    "marketingConsentHint": "Optional. We will send you a confirmation email; nothing else arrives unless you click the link in it. It makes no difference to taking part in the conversation."
   },
   "questionsForm": {
     "title": "A bit about you",
@@ -922,6 +924,9 @@
     "videoFullscreenHint": "The video takes the whole card with one large Continue button under it. The image, the heading and the welcome box are hidden, and only the logo and the footer links remain.",
     "requireConsent": "Require consent to data processing",
     "requireConsentHint": "Adds a required checkbox to the participant form, linking to the privacy policy set below. Nobody can start the conversation without ticking it.",
+    "crmTag": "CRM tag for contacts",
+    "crmTagPlaceholder": "e.g. Session: Poděbrady",
+    "crmTagHint": "Filling this in adds an optional \"send me event invitations\" checkbox to the intake form, and contacts from this session are created in the CRM under this tag. Leave it empty and nothing is sent anywhere. Only works on a form that has an Email field.",
     "replay": "Play again",
     "playWithSound": "Play with sound"
   },

@@ -51,6 +51,8 @@ export interface HostSessionsTable {
   theme_logo_url?: string;
   theme_privacy_url?: string;
   theme_intro_text?: string;
+  /** Tag pro kontakty z tohoto sezení v CRM; vyplněný zapíná i opt-in — viz migrace 051. */
+  theme_crm_tag?: string;
 }
 
 export interface UserSessionsTable {
@@ -66,6 +68,12 @@ export interface UserSessionsTable {
   language?: string;
   start_time: ColumnType<Date, Date | undefined, never>;
   last_edit: Generated<Date>;
+  /** Odpovědi z úvodního formuláře, klíčované id otázky — viz migrace 050. */
+  answers?: JSON;
+  /** Kdy účastník dal povinný souhlas se zpracováním — viz migrace 050. */
+  consent_at?: Date;
+  /** Kdy si vyžádal pozvánky na akce; nevyplněné = nevyžádal — viz migrace 050. */
+  marketing_consent_at?: Date;
 }
 
 export interface MessagesTable {

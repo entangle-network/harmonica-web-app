@@ -23,6 +23,8 @@ export type SessionTheme = {
   introVideoPoster: string | null;
   videoFullscreen: boolean;
   requireConsent: boolean;
+  /** Tag pro kontakty v CRM. Vyplněný zapíná nepovinný opt-in v úvodním formuláři. */
+  crmTag: string | null;
 };
 
 export const EMPTY_THEME: SessionTheme = {
@@ -42,6 +44,7 @@ export const EMPTY_THEME: SessionTheme = {
   introVideoPoster: null,
   videoFullscreen: false,
   requireConsent: false,
+  crmTag: null,
 };
 
 /**

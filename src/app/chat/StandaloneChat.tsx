@@ -11,6 +11,7 @@ import {
   updateUserSession,
 } from '@/lib/db';
 import { LoadingOverlay } from '@/components/chat/LoadingOverlay';
+import type { ParticipantConsent } from '@/lib/clientUtils';
 import { SessionModal } from '@/components/chat/SessionModal';
 import { ChatInterface } from '@/components/chat/ChatInterface';
 import { QuestionInfo } from 'app/create/types';
@@ -63,6 +64,17 @@ Please type your name or "anonymous" if you prefer
     }
     return {};
   });
+  // Souhlasy jdou vedle odpovědí, ne mezi nimi: do kontextu pro jazykový model
+  // nepatří a v odpovědích by skončily v prosaické větě, kterou model dostává.
+  const [userConsent, setUserConsent] = useState<ParticipantConsent | null>(
+    () => {
+      if (typeof window !== 'undefined') {
+        const stored = sessionStorage.getItem(`userConsent_${sessionId}`);
+        return stored ? JSON.parse(stored) : null;
+      }
+      return null;
+    },
+  );
 
   useEffect(() => {
     setIsMounted(true);
@@ -184,13 +196,19 @@ Please type your name or "anonymous" if you prefer
                 }
               : undefined
           }
-          onStart={(answers?: Record<string, string>) => {
+          onStart={(
+            answers?: Record<string, string>,
+            consent?: ParticipantConsent,
+          ) => {
             const contextData = answers || {};
+            const consentData = consent ?? null;
             setUserContext(contextData);
+            setUserConsent(consentData);
             setShowModal(false);
             // Persist to sessionStorage
             if (sessionId) {
               sessionStorage.setItem(`userContext_${sessionId}`, JSON.stringify(contextData));
+              sessionStorage.setItem(`userConsent_${sessionId}`, JSON.stringify(consentData));
               sessionStorage.setItem(`showModal_${sessionId}`, 'false');
             }
           }}
@@ -223,6 +241,7 @@ Please type your name or "anonymous" if you prefer
           message={message}
           assistantId={assistantId ?? undefined}
           userContext={userContext}
+          userConsent={userConsent}
           finalQuestions={finalQuestions}
           finalSurveyIntro={
             (hostData as { final_survey_intro?: string } | null)

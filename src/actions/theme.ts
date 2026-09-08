@@ -61,6 +61,7 @@ export async function saveThemeColors(
     introVideoPoster?: string | null;
     videoFullscreen?: boolean;
     requireConsent?: boolean;
+    crmTag?: string | null;
   },
 ) {
   await assertMayEdit(target);
@@ -107,6 +108,9 @@ export async function saveThemeColors(
               : {}),
             ...(colors.requireConsent !== undefined
               ? { theme_require_consent: colors.requireConsent }
+              : {}),
+            ...(colors.crmTag !== undefined
+              ? { theme_crm_tag: colors.crmTag }
               : {}),
           }
         : {}),

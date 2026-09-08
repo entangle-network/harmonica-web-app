@@ -21,6 +21,7 @@ import {
   useDefaultLanguageCode,
 } from './QuestionsModal';
 import { QuestionInfo, QuestionType } from 'app/create/types';
+import type { ParticipantConsent } from '@/lib/clientUtils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -38,7 +39,10 @@ interface SessionModalProps {
   sessionId: string | null;
   user?: UserProfile;
   hostData?: { topic: string; questions?: QuestionInfo[] };
-  onStart: (answers?: Record<string, string>) => void;
+  onStart: (
+    answers?: Record<string, string>,
+    consent?: ParticipantConsent,
+  ) => void;
   loadingUserInfo?: boolean;
 }
 
@@ -64,6 +68,18 @@ export const SessionModal = ({
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [consentGiven, setConsentGiven] = useState(false);
   const [consentError, setConsentError] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+
+  /**
+   * Nepovinný opt-in k pozvánkám má smysl jen tam, kde je kam kontakt uložit
+   * (sezení má vyplněný CRM tag) a kde je co uložit (formulář se ptá na
+   * e-mail). Jeden údaj v nastavení místo dvou přepínačů, které by spolu
+   * stejně musely držet krok.
+   */
+  const emailQuestion = hostData?.questions?.find(
+    (q) => q.type === QuestionType.EMAIL,
+  );
+  const offerMarketingConsent = !!theme.crmTag && !!emailQuestion;
 
   /**
    * Video-first invitation: the video fills the width and the only thing under
@@ -149,13 +165,24 @@ export const SessionModal = ({
     }
 
     // Pass answers directly to onStart (no transformation)
-    onStart({
-      ...answers,
-      preferred_language: resolveLanguageName(
-        answers.preferred_language,
-        defaultLanguage,
-      ),
-    });
+    const now = new Date().toISOString();
+    onStart(
+      {
+        ...answers,
+        preferred_language: resolveLanguageName(
+          answers.preferred_language,
+          defaultLanguage,
+        ),
+      },
+      {
+        // Souhlas se ukládá jako čas, ne jako "ano" — u souhlasu je okamžik
+        // udělení to, co je potřeba umět doložit. Sezení, které souhlas
+        // nevyžaduje, žádný nezaznamenává.
+        consentAt: theme.requireConsent ? now : null,
+        marketingConsentAt:
+          offerMarketingConsent && marketingConsent ? now : null,
+      },
+    );
   };
 
   if (showQuestions && hostData?.questions) {
@@ -386,6 +413,30 @@ export const SessionModal = ({
                               {t('consentRequired')}
                             </p>
                           )}
+                        </div>
+                      )}
+
+                      {offerMarketingConsent && (
+                        <div className="space-y-1 pt-2">
+                          <div className="flex items-start gap-3">
+                            <Checkbox
+                              id="marketing-consent"
+                              checked={marketingConsent}
+                              onCheckedChange={(checked) =>
+                                setMarketingConsent(checked === true)
+                              }
+                              className="mt-0.5 bg-white"
+                            />
+                            <Label
+                              htmlFor="marketing-consent"
+                              className="text-gray-700 font-normal leading-snug"
+                            >
+                              {t('marketingConsentLabel')}
+                            </Label>
+                          </div>
+                          <p className="text-xs text-gray-500 pl-7">
+                            {t('marketingConsentHint')}
+                          </p>
                         </div>
                       )}
                     </form>

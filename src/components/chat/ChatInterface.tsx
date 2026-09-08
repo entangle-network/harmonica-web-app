@@ -1,3 +1,4 @@
+import type { ParticipantConsent } from '@/lib/clientUtils';
 import { useTranslations } from 'next-intl';
 import { SourceLink } from '@/components/SourceLink';
 import { ParticipantFooterBrand } from '@/components/theme/ParticipantFooterBrand';
@@ -28,6 +29,7 @@ interface ChatInterfaceProps {
   message: OpenAIMessage;
   assistantId?: string;
   userContext?: Record<string, string>;
+  userConsent?: ParticipantConsent | null;
   questions?: JSON;
   finalQuestions?: QuestionInfo[];
   finalSurveyIntro?: string;
@@ -43,6 +45,7 @@ export const ChatInterface = ({
   message,
   assistantId,
   userContext,
+  userConsent,
   questions,
   finalQuestions = [],
   finalSurveyIntro = '',
@@ -332,6 +335,7 @@ export const ChatInterface = ({
             userSessionId={userSessionId}
             setUserSessionId={setUserSessionId}
             userContext={userContext}
+            userConsent={userConsent}
             crossPollination={hostData?.cross_pollination ?? false}
             sessionId={hostData?.id}
             onThreadIdReceived={handleThreadIdReceived}

@@ -7,7 +7,8 @@ import * as llama from '../app/api/llamaUtils';
 import { OpenAIMessage, OpenAIMessageWithContext } from '@/lib/types';
 import { UserProfile, useUser } from '@auth0/nextjs-auth0/client';
 import { Message } from '@/lib/schema';
-import { getUserNameFromContext } from '@/lib/clientUtils';
+import { getUserNameFromContext , type ParticipantConsent } from '@/lib/clientUtils';
+import { syncParticipantToCrm } from 'actions/crmSubscribe';
 import { getUserSessionById, getAllChatMessagesInOrder } from '@/lib/db';
 import { captureClientEvent } from '@/lib/posthog-client';
 
@@ -19,6 +20,7 @@ export interface UseChatOptions {
   context?: OpenAIMessageWithContext;
   placeholderText?: string;
   userContext?: Record<string, string>;
+  userConsent?: ParticipantConsent | null;
   isAskAi?: boolean;
   crossPollination?: boolean;
   sessionId?: string;
@@ -42,6 +44,7 @@ export function useChat(options: UseChatOptions) {
     context,
     placeholderText,
     userContext,
+    userConsent,
     isAskAi = false,
     crossPollination = false,
     sessionId: providedSessionId,
@@ -204,6 +207,18 @@ export function useChat(options: UseChatOptions) {
         active: true,
         start_time: new Date(),
         last_edit: new Date(),
+        // Odpovědi z formuláře ukládáme i jako údaj, ne jen jako prosaickou
+        // zprávu pro model níž: bez toho by je nešlo zpracovat (poslat kontakt
+        // do CRM, vyřídit žádost o výmaz) jinak než parsováním přepisů.
+        ...(userContext && Object.keys(userContext).length > 0
+          ? { answers: userContext as unknown as JSON }
+          : {}),
+        ...(userConsent?.consentAt
+          ? { consent_at: new Date(userConsent.consentAt) }
+          : {}),
+        ...(userConsent?.marketingConsentAt
+          ? { marketing_consent_at: new Date(userConsent.marketingConsentAt) }
+          : {}),
       };
       //insert user formdata
       const contextString = userContext
@@ -234,6 +249,12 @@ export function useChat(options: UseChatOptions) {
             session_id: sessionId,
             thread_id: threadIdRef.current,
           });
+          // Kontakt do CRM až po zápisu — akce si sama z databáze ověří, že
+          // souhlas opravdu padl, a dohledá tag sezení. Bez čekání: start
+          // konverzace na tom viset nesmí.
+          if (userIds[0] && userConsent?.marketingConsentAt) {
+            syncParticipantToCrm(userIds[0]).catch(() => {});
+          }
           return userIds[0]; // Return the userId, just in case setUserSessionId is not fast enough
         })
         .catch((error) => {

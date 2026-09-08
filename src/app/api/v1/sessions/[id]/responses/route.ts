@@ -126,6 +126,11 @@ export async function POST(
         language: undefined,
         start_time: new Date(),
         last_edit: new Date(),
+        // Účastník založený přes API neprošel úvodním formulářem, takže nemá
+        // ani odpovědi, ani souhlasy — viz migrace 050.
+        answers: undefined,
+        consent_at: undefined,
+        marketing_consent_at: undefined,
       };
     }
 

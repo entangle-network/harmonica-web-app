@@ -4,6 +4,7 @@ import { RequestData } from '@/lib/types';
 import { ADJECTIVES, ANIMALS, COLORS } from './nameGeneratorData';
 import { HostSession, UserSession } from './schema';
 import { getNumUsersAndMessages } from './db';
+import { QuestionType } from 'app/create/types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -186,4 +187,64 @@ export async function calculateStatus(session: HostSession): Promise<SessionStat
   }
 
   return SessionStatus.ACTIVE  
+}
+
+/**
+ * Časy souhlasů z úvodního formuláře. ISO řetězce, ne Date: cestou od formuláře
+ * ke konverzaci se to ukládá do sessionStorage, kde by Date nepřežilo.
+ */
+export type ParticipantConsent = {
+  /** Povinný souhlas se zpracováním odpovědí. */
+  consentAt: string | null;
+  /** Nepovinná žádost o pozvánky na akce. Null = nechce. */
+  marketingConsentAt: string | null;
+};
+
+const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * E-mail z odpovědí úvodního formuláře.
+ *
+ * Pole si definuje facilitátor sám, takže se nedá spoléhat na jméno klíče —
+ * hledáme podle typu otázky. U starších sezení, kde typ chybí, spadneme na
+ * první hodnotu, která vypadá jako adresa; nic dalšího se z toho nedovozuje.
+ */
+export function getEmailFromContext(
+  userContext?: Record<string, string>,
+  questions?: { id: string; type?: string }[],
+): string | null {
+  if (!userContext) return null;
+
+  const emailQuestion = questions?.find((q) => q.type === QuestionType.EMAIL);
+  const typed = emailQuestion ? userContext[emailQuestion.id]?.trim() : '';
+  if (typed && EMAIL_SHAPE.test(typed)) return typed;
+
+  const guessed = Object.values(userContext).find(
+    (value) => typeof value === 'string' && EMAIL_SHAPE.test(value.trim()),
+  );
+  return guessed ? guessed.trim() : null;
+}
+
+/**
+ * Město z odpovědí úvodního formuláře.
+ *
+ * Typ otázky pro město neexistuje, takže se hledá podle popisku, který napsal
+ * facilitátor — „Město“, „Obec“, „Odkud jste“. Když nic nesedí, vrátí null;
+ * kontakt v CRM pak prostě město mít nebude, což je lepší než tam dosadit
+ * odpověď na jinou otázku.
+ */
+export function getCityFromContext(
+  userContext?: Record<string, string>,
+  questions?: { id: string; label?: string }[],
+): string | null {
+  if (!userContext || !questions) return null;
+
+  const patterns = [/m(ě|e)st/i, /obec/i, /bydli(š|s)t/i, /odkud/i, /^city$/i, /town/i];
+  const match = questions.find((q) =>
+    q.label ? patterns.some((pattern) => pattern.test(q.label as string)) : false,
+  );
+  if (!match) return null;
+
+  const value = userContext[match.id]?.trim();
+  return value ? value : null;
 }

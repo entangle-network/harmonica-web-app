@@ -29,6 +29,7 @@ type ThemeColumns = {
   theme_intro_video_poster?: string | null;
   theme_video_fullscreen?: boolean | null;
   theme_require_consent?: boolean | null;
+  theme_crm_tag?: string | null;
 };
 
 /** Columns both tables carry, and which inherit session -> project. */
@@ -53,6 +54,7 @@ const SESSION_COLUMNS = [
   'theme_intro_video_poster',
   'theme_video_fullscreen',
   'theme_require_consent',
+  'theme_crm_tag',
 ] as const;
 
 function pick(...levels: (ThemeColumns | undefined)[]): SessionTheme {
@@ -83,6 +85,8 @@ function pick(...levels: (ThemeColumns | undefined)[]): SessionTheme {
     // Opt-in, so the default here is off rather than on.
     videoFullscreen: levels[0]?.theme_video_fullscreen === true,
     requireConsent: levels[0]?.theme_require_consent === true,
+    // Session-only a bez dědění: tag jednoho sezení nemá smysl brát z projektu.
+    crmTag: (levels[0]?.theme_crm_tag ?? null) as string | null,
   };
 }
 

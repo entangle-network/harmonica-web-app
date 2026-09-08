@@ -65,6 +65,7 @@ export function AppearanceSettings({
   const [introVideoPoster, setIntroVideoPoster] = useState('');
   const [videoFullscreen, setVideoFullscreen] = useState(false);
   const [requireConsent, setRequireConsent] = useState(false);
+  const [crmTag, setCrmTag] = useState('');
 
   const isSession = target.kind === 'SESSION';
 
@@ -90,6 +91,7 @@ export function AppearanceSettings({
       setIntroVideoPoster(own.introVideoPoster ?? '');
       setVideoFullscreen(own.videoFullscreen);
       setRequireConsent(own.requireConsent);
+      setCrmTag(own.crmTag ?? '');
     });
   }, [target.kind, target.id]);
   const [isSaving, setIsSaving] = useState(false);
@@ -131,6 +133,7 @@ export function AppearanceSettings({
               introVideoPoster: (video && poster) || null,
               videoFullscreen: videoFullscreen && !!video,
               requireConsent,
+              crmTag: crmTag.trim() || null,
             }
           : {}),
       });
@@ -440,6 +443,21 @@ export function AppearanceSettings({
           />
           <p className="text-xs text-muted-foreground">{t('privacyUrlHint')}</p>
         </div>
+
+        {isSession && (
+          <div className="space-y-2">
+            <Label htmlFor="theme-crm-tag">{t('crmTag')}</Label>
+            <Input
+              id="theme-crm-tag"
+              type="text"
+              value={crmTag}
+              placeholder={t('crmTagPlaceholder')}
+              onChange={(e) => setCrmTag(e.target.value)}
+              className="max-w-md"
+            />
+            <p className="text-xs text-muted-foreground">{t('crmTagHint')}</p>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-end">

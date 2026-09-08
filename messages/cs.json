@@ -513,8 +513,10 @@
     "formIntro": "Než začneme, potřebujeme pár údajů",
     "begin": "Začít",
     "privacyLink": "Zásady ochrany osobních údajů",
-    "consentLabel": "Souhlasím se <link>zpracováním osobních údajů</link>",
-    "consentRequired": "Bez tohoto souhlasu nemůžeme pokračovat"
+    "consentLabel": "Souhlasím se zpracováním svých odpovědí v tomto sezení podle <link>zásad ochrany osobních údajů</link>",
+    "consentRequired": "Bez tohoto souhlasu nemůžeme pokračovat",
+    "marketingConsentLabel": "Chci dostávat pozvánky na akce — na ty, které souvisejí s tím, o čem tu píšu, nebo se konají u mě ve městě",
+    "marketingConsentHint": "Nepovinné. Přijde vám potvrzovací e-mail; dokud v něm neklinete na odkaz, nic vám posílat nebudeme. Na účasti v konverzaci to nic nemění."
   },
   "questionsForm": {
     "title": "Něco o vás",
@@ -922,6 +924,9 @@
     "videoFullscreenHint": "Video zabere celou kartu a pod ním bude jen jedno velké tlačítko Pokračovat. Obrázek, nadpis i uvítací box se skryjí, zůstane logo a odkazy v patičce.",
     "requireConsent": "Vyžadovat souhlas se zpracováním osobních údajů",
     "requireConsentHint": "Přidá do formuláře pro účastníky povinné zaškrtávací políčko s odkazem na zásady nastavené níže. Bez zaškrtnutí nelze konverzaci začít.",
+    "crmTag": "Tag pro kontakty v CRM",
+    "crmTagPlaceholder": "např. Sezení: Poděbrady",
+    "crmTagHint": "Vyplněný tag přidá do úvodního formuláře nepovinné políčko „chci pozvánky na akce“ a kontakty z tohoto sezení se s ním založí v CRM. Prázdné pole znamená, že se nikam nic neposílá. Funguje jen u formuláře, který má pole typu E-mail.",
     "replay": "Přehrát znovu",
     "playWithSound": "Přehrát se zvukem"
   },
