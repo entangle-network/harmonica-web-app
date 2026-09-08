@@ -54,3 +54,6 @@ CLAUDE.md
 # sensitive / internal docs
 docs/plans/
 docs/process-notes.md
+# Zdrojove video pred prevodem — do repozitare patri jen zmensena verze
+# v public/video/.
+/video/

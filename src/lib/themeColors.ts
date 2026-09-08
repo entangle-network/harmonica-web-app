@@ -42,7 +42,17 @@ export const EMPTY_THEME: SessionTheme = {
   requireConsent: false,
 };
 
-export type VideoEmbed = { provider: 'youtube' | 'vimeo'; id: string };
+/**
+ * `file` je video hostované u nás; `id` je rovnou jeho adresa, protože
+ * žádné jiné identifikátory nemá.
+ */
+export type VideoEmbed = {
+  provider: 'youtube' | 'vimeo' | 'file';
+  id: string;
+};
+
+/** Přípony, které umí přehrát prohlížeč sám, bez cizího přehrávače. */
+const VIDEO_FILE = /\.(mp4|webm|ogv)$/i;
 
 /**
  * Recognises the video URLs a host is likely to paste.
@@ -56,9 +66,20 @@ export function parseVideoEmbed(
 ): VideoEmbed | null {
   if (!url) return null;
 
+  const trimmed = url.trim();
+
+  // Vlastní soubor v public/ se zadává cestou od kořene ("/video/uvod.mp4").
+  // Musí se vyřešit dřív než new URL(), pro které relativní cesta není adresa.
+  // "//" je vyloučené schválně: to už je cizí server bez uvedeného protokolu.
+  if (trimmed.startsWith('/') && !trimmed.startsWith('//')) {
+    return VIDEO_FILE.test(trimmed.split('?')[0])
+      ? { provider: 'file', id: trimmed }
+      : null;
+  }
+
   let parsed: URL;
   try {
-    parsed = new URL(url.trim());
+    parsed = new URL(trimmed);
   } catch {
     return null;
   }
@@ -82,6 +103,15 @@ export function parseVideoEmbed(
   if (host === 'vimeo.com' || host === 'player.vimeo.com') {
     const id = /(\d{6,})/.exec(parsed.pathname)?.[1];
     return id ? { provider: 'vimeo', id } : null;
+  }
+
+  // Soubor na jiném serveru — třeba na webu projektu. Jen http(s), aby se do
+  // atributu src nedostalo javascript: ani data:.
+  if (
+    (parsed.protocol === 'https:' || parsed.protocol === 'http:') &&
+    VIDEO_FILE.test(parsed.pathname)
+  ) {
+    return { provider: 'file', id: parsed.href };
   }
 
   return null;

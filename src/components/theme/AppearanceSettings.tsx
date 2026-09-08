@@ -316,11 +316,13 @@ export function AppearanceSettings({
 
           <div className="space-y-2 border-t pt-4">
             <Label htmlFor="theme-intro-video">{t('introVideo')}</Label>
+            {/* Ne type="url": cesta k vlastnímu souboru ("/video/uvod.mp4")
+                není podle prohlížeče platná adresa a pole by ji odmítlo. */}
             <Input
               id="theme-intro-video"
-              type="url"
+              type="text"
               value={introVideoUrl}
-              placeholder="https://www.youtube.com/watch?v=..."
+              placeholder="/video/uvod.mp4"
               onChange={(e) => setIntroVideoUrl(e.target.value)}
               className="max-w-md"
             />

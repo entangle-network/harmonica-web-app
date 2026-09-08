@@ -913,7 +913,7 @@
     "showIntroHeading": "Show the “Share your perspective” heading",
     "showIntroText": "Show the welcome text",
     "introVideo": "Video above the welcome text",
-    "introVideoHint": "Paste a YouTube or Vimeo link. It starts on its own; if the browser blocks the sound — most do until the visitor clicks something — it plays muted with a button to turn the sound on. Leave empty for no video.",
+    "introVideoHint": "Paste a YouTube or Vimeo link, or the path to a file of your own (e.g. /video/intro.mp4). A file of your own is more reliable — it does not depend on a third-party service the visitor's network might block. The video starts on its own; if the browser blocks the sound, a play button appears. Leave empty for no video.",
     "videoUrlInvalid": "That does not look like a YouTube or Vimeo link",
     "videoFullscreen": "Show the video full width",
     "videoFullscreenHint": "The video takes the whole card with one large Continue button under it. The image, the heading and the welcome box are hidden, and only the logo and the footer links remain.",

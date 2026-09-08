@@ -32,8 +32,11 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
 
   if (
     // Allow these without authentication:
+    // Video hostované u nás patří k pozvánce, kterou účastník otevírá bez
+    // přihlášení. Bez výjimky by se požadavek na soubor přesměroval na Auth0
+    // a přehrávač by dostal přihlašovací stránku místo videa.
     req.nextUrl.pathname.match(
-      /^\/(?:api|login|chat|gdpr|canvas-demo|.*\.ico|.*\.png|.*\.svg|_next\/static|_next\/image)/
+      /^\/(?:api|login|chat|gdpr|canvas-demo|.*\.ico|.*\.png|.*\.svg|.*\.mp4|.*\.webm|.*\.ogv|_next\/static|_next\/image)/
     )
   ) {
     return NextResponse.next();

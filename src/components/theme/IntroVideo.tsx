@@ -25,6 +25,12 @@ import { parseVideoEmbed, type VideoEmbed } from '@/lib/themeColors';
  *
  * The players are addressed through their SDKs rather than a bare iframe
  * because an iframe gives no way to tell "playing" from "blocked".
+ *
+ * Vlastní soubor nic z toho nepotřebuje: <video> je ve stejném dokumentu, o
+ * zablokovaném spuštění řekne odmítnutý příslib z play() a nemá žádné cizí
+ * popisky, které by bylo potřeba zakrývat. Je taky jediná varianta, kterou
+ * nemůže shodit filtr v síti návštěvníka — cizí přehrávač může být blokovaný
+ * a pak po videu zbude jen prázdné místo.
  */
 
 const YT_API = 'https://www.youtube.com/iframe_api';
@@ -125,6 +131,9 @@ export function IntroVideo({
   // with an iframe, so a ref aimed at that element is detached the moment the
   // player mounts and cannot be reused to rebuild one.
   const wrapperRef = useRef<HTMLDivElement>(null);
+  // Vlastní soubor se nepodstrkuje žádnému SDK, takže <video> zůstává
+  // v JSX a odkaz na něj přežije celý život komponenty.
+  const videoRef = useRef<HTMLVideoElement>(null);
   const playerRef = useRef<any>(null);
   const cancelledRef = useRef(false);
 
@@ -193,9 +202,29 @@ export function IntroVideo({
   );
 
   useEffect(() => {
-    if (!provider || !videoId || !wrapperRef.current) return;
+    if (!provider || !videoId) return;
 
     cancelledRef.current = false;
+
+    // Vlastní soubor: žádný cizí skript, žádné čekání na cizí server.
+    // Zvuk se pustí rovnou a jediné, co může selhat, je zákaz autoplaye —
+    // ten se pozná odmítnutým příslibem z play().
+    if (provider === 'file') {
+      const video = videoRef.current;
+      if (!video) return;
+
+      video.muted = false;
+      video.play().catch(() => {
+        if (!cancelledRef.current) setBlocked(true);
+      });
+
+      return () => {
+        cancelledRef.current = true;
+        video.pause();
+      };
+    }
+
+    if (!wrapperRef.current) return;
 
     // Give the attempt a moment to get going. Under a second is too eager on a
     // slow connection, where the video is still buffering rather than blocked.
@@ -290,6 +319,18 @@ export function IntroVideo({
     setBlocked(false);
     setStarted(false);
 
+    // Vlastní <video> je ve stejném dokumentu, takže kliknutí platí i pro
+    // něj a stačí ho pustit znovu — na rozdíl od YouTube se nemusí
+    // přestavovat.
+    if (provider === 'file') {
+      const video = videoRef.current;
+      if (!video) return;
+      video.muted = false;
+      video.currentTime = 0;
+      video.play();
+      return;
+    }
+
     if (provider === 'youtube') {
       const YT = (window as any).YT;
       if (!YT?.Player || !videoId) return;
@@ -309,6 +350,13 @@ export function IntroVideo({
 
   const handleReplay = () => {
     setEnded(false);
+    if (provider === 'file') {
+      const video = videoRef.current;
+      if (!video) return;
+      video.currentTime = 0;
+      video.play();
+      return;
+    }
     if (provider === 'youtube') {
       playerRef.current?.seekTo?.(0);
       playerRef.current?.playVideo?.();
@@ -324,15 +372,35 @@ export function IntroVideo({
   // the whole block goes away instead.
   if (failed) return null;
 
-  const covered = !started || ended;
+  // U vlastního souboru není co zakrývat: <video> bez ovládacích prvků
+  // nemá cizí popisky ani závěrečnou nabídku dalších videí. Překryv tu
+  // slouží jen k nabídnutí tlačítka — po zablokovaném autoplayi a na konci.
+  const covered =
+    provider === 'file' ? blocked || ended : !started || ended;
 
   return (
     <div className={className ?? 'mb-8'}>
       <div className="relative overflow-hidden rounded-lg border border-gray-200 shadow-md">
-        <div
-          ref={wrapperRef}
-          className="aspect-video [&>iframe]:h-full [&>iframe]:w-full"
-        />
+        {provider === 'file' ? (
+          <video
+            ref={videoRef}
+            src={videoId}
+            className="aspect-video h-full w-full bg-neutral-900"
+            playsInline
+            preload="auto"
+            onPlaying={() => {
+              setStarted(true);
+              setEnded(false);
+            }}
+            onEnded={() => setEnded(true)}
+            onError={() => setFailed(true)}
+          />
+        ) : (
+          <div
+            ref={wrapperRef}
+            className="aspect-video [&>iframe]:h-full [&>iframe]:w-full"
+          />
+        )}
 
         {covered && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-neutral-900">
