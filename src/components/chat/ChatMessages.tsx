@@ -21,7 +21,7 @@ interface ChatMessagesProps {
     isAskAi?: boolean;
   };
   className?: string;
-  /** Vlozi se za posledni zpravu, uvnitr rolovaci oblasti. */
+  /** Vloží se za poslední zprávu, uvnitř rolovací oblasti. */
   afterMessages?: React.ReactNode;
 }
 
@@ -42,11 +42,20 @@ export function ChatMessages({
   } = chat;
   
   const scrollPanelRef = useRef<HTMLDivElement>(null);
+
+  /*
+   * Obsah slotu přibývá až po poslední zprávě, takže změnu `messages`
+   * nevyvolá a bez téhle závislosti by zůstal pod okrajem okna. Stačí vědět,
+   * že se slot naplnil — na samotný element se odkazovat nelze, ten má při
+   * každém překreslení novou identitu a rolovalo by se pořád dokola.
+   */
+  const hasAfterMessages = Boolean(afterMessages);
+
   useEffect(() => {
     if (scrollPanelRef?.current && messages.length > 1) {
       scrollPanelRef.current.scrollTop = scrollPanelRef.current.scrollHeight;
     }
-  }, [messages, scrollPanelRef]);
+  }, [messages, scrollPanelRef, hasAfterMessages]);
 
   return (
     <div ref={scrollPanelRef} className={className}>
