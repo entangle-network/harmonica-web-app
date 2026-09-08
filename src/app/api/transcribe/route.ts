@@ -24,6 +24,22 @@ function fileNameFor(audio: Blob) {
   return `recording.${EXTENSIONS[mime] ?? 'webm'}`;
 }
 
+/**
+ * Věta v cílovém jazyce, kterou se přepis ukotví.
+ *
+ * `language` je pro tenhle model nápověda, ne příkaz — u krátké nebo nezřetelné
+ * nahrávky se od ní odchýlí a českou řeč vrátí jako polštinu nebo slovenštinu,
+ * které jsou zvukově blízko. Ukázka textu v cílovém jazyce tu volbu drží
+ * mnohem pevněji než samotný kód jazyka.
+ */
+const LANGUAGE_PRIMERS: Record<string, string> = {
+  cs: 'Toto je přepis odpovědi v češtině. Mluvčí popisuje své zkušenosti a názory na dění ve svém městě.',
+  sk: 'Toto je prepis odpovede v slovenčine.',
+  pl: 'To jest transkrypcja odpowiedzi w języku polskim.',
+  de: 'Dies ist eine Transkription einer Antwort auf Deutsch.',
+  en: 'This is a transcript of an answer in English.',
+};
+
 async function transcribeWithOpenAI(audio: Blob, language: string) {
   const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -35,6 +51,9 @@ async function transcribeWithOpenAI(audio: Blob, language: string) {
     file,
     model: process.env.TRANSCRIBE_MODEL || DEFAULT_OPENAI_MODEL,
     language,
+    ...(LANGUAGE_PRIMERS[language]
+      ? { prompt: LANGUAGE_PRIMERS[language] }
+      : {}),
   });
 
   return result.text ?? '';
@@ -83,8 +102,14 @@ export async function POST(request: Request) {
 
     // The language has to be passed through: told nothing, a transcriber
     // defaults to English and renders Czech speech as English-looking words.
-    const language =
-      (formData.get('language') as string) || process.env.APP_LOCALE || 'en';
+    const requested = formData.get('language') as string | null;
+    const language = requested || process.env.APP_LOCALE || 'en';
+
+    // Jazyk, ne obsah: kdyby přepis zase vyšel v cizím jazyce, tohle rozliší,
+    // jestli prohlížeč jazyk vůbec poslal, nebo se od něj odchýlil model.
+    console.log(
+      `[i] Přepis: požadovaný jazyk ${requested ?? '(neposlán)'}, použit ${language}`,
+    );
 
     let transcription: string;
     if (process.env.OPENAI_API_KEY) {
