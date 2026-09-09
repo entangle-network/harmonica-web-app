@@ -190,7 +190,12 @@ export const ChatInterface = ({
             last_edit: new Date(),
           });
 
-          await increaseSessionsCount(userSessionId, 'num_finished');
+          // Počítadlo patří k SEZENÍ, ne k účastníkovi: s id účastníka dotaz
+          // na host_db nic nenašel, vyhodil výjimku a ta se tu tiše polkla —
+          // num_finished proto nikdy nerostlo.
+          if (hostData?.id) {
+            await increaseSessionsCount(hostData.id, 'num_finished');
+          }
         } catch (error) {
           console.error('Error updating session:', error);
         }

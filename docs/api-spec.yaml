@@ -132,6 +132,45 @@ components:
           type: integer
       required: [id, text, position]
 
+    SessionStats:
+      type: object
+      properties:
+        session_id:
+          type: string
+        topic:
+          type: string
+        active:
+          type: boolean
+        participants:
+          type: integer
+          description: Participants who submitted the intake form (rows in user_db)
+        engaged:
+          type: integer
+          description: Participants with more than two messages, included in the summary
+        finished:
+          type: integer
+          description: Engaged participants who completed the conversation
+        marketing_optins:
+          type: integer
+          description: Participants who asked for event invitations
+        messages_avg:
+          type: number
+        messages_median:
+          type: integer
+        by_day:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              participants:
+                type: integer
+              engaged:
+                type: integer
+              finished:
+                type: integer
     Participant:
       type: object
       properties:
@@ -722,6 +761,31 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /sessions/{id}/stats:
+    get:
+      summary: Session statistics
+      description: |
+        Aggregate numbers about participation — counts only, never message
+        content. "Engaged" uses the same definition as the session admin
+        (more than two messages and included in the summary), so both places
+        show the same figures.
+      operationId: getSessionStats
+      tags: [Sessions]
+      parameters:
+        - $ref: '#/components/parameters/sessionId'
+      responses:
+        '200':
+          description: Session statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStats'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /sessions/{id}/questions:
     get:
       summary: Get session questions
